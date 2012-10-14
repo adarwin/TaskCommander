@@ -8,6 +8,7 @@ SUNY Oswego
 import java.awt.Dimension;
 import java.util.Calendar;
 import javax.swing.border.SoftBevelBorder;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
@@ -16,22 +17,32 @@ import javax.swing.SpringLayout;
 
 public class TaskWidget extends JPanel
 {
-  private JCheckBox task;
+  private JCheckBox taskCheckBox;
   private JLabel courseLabel, dueDate;
-  private Dimension preferredSize;
+  private Dimension minimumSize, preferredSize, maximumSize;
   private SpringLayout layout;
   private JButton notesButton;
+  private Task task;
+
+  public TaskWidget()
+  {
+    this("TaskNameHere", "CourseNameHere");
+  }
   public TaskWidget(String taskName)
   {
     this(taskName, "SomeCourseName");
   }
   public TaskWidget(String taskName, String course)
   {
+    super();
     layout = new SpringLayout();
     setLayout(layout);
-    preferredSize = new Dimension(300, 50);
-    notesButton = new JButton("Notes");
-    task = new JCheckBox(taskName);
+    minimumSize = new Dimension(100, 50);
+    preferredSize = new Dimension(200, 50);
+    maximumSize = new Dimension(3000, 50);
+    notesButton = new JButton("");
+    notesButton.setIcon(new ImageIcon("images/Notes.jpg"));
+    taskCheckBox = new JCheckBox(taskName);
     courseLabel = new JLabel(course);
     Calendar cal = Calendar.getInstance();
     Integer day = cal.get(Calendar.DAY_OF_WEEK);
@@ -49,20 +60,24 @@ public class TaskWidget extends JPanel
     }
     dueDate = new JLabel(dayString);
     setBorder(new SoftBevelBorder(SoftBevelBorder.LOWERED));
+    //setMinimumSize(minimumSize);
     setPreferredSize(preferredSize);
-    add(task);
+    setMaximumSize(maximumSize);
+    add(taskCheckBox);
     add(courseLabel);
     add(dueDate);
     add(notesButton);
 
-    layout.putConstraint(SpringLayout.NORTH, task, 0, SpringLayout.NORTH, this);
-    layout.putConstraint(SpringLayout.WEST, task, 0, SpringLayout.WEST, this);
+    int margin = 2;
 
-    layout.putConstraint(SpringLayout.NORTH, courseLabel, 0, SpringLayout.SOUTH, task);
-    layout.putConstraint(SpringLayout.WEST, courseLabel, 28, SpringLayout.WEST, this);
+    layout.putConstraint(SpringLayout.NORTH, taskCheckBox, 0, SpringLayout.NORTH, this);
+    layout.putConstraint(SpringLayout.WEST, taskCheckBox, 0, SpringLayout.WEST, this);
 
-    layout.putConstraint(SpringLayout.NORTH, dueDate, 0, SpringLayout.NORTH, this);
-    layout.putConstraint(SpringLayout.EAST, dueDate, 0, SpringLayout.EAST, this);
+    layout.putConstraint(SpringLayout.NORTH, courseLabel, 0, SpringLayout.SOUTH, taskCheckBox);
+    layout.putConstraint(SpringLayout.WEST, courseLabel, 27, SpringLayout.WEST, this);
+
+    layout.putConstraint(SpringLayout.NORTH, dueDate, margin, SpringLayout.NORTH, this);
+    layout.putConstraint(SpringLayout.EAST, dueDate, -1*margin, SpringLayout.EAST, this);
 
     layout.putConstraint(SpringLayout.NORTH, notesButton, 0, SpringLayout.NORTH, this);
     layout.putConstraint(SpringLayout.EAST, notesButton, 0, SpringLayout.WEST, dueDate);
