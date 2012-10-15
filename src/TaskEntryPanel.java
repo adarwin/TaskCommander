@@ -6,8 +6,8 @@ SUNY Oswego
 */
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.util.Arrays;
 import java.util.List;
 import javax.swing.border.TitledBorder;
@@ -57,6 +57,7 @@ public class TaskEntryPanel extends JPanel
     layout.putConstraint(SpringLayout.WEST, mainSplitPane, 0, SpringLayout.WEST, this);
     setLayout(layout);
   }
+
 
   public void addCourseWidget(CourseWidget courseWidget)
   {

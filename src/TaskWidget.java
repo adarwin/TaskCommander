@@ -5,8 +5,10 @@ CSC 420: Graphical User Interfaces
 SUNY Oswego
 */
 
-import java.awt.Dimension;
 import java.util.Calendar;
+import java.awt.Dimension;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseEvent;
 import javax.swing.border.SoftBevelBorder;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -35,6 +37,7 @@ public class TaskWidget extends JPanel
   public TaskWidget(String taskName, String course)
   {
     super();
+    task = new Task(taskName);
     layout = new SpringLayout();
     setLayout(layout);
     minimumSize = new Dimension(100, 50);
@@ -81,6 +84,22 @@ public class TaskWidget extends JPanel
 
     layout.putConstraint(SpringLayout.NORTH, notesButton, 0, SpringLayout.NORTH, this);
     layout.putConstraint(SpringLayout.EAST, notesButton, 0, SpringLayout.WEST, dueDate);
+
+    addMouseListener(new MouseListener()
+    {
+      public void mouseClicked(MouseEvent e) {}
+      public void mouseEntered(MouseEvent e) {}
+      public void mouseExited(MouseEvent e) {}
+      public void mousePressed(MouseEvent e)
+      {
+        if(e.getButton() == MouseEvent.BUTTON3)
+        {
+          //Open right-click menu
+          System.out.println("Open right-click menu");
+        }
+      }
+      public void mouseReleased(MouseEvent e) {}
+    });
 
   }
 }
