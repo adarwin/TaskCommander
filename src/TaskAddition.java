@@ -27,10 +27,12 @@ public class TaskAddition implements Command
   {
     if (taskEntryPanel != null)
     {
-      taskEntryPanel.remove(taskWidget);
+      System.out.println("Undo");
+      taskEntryPanel.removeTaskWidget(taskWidget);
     }
   }
   public void redo()
   {
+    run();
   }
 }

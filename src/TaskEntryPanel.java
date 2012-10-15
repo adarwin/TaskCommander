@@ -81,6 +81,13 @@ public class TaskEntryPanel extends JPanel
     System.out.println("Adding taskwidget");
     centerContent.add(taskWidget);
   }
+  public void removeTaskWidget(TaskWidget taskWidget)
+  {
+    if (taskWidget != null)
+    {
+      centerContent.remove(taskWidget);
+    }
+  }
 
   public void addTaskWidgetDivider(String text)
   {
