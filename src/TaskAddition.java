@@ -10,22 +10,25 @@ import java.awt.Container;
 public class TaskAddition implements Command
 {
   TaskWidget taskWidget;
-  Container parentComponent;
-  public TaskAddition(Container parent, TaskWidget taskWidget)
+  TaskEntryPanel taskEntryPanel;
+  public TaskAddition(TaskEntryPanel taskEntryPanel, TaskWidget taskWidget)
   {
     this.taskWidget = taskWidget;
-    parentComponent = parent;
+    this.taskEntryPanel = taskEntryPanel;
   }
   public void run()
   {
-    if (parentComponent != null)
+    if (taskEntryPanel != null)
     {
-      parentComponent.add(taskWidget);
+      taskEntryPanel.addTaskWidget(taskWidget);
     }
   }
   public void undo()
   {
-    parentComponent.remove(taskWidget);
+    if (taskEntryPanel != null)
+    {
+      taskEntryPanel.remove(taskWidget);
+    }
   }
   public void redo()
   {

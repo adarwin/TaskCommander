@@ -7,6 +7,7 @@ SUNY Oswego
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Component;
 import java.util.Arrays;
 import java.util.List;
 import javax.swing.border.TitledBorder;
@@ -23,6 +24,7 @@ public class TaskEntryPanel extends JPanel
   JSplitPane nestedSplitPane;
   JPanel leftContent, centerContent, rightContent;
   SpringLayout layout;
+
   public TaskEntryPanel()
   {
     super();
@@ -76,11 +78,13 @@ public class TaskEntryPanel extends JPanel
     {
       taskWidget = new TaskWidget();
     }
+    System.out.println("Adding taskwidget");
     centerContent.add(taskWidget);
   }
 
   public void addTaskWidgetDivider(String text)
   {
     centerContent.add(new TaskWidgetDivider(text));
+    centerContent.repaint();
   }
 }

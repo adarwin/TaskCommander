@@ -12,6 +12,12 @@ public class TaskEdit implements Command
   //New Data
   Task newState;
 
+  public TaskEdit(Task previous, Task edited)
+  {
+    previousState = previous;
+    newState = edited;
+  }
+
   public void run()
   {
   }

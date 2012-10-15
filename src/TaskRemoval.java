@@ -8,6 +8,13 @@ SUNY Oswego
 public class TaskRemoval implements Command
 {
   Task task;
+
+  public TaskRemoval(Task task)
+  {
+    this.task = task;
+  }
+
+
   public void run()
   {
   }
