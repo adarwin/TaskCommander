@@ -87,6 +87,9 @@ public class TaskEntryPanel extends JPanel implements TaskView
       mainSplitPane.setContinuousLayout(true);
       nestedSplitPane.setContinuousLayout(true);
 
+      mainSplitPane.setDividerLocation(TaskCommander.startingWidth/3);
+      nestedSplitPane.setDividerLocation(TaskCommander.startingWidth/3);
+
 
     //Add components
       centerPane.add(quickTaskField);
@@ -134,6 +137,7 @@ public class TaskEntryPanel extends JPanel implements TaskView
         {
           if (DEBUG) log("Intercepted entry from quickTaskField");
           TaskCommander.addTask(quickTaskField.getText());
+          quickTaskField.selectAll();
         }
       });
       taskAddButton.addActionListener(new ActionListener()

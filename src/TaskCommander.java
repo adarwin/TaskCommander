@@ -21,6 +21,8 @@ public class TaskCommander
   private static ArrayList<Task> tasks;
   private static boolean DEBUG = true;
   private static String CLASS = "TaskCommander";
+  public static int startingWidth = 800;
+  public static int startingHeight = 600;
 
   //Public Methods
     private static void log(String message)
@@ -188,7 +190,7 @@ public class TaskCommander
     tasks = new ArrayList<Task>();
 
     JFrame frame = new JFrame("TaskCommander");
-    frame.setPreferredSize(new Dimension(800, 600));
+    frame.setPreferredSize(new Dimension(startingWidth, startingHeight));
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     addComponentsToFrame(frame);
     frame.pack();
