@@ -26,6 +26,8 @@ public class TaskWidget extends JPanel
   private JButton notesButton;
   private Task task;
 
+  public Task getTask() { return task; }
+
   public TaskWidget()
   {
     this("TaskNameHere", "CourseNameHere");
@@ -34,10 +36,14 @@ public class TaskWidget extends JPanel
   {
     this(taskName, "SomeCourseName");
   }
-  public TaskWidget(String taskName, String course)
+  public TaskWidget(String taskName, String courseName)
+  {
+    this(new Task(taskName, new Course(courseName)));
+  }
+  public TaskWidget(Task task)
   {
     super();
-    task = new Task(taskName);
+    this.task = task;
     layout = new SpringLayout();
     setLayout(layout);
     minimumSize = new Dimension(100, 50);
@@ -45,8 +51,8 @@ public class TaskWidget extends JPanel
     maximumSize = new Dimension(3000, 50);
     notesButton = new JButton("");
     notesButton.setIcon(new ImageIcon("images/Notes.jpg"));
-    taskCheckBox = new JCheckBox(taskName);
-    courseLabel = new JLabel(course);
+    taskCheckBox = new JCheckBox(task.getName());
+    courseLabel = new JLabel(task.getCourse().getName());
     Calendar cal = Calendar.getInstance();
     Integer day = cal.get(Calendar.DAY_OF_WEEK);
     String dayString;

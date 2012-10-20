@@ -6,33 +6,58 @@ SUNY Oswego
 */
 
 import java.awt.Container;
+import java.util.ArrayList;
 
 public class TaskAddition implements Command
 {
-  TaskWidget taskWidget;
-  TaskEntryPanel taskEntryPanel;
-  public TaskAddition(TaskEntryPanel taskEntryPanel, TaskWidget taskWidget)
+  private TaskView taskViewToUpdate;
+  private Task task;
+  private boolean DEBUG = true;
+  private String CLASS = "TaskAddition";
+
+  private void log(String message)
   {
-    this.taskWidget = taskWidget;
-    this.taskEntryPanel = taskEntryPanel;
+    TaskCommander.log(CLASS, message);
+  }
+  public TaskAddition(Task task, TaskView taskViewToUpdate)
+  {
+    if (DEBUG) log("Initializing new TaskAddition with task name: '" + task.getName() + "' and taskViewToUpdate: " + (taskViewToUpdate == null ? null : "non-null") + "\r\n");
+    this.task = task;
+    this.taskViewToUpdate = taskViewToUpdate;
   }
   public void run()
   {
-    if (taskEntryPanel != null)
+    if (DEBUG) log("Now running TaskAddition command");
+    if (taskViewToUpdate != null)
     {
-      taskEntryPanel.addTaskWidget(taskWidget);
+      if (DEBUG) log("Get existing tasks from TaskCommander");
+      ArrayList<Task> tasks = TaskCommander.getTasks();
+      if (DEBUG) log("Add the task contained in this command to the existing tasks list");
+      tasks.add(task);
+      if (DEBUG) log("Add the task to the taskViewToUpdate");
+      taskViewToUpdate.addTask(task);
+    }
+    else
+    {
+      if (DEBUG) log("taskViewToUpdate is null, therefore the run command does nothing.");
     }
   }
   public void undo()
   {
-    if (taskEntryPanel != null)
+    if (DEBUG) log("Attempting to undo TaskAddition");
+    if (taskViewToUpdate != null)
     {
-      System.out.println("Undo");
-      taskEntryPanel.removeTaskWidget(taskWidget);
+      if (DEBUG) log("Remove task from taskViewToUpdate");
+      taskViewToUpdate.removeTask(task);
+    }
+    else
+    {
+      if (DEBUG) log("Since taskViewToUpdate was null, we did nothing.");
     }
   }
   public void redo()
   {
+    if (DEBUG) log("Attempting to redo this TaskAddition.");
     run();
   }
 }

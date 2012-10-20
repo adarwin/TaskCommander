@@ -17,6 +17,154 @@ public class TaskCommander
   private static TaskEntryPanel taskEntryPanel;
   private static JFrame frame;
   private static JTextField input;
+  private static ArrayList<Course> courses;
+  private static ArrayList<Task> tasks;
+  private static boolean DEBUG = true;
+  private static String CLASS = "TaskCommander";
+
+  //Public Methods
+    private static void log(String message)
+    {
+      log(CLASS, message);
+    }
+    public static void log(String header, String message)
+    {
+      System.out.println(header + ": " + message);
+    }
+    public static JFrame getFrame() { return frame; }
+    public static void undo()
+    {
+      if (runCommands != null && !runCommands.isEmpty())
+        {
+        Command lastCommand = runCommands.pop();
+        lastCommand.undo();
+        if (undonCommands == null)
+        {
+          undonCommands = new Stack<Command>();
+        }
+        undonCommands.push(lastCommand);
+      }
+    }
+  
+    public static void redo()
+    {
+      if(undonCommands != null && !undonCommands.isEmpty())
+      {
+        Command lastCommand = undonCommands.pop();
+        lastCommand.redo();
+        runCommands.push(lastCommand);
+      }
+    }
+
+    public static void addCommand(Command command)
+    {
+      if (DEBUG) log("Adding new command");
+      if (runCommands == null)
+      {
+        runCommands = new Stack<Command>();
+      }
+      //command.run();
+      runCommands.push(command);
+      if (undonCommands != null)
+      {
+        undonCommands.clear();
+      }
+    }
+
+    public static Stack<Command> getRunCommands() { return runCommands; }
+    public static Stack<Command> getUndonCommands() { return undonCommands; }
+
+    public static void addCourse(TaskView taskView)
+    {
+      addCourse("General", taskView);
+    }
+
+    public static void addCourse(String name, TaskView taskView)
+    {
+      Command command = new CourseAddition(name, taskView);
+      command.run();
+      addCommand(command);
+    }
+
+    public static void addTask()
+    {
+      addTask(input.getText());
+    }
+    
+    public static void addTask(String name)
+    {
+      if (DEBUG) log("Adding task with name: '" + name + "'");
+      if (DEBUG) log("Get selected course");
+      Course course = getSelectedCourse();
+      if (DEBUG) log("Create Task object and add it");
+      addTask(new Task(name, course));
+    }
+
+    public static void addTask(Task task)
+    {
+      if (DEBUG) log("Attempting to add Task object");
+      if (DEBUG) log("Create the TaskAddition command object");
+      Command command = new TaskAddition(task, taskEntryPanel);
+      if (DEBUG) log("Run the command");
+      command.run();
+      if (DEBUG) log("Add the command to the list of commands");
+      addCommand(command);
+
+      if (DEBUG) log("Revalidate and repaint taskEntryPanel");
+      taskEntryPanel.revalidate();
+      taskEntryPanel.repaint();
+    }
+
+    public static Course getSelectedCourse()
+    {
+      if (DEBUG) log("Attempting to determine selected course");
+      Course selectedCourse = null;
+      if (courses != null)
+      {
+        for(Course c : courses)
+        {
+          if (c.isSelected())
+          {
+            selectedCourse = c;
+            break;
+          }
+        }
+      }
+      if (DEBUG)
+      {
+        if (selectedCourse != null)
+        {
+          log("Found selected course to be: " + selectedCourse.getName());
+        }
+        else
+        {
+          log("There was no selected course.");
+        }
+      }
+      return selectedCourse;
+    }
+
+    public void setSelected(Course course)
+    {
+      for (Course c : courses)
+      {
+        if (c == course)
+        {
+          c.setSelected(true);
+          break;
+        }
+      }
+      if (!course.isSelected())
+      {
+        //Throw exception here
+        System.out.println("ERROR");
+      }
+    }
+
+    public static ArrayList<Task> getTasks() { return tasks; }
+    public static ArrayList<Course> getCourses() { return courses; }
+
+
 
   public static void main(String[] args)
   {
@@ -29,8 +177,16 @@ public class TaskCommander
     });
   }
 
-  public static void createAndShowGUI()
+
+
+
+
+
+  private static void createAndShowGUI()
   {
+    courses = new ArrayList<Course>();
+    tasks = new ArrayList<Task>();
+
     JFrame frame = new JFrame("TaskCommander");
     frame.setPreferredSize(new Dimension(800, 600));
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -140,72 +296,5 @@ public class TaskCommander
     constantsPanel.add(toolBar, BorderLayout.SOUTH);
     contentPane.add(constantsPanel, BorderLayout.NORTH);
     contentPane.add(taskEntryPanel, BorderLayout.CENTER);
-
-
-
   }
-
-  //Public Methods
-    public static JFrame getFrame() { return frame; }
-    public static void undo()
-    {
-      if (runCommands != null && !runCommands.isEmpty())
-        {
-        Command lastCommand = runCommands.pop();
-        lastCommand.undo();
-        if (undonCommands == null)
-        {
-          undonCommands = new Stack<Command>();
-        }
-        undonCommands.push(lastCommand);
-      }
-    }
-  
-    public static void redo()
-    {
-      if(undonCommands != null && !undonCommands.isEmpty())
-      {
-        Command lastCommand = undonCommands.pop();
-        lastCommand.redo();
-        runCommands.push(lastCommand);
-      }
-    }
-
-    public static void addCommand(Command command)
-    {
-      if (runCommands == null)
-      {
-        runCommands = new Stack<Command>();
-      }
-      command.run();
-      runCommands.push(command);
-      if (undonCommands != null)
-      {
-        undonCommands.clear();
-      }
-    }
-
-    public static Stack<Command> getRunCommands() { return runCommands; }
-    public static Stack<Command> getUndonCommands() { return undonCommands; }
-
-    public static void addTask()
-    {
-      addTask(input.getText());
-    }
-    public static void addTask(String name)
-    {
-      System.out.println("Adding new task");
-      Command command = new TaskAddition(taskEntryPanel, new TaskWidget(name));
-      command.run();
-      addCommand(command);
-
-      taskEntryPanel.revalidate();
-      taskEntryPanel.repaint();
-    }
-
-
-
-
-
-
 }

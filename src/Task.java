@@ -25,10 +25,12 @@ public class Task
   private String note;
   private Course associatedCourse;
 
+  /*
   public Task(String name)
   {
     this(name, new Course("General"));
   }
+  */
   public Task(String name, Course course)
   {
     taskName = name;

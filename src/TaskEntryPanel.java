@@ -13,6 +13,7 @@ import java.awt.Dimension;
 import java.awt.Insets;
 import java.util.Arrays;
 import java.util.List;
+import java.util.ArrayList;
 import javax.swing.border.TitledBorder;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -22,20 +23,28 @@ import javax.swing.JSplitPane;
 import javax.swing.JTextField;
 import javax.swing.SpringLayout;
 
-public class TaskEntryPanel extends JPanel
+public class TaskEntryPanel extends JPanel implements TaskView
 {
-  JSplitPane mainSplitPane;
-  JSplitPane nestedSplitPane;
+  JSplitPane mainSplitPane, nestedSplitPane;
   JPanel leftContent, centerContent, rightContent;
   JPanel leftPane, centerPane, rightPane;
-  SpringLayout layout, centerLayout;
+  JScrollPane leftScrollPane, centerScrollPane, rightScrollPane;
   JTextField quickTaskField;
   JButton taskAddButton;
-  JScrollPane leftScrollPane, centerScrollPane, rightScrollPane;
+  SpringLayout layout, centerLayout;
+  private ArrayList<TaskWidget> taskWidgets;
+  private final boolean DEBUG = true;
+  private final String CLASS = "TaskEntryPanel";
+
+  private void log(String message)
+  {
+    TaskCommander.log(CLASS, message);
+  }
 
   public TaskEntryPanel()
   {
     super();
+    taskWidgets = new ArrayList<TaskWidget>();
     // Initialize Components and Containers
       // Split Panes
         mainSplitPane = new JSplitPane();
@@ -123,6 +132,7 @@ public class TaskEntryPanel extends JPanel
       {
         public void actionPerformed(ActionEvent e)
         {
+          if (DEBUG) log("Intercepted entry from quickTaskField");
           TaskCommander.addTask(quickTaskField.getText());
         }
       });
@@ -130,6 +140,7 @@ public class TaskEntryPanel extends JPanel
       {
         public void actionPerformed(ActionEvent e)
         {
+          if (DEBUG) log("Intercepted click on taskAddButton");
           TaskCommander.addTask(quickTaskField.getText());
         }
       });
@@ -162,6 +173,7 @@ public class TaskEntryPanel extends JPanel
     {
       taskWidget = new TaskWidget();
     }
+    taskWidgets.add(taskWidget);
     System.out.println("Adding taskwidget");
     centerContent.add(taskWidget);
   }
@@ -177,5 +189,46 @@ public class TaskEntryPanel extends JPanel
   {
     centerContent.add(new TaskWidgetDivider(text));
     centerContent.repaint();
+  }
+
+
+
+
+  public void addCourse(Course course)
+  {
+    if (DEBUG) log("addCourse(Course course) currently does nothing.");
+  }
+  public void addTask(Task task)
+  {
+    if (DEBUG) log("Attempt to add new taskWidget");
+    TaskWidget taskWidget = new TaskWidget(task);
+    taskWidgets.add(taskWidget);
+    centerContent.add(taskWidget);
+  }
+  public void removeCourse(Course course)
+  {
+    if (DEBUG) log("removeCourse(Course course) currently does nothing.");
+  }
+  public void removeTask(Task task)
+  {
+    if (DEBUG) log("Find the taskWidget that contains the desired task");
+    TaskWidget target = null;
+    for (TaskWidget tw : taskWidgets)
+    {
+      if (tw.getTask() == task)
+      {
+        target = tw;
+      }
+    }
+    if (target == null)
+    {
+      if (DEBUG) log("Failed to find desired taskWidget");
+    }
+    else
+    {
+      if (DEBUG) log("Found the desired taskWidget...now just remove it");
+      taskWidgets.remove(target);
+      centerContent.remove(target);
+    }
   }
 }

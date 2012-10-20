@@ -21,15 +21,22 @@ public class Course
   * Current Grade
   * Grading Policy
   */
-  String courseName, professor, building;
-  int roomNumber;
-  int[] startingTime;
-  int[] endingTime;
-  int courseNumber;
-  double grade;
+  private String courseName, professor, building;
+  private int roomNumber;
+  private int[] startingTime;
+  private int[] endingTime;
+  private int courseNumber;
+  private double grade;
+
+  private boolean selected;
 
   public Course(String name)
   {
     courseName = name;
+    selected = false;
   }
+  public String getName() { return courseName; }
+  public void setName(String newName) { courseName = newName; }
+  public boolean isSelected() { return selected; }
+  public void setSelected(boolean value) { selected = value; }
 }

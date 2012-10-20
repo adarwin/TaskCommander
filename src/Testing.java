@@ -78,10 +78,10 @@ public class Testing
   {
     String testName = "allCommandsShouldBeAddedToAStack";
     //Generate list of commands
-    Command command1 = new TaskAddition(null, new TaskWidget());
+    Command command1 = new TaskAddition(new Task("TaskName", new Course("CourseName")), null);
     Command command2 = new TaskEdit(null, null);
     Command command3 = new TaskRemoval(null);
-    Command command4 = new TaskAddition(null, new TaskWidget());
+    Command command4 = new TaskAddition(new Task("TaskName", new Course("CourseName")), null);
     TaskCommander.addCommand(command1);
     TaskCommander.addCommand(command2);
     TaskCommander.addCommand(command3);
@@ -105,10 +105,10 @@ public class Testing
   {
     String testName = "allUndonCommandsShouldBeAddedToASeparateStack";
 
-    Command command1 = new TaskAddition(null, new TaskWidget());
+    Command command1 = new TaskAddition(new Task("TaskName", new Course("CourseName")), null);
     Command command2 = new TaskEdit(null, null);
     Command command3 = new TaskRemoval(null);
-    Command command4 = new TaskAddition(null, new TaskWidget());
+    Command command4 = new TaskAddition(new Task("TaskName", new Course("CourseName")), null);
 
     TaskCommander.addCommand(command1);
     TaskCommander.addCommand(command2);
@@ -145,10 +145,10 @@ public class Testing
   {
     String testName = "allRedoneCommandsShouldBeAddedToStack";
 
-    Command command1 = new TaskAddition(null, new TaskWidget());
+    Command command1 = new TaskAddition(new Task("TaskName", new Course("CourseName")), null);
     Command command2 = new TaskEdit(null, null);
     Command command3 = new TaskRemoval(null);
-    Command command4 = new TaskAddition(null, new TaskWidget());
+    Command command4 = new TaskAddition(new Task("TaskName", new Course("CourseName")), null);
 
     TaskCommander.addCommand(command1);
     TaskCommander.addCommand(command2);
