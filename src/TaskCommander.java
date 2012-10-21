@@ -15,6 +15,8 @@ public class TaskCommander
   private static Stack<Command> runCommands;
   private static Stack<Command> undonCommands;
   private static TaskEntryPanel taskEntryPanel;
+  private static TaskPlanningPanel planningBoard;
+  private static JPanel mainContentPanel;
   private static JFrame frame;
   private static JTextField input;
   private static ArrayList<Course> courses;
@@ -23,6 +25,8 @@ public class TaskCommander
   private static String CLASS = "TaskCommander";
   public static int startingWidth = 800;
   public static int startingHeight = 600;
+  private static final String TASK_ENTRY = "Task Entry Mode";
+  private static final String PLANNING = "Planning Board";
 
   //Public Methods
     private static void log(String message)
@@ -202,6 +206,7 @@ public class TaskCommander
   {
     Container contentPane = mainFrame.getContentPane();
     JPanel constantsPanel = new JPanel();
+    mainContentPanel = new JPanel(new CardLayout());
     constantsPanel.setLayout(new BorderLayout());
 
     JMenuBar menuBar = new JMenuBar();
@@ -257,10 +262,26 @@ public class TaskCommander
       JRadioButtonMenuItem rbMenuItem = new JRadioButtonMenuItem("Task Entry Mode");
       rbMenuItem.setSelected(true);
       rbMenuItem.setMnemonic(KeyEvent.VK_T);
+      rbMenuItem.addActionListener(new ActionListener()
+      {
+        public void actionPerformed(ActionEvent e)
+        {
+          CardLayout c = (CardLayout)(mainContentPanel.getLayout());
+          c.show(mainContentPanel, TASK_ENTRY);
+        }
+      });
       viewModes.add(rbMenuItem);
       viewMenu.add(rbMenuItem);
       rbMenuItem = new JRadioButtonMenuItem("Planning Board");
       rbMenuItem.setMnemonic(KeyEvent.VK_P);
+      rbMenuItem.addActionListener(new ActionListener()
+      {
+        public void actionPerformed(ActionEvent e)
+        {
+          CardLayout c = (CardLayout)(mainContentPanel.getLayout());
+          c.show(mainContentPanel, PLANNING);
+        }
+      });
       viewModes.add(rbMenuItem);
       viewMenu.add(rbMenuItem);
 
@@ -290,13 +311,19 @@ public class TaskCommander
 
 
     taskEntryPanel = new TaskEntryPanel();
+    planningBoard = new TaskPlanningPanel();
     JButton undo = new JButton("Undo");
     JButton redo = new JButton("Redo");
     input = new JTextField();
 
     constantsPanel.add(menuBar, BorderLayout.NORTH);
     constantsPanel.add(toolBar, BorderLayout.SOUTH);
+
+    mainContentPanel.add(taskEntryPanel, TASK_ENTRY);
+    mainContentPanel.add(planningBoard, PLANNING);
+
     contentPane.add(constantsPanel, BorderLayout.NORTH);
-    contentPane.add(taskEntryPanel, BorderLayout.CENTER);
+    //contentPane.add(taskEntryPanel, BorderLayout.CENTER);
+    contentPane.add(mainContentPanel, BorderLayout.CENTER);
   }
 }
