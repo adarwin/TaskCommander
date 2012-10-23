@@ -7,6 +7,7 @@ SUNY Oswego
 
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
+import java.awt.BorderLayout;
 
 public class TaskPlanningPanel extends JPanel implements TaskView
 {

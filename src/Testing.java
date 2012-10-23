@@ -232,11 +232,15 @@ public class Testing
 
   private static void addComponentsTo(Container contentPane)
   {
+    PlanningCalendar calendar = new PlanningCalendar();
+    contentPane.add(calendar, BorderLayout.CENTER);
+    /*
     TaskEntryPanel taskEntryPanel = new TaskEntryPanel();
     //taskEntryPanel.setBorder(new MatteBorder(1, 1, 1, 1, Color.black));
     //taskEntryPanel.addTaskWidget();
     //TaskCommander.addTaskWidget();
     taskEntryPanel.addTaskWidgetDivider("SomeTitle");
     contentPane.add(taskEntryPanel, BorderLayout.CENTER);
+    */
   }
 }
