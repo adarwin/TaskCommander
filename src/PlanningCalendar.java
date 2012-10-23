@@ -5,6 +5,9 @@ CSC 420: Graphical User Interfaces
 SUNY Oswego
 */
 
+import java.awt.Dimension;
+import java.awt.GridBagLayout;
+import java.awt.GridBagConstraints;
 import java.util.Calendar;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -18,18 +21,21 @@ public class PlanningCalendar extends JPanel implements TaskView
     private JLabel dateLabel;
     public Day(Integer date)
     {
+      setPreferredSize(new Dimension(50, 50));
       this.date = date;
       setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
       dateLabel = new JLabel(date.toString());
       add(dateLabel);
     }
-    public int getDate() { return date; }
+    public Integer getDate() { return date; }
   }
 
   Day[][] days;
 
   public PlanningCalendar()
   {
+    setLayout(new GridBagLayout());
+    GridBagConstraints layoutConstraints = new GridBagConstraints();
     days = new Day[6][8];
     Calendar cal = Calendar.getInstance();
     Integer dayOfWeek = cal.get(Calendar.DAY_OF_WEEK);
@@ -87,13 +93,36 @@ public class PlanningCalendar extends JPanel implements TaskView
       }
       dayOfWeek = 1;
     }
-    for (Day[] value : days)
+    System.out.println("| Su | Mo | Tu | We | Th | Fr | Sa |");
+    System.out.println("------------------------------------");
+    for (int i = 1; i < days.length; i++)
     {
-      System.out.println("\r\n---------");
-      for (Day day : value)
+      for (int j = 1; j < days[i].length; j++)
       {
-        System.out.print(", " + (day == null ? day : day.getDate()));
+        String value;
+        if (days[i][j] == null)
+        {
+          value = "  ";
+        }
+        else
+        {
+          String orig = days[i][j].getDate().toString();
+          value = orig.length() > 1 ? orig : "0" + orig;
+        }
+        System.out.print("| " + value + " ");
+        if (days[i][j] != null)
+        {
+          GridBagConstraints c = new GridBagConstraints();
+          c.fill = GridBagConstraints.BOTH;
+          c.weightx = 0.5;
+          c.weighty = 0.5;
+          c.gridx = j;
+          c.gridy = i;
+          add(days[i][j], c);
+        }
       }
+      System.out.println("|");
+      System.out.println("------------------------------------");
     }
   }
   public void addCourse(Course course)
