@@ -5,10 +5,13 @@ CSC 420: Graphical User Interfaces
 SUNY Oswego
 */
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.util.Calendar;
+import javax.swing.border.SoftBevelBorder;
+import javax.swing.border.MatteBorder;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.BoxLayout;
@@ -17,17 +20,27 @@ public class PlanningCalendar extends JPanel implements TaskView
 {
   class Day extends JPanel
   {
-    private int date;
+    private Integer date;
     private JLabel dateLabel;
-    public Day(Integer date)
+    public Day()
     {
+      setBorder(new MatteBorder(1, 1, 1, 1, Color.black));
       setPreferredSize(new Dimension(50, 50));
-      this.date = date;
       setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
-      dateLabel = new JLabel(date.toString());
+      dateLabel = new JLabel("");
       add(dateLabel);
     }
+    public Day(Integer date)
+    {
+      this();
+      setDate(date);
+    }
     public Integer getDate() { return date; }
+    public void setDate(Integer date)
+    {
+      this.date = date;
+      dateLabel.setText(date.toString());
+    }
   }
 
   Day[][] days;
@@ -100,26 +113,28 @@ public class PlanningCalendar extends JPanel implements TaskView
       for (int j = 1; j < days[i].length; j++)
       {
         String value;
+        Day dayToAdd;
         if (days[i][j] == null)
         {
           value = "  ";
+          dayToAdd = new Day();
         }
         else
         {
           String orig = days[i][j].getDate().toString();
           value = orig.length() > 1 ? orig : "0" + orig;
+
+          dayToAdd = days[i][j];
         }
         System.out.print("| " + value + " ");
-        if (days[i][j] != null)
-        {
-          GridBagConstraints c = new GridBagConstraints();
-          c.fill = GridBagConstraints.BOTH;
-          c.weightx = 0.5;
-          c.weighty = 0.5;
-          c.gridx = j;
-          c.gridy = i;
-          add(days[i][j], c);
-        }
+
+        GridBagConstraints c = new GridBagConstraints();
+        c.fill = GridBagConstraints.BOTH;
+        c.weightx = 0.5;
+        c.weighty = 0.5;
+        c.gridx = j;
+        c.gridy = i;
+        add(dayToAdd, c);
       }
       System.out.println("|");
       System.out.println("------------------------------------");
