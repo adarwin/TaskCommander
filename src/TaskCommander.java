@@ -88,7 +88,12 @@ public class TaskCommander
 
     public static void addCourse(String name, TaskView taskView)
     {
-      Command command = new CourseAddition(name, taskView);
+      Course course = new Course(name);
+      addCourse(course, taskView);
+    }
+    public static void addCourse(Course course, TaskView taskView)
+    {
+      Command command = new CourseAddition(course, taskView);
       command.run();
       addCommand(command);
     }
@@ -112,6 +117,28 @@ public class TaskCommander
       if (DEBUG) log("Attempting to add Task object");
       if (DEBUG) log("Create the TaskAddition command object");
       Command command = new TaskAddition(task, taskEntryPanel);
+      if (DEBUG) log("Run the command");
+      command.run();
+      if (DEBUG) log("Add the command to the list of commands");
+      addCommand(command);
+
+      if (DEBUG) log("Revalidate and repaint taskEntryPanel");
+      taskEntryPanel.revalidate();
+      taskEntryPanel.repaint();
+    }
+
+    public static void addCourse(String name)
+    {
+      if (DEBUG) log("Adding course with name: '" + name + "'");
+      if (DEBUG) log("Create Course object and add it");
+      addCourse(new Course(name));
+    }
+
+    public static void addCourse(Course course)
+    {
+      if (DEBUG) log("Attempting to add Course object");
+      if (DEBUG) log("Create the CourseAddition command object");
+      Command command = new CourseAddition(course, taskEntryPanel);
       if (DEBUG) log("Run the command");
       command.run();
       if (DEBUG) log("Add the command to the list of commands");

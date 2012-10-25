@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 public class CourseAddition implements Command
 {
-  private String courseName;
+  //private String courseName;
   private TaskView taskViewToUpdate;
   private Course course;
   private boolean DEBUG = true;
@@ -21,16 +21,17 @@ public class CourseAddition implements Command
     TaskCommander.log(CLASS, message);
   }
 
-  public CourseAddition(String courseName, TaskView taskViewToUpdate)
+  public CourseAddition(Course course, TaskView taskViewToUpdate)
   {
-    this.courseName = courseName;
+    this.course = course;
+    //this.courseName = courseName;
     this.taskViewToUpdate = taskViewToUpdate;
   }
 
   public void run()
   {
     if (DEBUG) log("Attempting to run CourseAddition command");
-    course = new Course(courseName);
+    //course = new Course(courseName);
     if (DEBUG) log("Get courses from TaskCommander and add this course to the list");
     TaskCommander.getCourses().add(course);
     if (taskViewToUpdate != null)
