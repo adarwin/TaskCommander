@@ -19,6 +19,7 @@ public class TaskCommander
   private static JPanel mainContentPanel;
   private static JFrame frame;
   private static JTextField input;
+  private static JToolBar toolBar;
   private static ArrayList<Course> courses;
   private static ArrayList<Task> tasks;
   private static boolean DEBUG = true;
@@ -208,6 +209,7 @@ public class TaskCommander
     JPanel constantsPanel = new JPanel();
     mainContentPanel = new JPanel(new CardLayout());
     constantsPanel.setLayout(new BorderLayout());
+    toolBar = new JToolBar();
 
     JMenuBar menuBar = new JMenuBar();
     //Build the file menu
@@ -272,6 +274,16 @@ public class TaskCommander
       });
       viewModes.add(rbMenuItem);
       viewMenu.add(rbMenuItem);
+
+      //Add to toolbar
+      ActionListener[] listeners = rbMenuItem.getActionListeners();
+      JButton temp = new JButton(rbMenuItem.getText());
+      for (ActionListener listener : listeners)
+      {
+        temp.addActionListener(listener);
+      }
+      toolBar.add(temp);
+
       rbMenuItem = new JRadioButtonMenuItem("Planning Board");
       rbMenuItem.setMnemonic(KeyEvent.VK_P);
       rbMenuItem.addActionListener(new ActionListener()
@@ -284,6 +296,15 @@ public class TaskCommander
       });
       viewModes.add(rbMenuItem);
       viewMenu.add(rbMenuItem);
+
+      //Add to toolbar
+      listeners = rbMenuItem.getActionListeners();
+      temp = new JButton(rbMenuItem.getText());
+      for (ActionListener listener : listeners)
+      {
+        temp.addActionListener(listener);
+      }
+      toolBar.add(temp);
 
     //Build the tools menu
       JMenu toolsMenu = new JMenu("Tools");
@@ -303,7 +324,6 @@ public class TaskCommander
     menuBar.add(toolsMenu);
 
 
-    JToolBar toolBar = new JToolBar();
     toolBar.setFloatable(false);
     toolBar.setBorderPainted(true);
     //toolBar.setPreferredSize(new Dimension(100, 50));

@@ -89,6 +89,9 @@ public class TaskEntryPanel extends JPanel implements TaskView
 
       mainSplitPane.setDividerLocation(TaskCommander.startingWidth/3);
       nestedSplitPane.setDividerLocation(TaskCommander.startingWidth/3);
+      mainSplitPane.setResizeWeight(.2);
+      nestedSplitPane.setResizeWeight(.8);
+
 
 
     //Add components
