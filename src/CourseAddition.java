@@ -67,6 +67,7 @@ public class CourseAddition implements Command
   }
   public void redo()
   {
-    if (DEBUG) log("Redo currently does nothing");
+    if (DEBUG) log("Attempting to redo this CourseAddition");
+    run();
   }
 }

@@ -9,6 +9,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
 import javax.swing.*;
+import javax.swing.UIManager.*;
 
 public class TaskCommander 
 {
@@ -202,6 +203,39 @@ public class TaskCommander
 
   public static void main(String[] args)
   {
+    try
+    {
+      for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels())
+      {
+        if ("Nimbus".equals(info.getName()))
+        {
+          UIManager.setLookAndFeel(info.getClassName());
+          break;
+        }
+      }
+    }
+    catch (UnsupportedLookAndFeelException e)
+    {
+      e.printStackTrace();
+      System.exit(1);
+    }
+    catch (ClassNotFoundException e)
+    {
+      e.printStackTrace();
+      System.exit(1);
+    }
+    catch (InstantiationException e)
+    {
+      e.printStackTrace();
+      System.exit(1);
+    }
+    catch (IllegalAccessException e)
+    {
+      e.printStackTrace();
+      System.exit(1);
+    }
+
+
     SwingUtilities.invokeLater(new Runnable()
     {
       public void run()
@@ -303,13 +337,9 @@ public class TaskCommander
       viewMenu.add(rbMenuItem);
 
       //Add to toolbar
-      ActionListener[] listeners = rbMenuItem.getActionListeners();
-      JButton temp = new JButton(rbMenuItem.getText());
-      for (ActionListener listener : listeners)
-      {
-        temp.addActionListener(listener);
-      }
-      toolBar.add(temp);
+        JButton temp = new JButton(rbMenuItem.getText());
+        temp.setModel(rbMenuItem.getModel());
+        toolBar.add(temp);
 
       rbMenuItem = new JRadioButtonMenuItem("Planning Board");
       rbMenuItem.setMnemonic(KeyEvent.VK_P);
@@ -325,13 +355,9 @@ public class TaskCommander
       viewMenu.add(rbMenuItem);
 
       //Add to toolbar
-      listeners = rbMenuItem.getActionListeners();
-      temp = new JButton(rbMenuItem.getText());
-      for (ActionListener listener : listeners)
-      {
-        temp.addActionListener(listener);
-      }
-      toolBar.add(temp);
+        temp = new JButton(rbMenuItem.getText());
+        temp.setModel(rbMenuItem.getModel());
+        toolBar.add(temp);
 
     //Build the tools menu
       JMenu toolsMenu = new JMenu("Tools");

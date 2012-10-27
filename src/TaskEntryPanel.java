@@ -77,8 +77,8 @@ public class TaskEntryPanel extends JPanel implements TaskView
 
 
     //Configure Components
-      taskAddButton.setPreferredSize(new Dimension(20, 20));
-      courseAddButton.setPreferredSize(new Dimension(20, 20));
+      taskAddButton.setPreferredSize(new Dimension(40, 20));
+      courseAddButton.setPreferredSize(new Dimension(40, 20));
       quickTaskField.setText("Enter new task here");
       quickCourseField.setText("Enter new course name here");
       centerScrollPane.setMinimumSize(new Dimension(300, 0));
@@ -96,7 +96,7 @@ public class TaskEntryPanel extends JPanel implements TaskView
       mainSplitPane.setDividerLocation(TaskCommander.startingWidth/3);
       nestedSplitPane.setDividerLocation(TaskCommander.startingWidth/3);
       mainSplitPane.setResizeWeight(.2);
-      nestedSplitPane.setResizeWeight(.8);
+      nestedSplitPane.setResizeWeight(1);
 
 
 
@@ -263,7 +263,25 @@ public class TaskEntryPanel extends JPanel implements TaskView
   }
   public void removeCourse(Course course)
   {
-    if (DEBUG) log("removeCourse(Course course) currently does nothing.");
+    if (DEBUG) log("Find the courseWidget that contains the desired course");
+    CourseWidget target = null;
+    for (CourseWidget cw : courseWidgets)
+    {
+      if (cw.getCourse() == course)
+      {
+        target = cw;
+      }
+    }
+    if (target == null)
+    {
+      if (DEBUG) log("Failed to find desired courseWidget");
+    }
+    else
+    {
+      if (DEBUG) log("Found the desired courseWidget...now just remove it");
+      courseWidgets.remove(target);
+      leftContent.remove(target);
+    }
   }
   public void removeTask(Task task)
   {
