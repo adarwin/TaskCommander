@@ -5,8 +5,11 @@ CSC 420: Graphical User Interfaces
 SUNY Oswego
 */
 
+import java.awt.Color;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.FocusEvent;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -34,6 +37,8 @@ public class TaskEntryPanel extends JPanel implements TaskView
   SpringLayout layout, centerLayout, leftLayout;
   private ArrayList<TaskWidget> taskWidgets;
   private ArrayList<CourseWidget> courseWidgets;
+  private String quickTaskText = "Enter new task name here";
+  private String quickCourseText = "Enter new course name here";
   private final boolean DEBUG = true;
   private final String CLASS = "TaskEntryPanel";
 
@@ -79,8 +84,10 @@ public class TaskEntryPanel extends JPanel implements TaskView
     //Configure Components
       taskAddButton.setPreferredSize(new Dimension(40, 20));
       courseAddButton.setPreferredSize(new Dimension(40, 20));
-      quickTaskField.setText("Enter new task here");
-      quickCourseField.setText("Enter new course name here");
+      quickTaskField.setText(quickTaskText);
+      quickTaskField.setForeground(Color.gray);
+      quickCourseField.setText(quickCourseText);
+      quickCourseField.setForeground(Color.gray);
       centerScrollPane.setMinimumSize(new Dimension(300, 0));
 
 
@@ -162,7 +169,7 @@ public class TaskEntryPanel extends JPanel implements TaskView
 
 
 
-    //Add Action Listeners
+    //Add Listeners
       quickTaskField.addActionListener(new ActionListener()
       {
         public void actionPerformed(ActionEvent e)
@@ -176,9 +183,13 @@ public class TaskEntryPanel extends JPanel implements TaskView
       {
         public void focusGained(FocusEvent e)
         {
+          quickTaskField.setText("");
+          quickTaskField.setForeground(Color.black);
         }
         public void focusLost(FocusEvent e)
         {
+          quickTaskField.setText(quickTaskText);
+          quickTaskField.setForeground(Color.gray);
         }
       });
       quickCourseField.addActionListener(new ActionListener()
@@ -188,6 +199,19 @@ public class TaskEntryPanel extends JPanel implements TaskView
           if (DEBUG) log("Intercepted entry from quickCourseField");
           TaskCommander.addCourse(quickCourseField.getText());
           quickCourseField.selectAll();
+        }
+      });
+      quickCourseField.addFocusListener(new FocusListener()
+      {
+        public void focusGained(FocusEvent e)
+        {
+          quickCourseField.setText("");
+          quickCourseField.setForeground(Color.black);
+        }
+        public void focusLost(FocusEvent e)
+        {
+          quickCourseField.setText(quickCourseText);
+          quickCourseField.setForeground(Color.gray);
         }
       });
       taskAddButton.addActionListener(new ActionListener()
