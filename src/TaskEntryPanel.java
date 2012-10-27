@@ -172,6 +172,15 @@ public class TaskEntryPanel extends JPanel implements TaskView
           quickTaskField.selectAll();
         }
       });
+      quickTaskField.addFocusListener(new FocusListener()
+      {
+        public void focusGained(FocusEvent e)
+        {
+        }
+        public void focusLost(FocusEvent e)
+        {
+        }
+      });
       quickCourseField.addActionListener(new ActionListener()
       {
         public void actionPerformed(ActionEvent e)
