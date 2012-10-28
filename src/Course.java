@@ -6,6 +6,7 @@ SUNY Oswego
 */
 
 import java.util.Date;
+import java.awt.Color;
 
 public class Course
 {
@@ -27,6 +28,7 @@ public class Course
   private int[] endingTime;
   private int courseNumber;
   private double grade;
+  private Color color;
 
   private boolean selected;
 
@@ -34,7 +36,10 @@ public class Course
   {
     courseName = name;
     selected = false;
+    color = TaskCommander.getDefaultCourseColor();
   }
+  public Color getColor() { return color; }
+  public void setColor(Color color) { this.color = color; }
   public String getName() { return courseName; }
   public void setName(String newName) { courseName = newName; }
   public boolean isSelected() { return selected; }

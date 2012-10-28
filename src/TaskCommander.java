@@ -23,18 +23,28 @@ public class TaskCommander
   private static JToolBar toolBar;
   private static ArrayList<Course> courses;
   private static ArrayList<Task> tasks;
+  private static Course generalCourse;
   private static boolean DEBUG = true;
   private static String CLASS = "TaskCommander";
   public static int startingWidth = 800;
   public static int startingHeight = 600;
   private static final String TASK_ENTRY = "Task Entry Mode";
   private static final String PLANNING = "Planning Board";
+  static final Color pastelGreen = new Color(210, 255, 197);
+  static final Color pastelBlue = new Color(208, 200, 255);
+  static final Color pastelYellow = new Color(255, 247, 187);
+  static final Color pastelCyan = new Color(183, 252, 255);
+  static final Color pastelPurple = new Color(255, 191, 239);
+  static final Color pastelRed = new Color(255, 199, 198);
+  static final Color neutralColor = new Color(214, 217, 223);
+
+  private static void log(String message)
+  {
+    log(CLASS, message);
+  }
 
   //Public Methods
-    private static void log(String message)
-    {
-      log(CLASS, message);
-    }
+    public static Color getDefaultCourseColor() { return neutralColor; }
     public static void log(String header, String message)
     {
       System.out.println(header + ": " + message);
@@ -109,6 +119,10 @@ public class TaskCommander
       if (DEBUG) log("Adding task with name: '" + name + "'");
       if (DEBUG) log("Get selected course");
       Course course = getSelectedCourse();
+      if (course == null)
+      {
+        course = generalCourse;
+      }
       if (DEBUG) log("Create Task object and add it");
       addTask(new Task(name, course));
     }
@@ -179,13 +193,13 @@ public class TaskCommander
       return selectedCourse;
     }
 
-    public void setSelected(Course course)
+    public void setSelected(Course course, boolean selection)
     {
       for (Course c : courses)
       {
         if (c == course)
         {
-          c.setSelected(true);
+          c.setSelected(selection);
           break;
         }
       }
@@ -398,5 +412,11 @@ public class TaskCommander
     contentPane.add(constantsPanel, BorderLayout.NORTH);
     //contentPane.add(taskEntryPanel, BorderLayout.CENTER);
     contentPane.add(mainContentPanel, BorderLayout.CENTER);
+
+
+    // Add general course
+      generalCourse = new Course("General");
+      Command command = new CourseAddition(generalCourse, taskEntryPanel);
+      command.run();
   }
 }

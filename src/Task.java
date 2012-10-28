@@ -34,7 +34,7 @@ public class Task
   public Task(String name, Course course)
   {
     taskName = name;
-    associatedCourse = new Course("General");
+    associatedCourse = course;
   }
   public Course getCourse() { return associatedCourse; }
   public void setCourse(Course newCourse) { associatedCourse = newCourse; }

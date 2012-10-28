@@ -77,6 +77,8 @@ public class TaskWidget extends JPanel
     add(dueDate);
     add(notesButton);
 
+    setBackground(task.getCourse().getColor());
+
     int margin = 2;
 
     layout.putConstraint(SpringLayout.NORTH, taskCheckBox, 0, SpringLayout.NORTH, this);
