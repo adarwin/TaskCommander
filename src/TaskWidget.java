@@ -6,7 +6,10 @@ SUNY Oswego
 */
 
 import java.util.Calendar;
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseEvent;
 import javax.swing.border.SoftBevelBorder;
@@ -27,6 +30,21 @@ public class TaskWidget extends JPanel
   private Task task;
 
   public Task getTask() { return task; }
+  public boolean isSelected() { return task.isSelected(); }
+
+  private void setSelected(boolean selected)
+  {
+    task.setSelected(selected);
+    if (selected)
+    {
+      setBackground(TaskCommander.pastelBlue);
+    }
+    else
+    {
+      setBackground(TaskCommander.neutralColor);
+    }
+  }
+
 
   public TaskWidget()
   {
@@ -42,7 +60,7 @@ public class TaskWidget extends JPanel
   }
   public TaskWidget(Task task)
   {
-    super();
+    //super();
     this.task = task;
     layout = new SpringLayout();
     setLayout(layout);
@@ -93,21 +111,43 @@ public class TaskWidget extends JPanel
     layout.putConstraint(SpringLayout.NORTH, notesButton, 0, SpringLayout.NORTH, this);
     layout.putConstraint(SpringLayout.EAST, notesButton, 0, SpringLayout.WEST, dueDate);
 
-    addMouseListener(new MouseListener()
-    {
-      public void mouseClicked(MouseEvent e) {}
-      public void mouseEntered(MouseEvent e) {}
-      public void mouseExited(MouseEvent e) {}
-      public void mousePressed(MouseEvent e)
-      {
-        if(e.getButton() == MouseEvent.BUTTON3)
-        {
-          //Open right-click menu
-          System.out.println("Open right-click menu");
-        }
-      }
-      public void mouseReleased(MouseEvent e) {}
-    });
 
+
+    // Add Listeners
+      addMouseListener(new MouseListener()
+      {
+        public void mouseClicked(MouseEvent e) {}
+        public void mouseEntered(MouseEvent e)
+        {
+          if (e.getButton() == MouseEvent.BUTTON1)
+          {
+            //Select
+            setSelected(!isSelected());
+          }
+        }
+        public void mouseExited(MouseEvent e) {}
+        public void mousePressed(MouseEvent e)
+        {
+          if(e.getButton() == MouseEvent.BUTTON3)
+          {
+            //Open right-click menu
+            System.out.println("Open right-click menu");
+          }
+          else if (e.getButton() == MouseEvent.BUTTON1)
+          {
+            //Select
+            setSelected(!isSelected());
+          }
+        }
+        public void mouseReleased(MouseEvent e) {}
+      });
+
+      taskCheckBox.addActionListener(new ActionListener()
+      {
+        public void actionPerformed(ActionEvent e)
+        {
+          setSelected(taskCheckBox.isSelected());
+        }
+      });
   }
 }

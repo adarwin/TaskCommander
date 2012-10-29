@@ -23,6 +23,7 @@ public class TaskCommander
   private static JToolBar toolBar;
   private static ArrayList<Course> courses;
   private static ArrayList<Task> tasks;
+  private static ArrayList<SubTask> subTasks;
   private static Course generalCourse;
   private static boolean DEBUG = true;
   private static String CLASS = "TaskCommander";
@@ -142,6 +143,37 @@ public class TaskCommander
       taskEntryPanel.repaint();
     }
 
+    public static SubTask addSubTask(String name)
+    {
+      if (DEBUG) log("Adding subtask with name: '" + name + "'");
+      if (DEBUG) log("Get selected task");
+      Task task = getSelectedTask();
+      SubTask output;
+      if (task == null)
+      {
+        output = null;
+      }
+      else
+      {
+        output = addSubTask(new SubTask(name, task));
+      }
+      return output;
+    }
+    public static SubTask addSubTask(SubTask subTask)
+    {
+      if (DEBUG) log("Attempting to add SubTask object");
+      if (DEBUG) log("Create the SubTaskAddition command object");
+      Command command = new SubTaskAddition(subTask, taskEntryPanel);
+      if (DEBUG) log("Run the command");
+      command.run();
+      if (DEBUG) log("Add the command to the list of commands");
+      addCommand(command);
+      if (DEBUG) log("Revalidate and repaint taskEntryPanel");
+      taskEntryPanel.revalidate();
+      taskEntryPanel.repaint();
+      return subTask;
+    }
+
     public static void addCourse(String name)
     {
       if (DEBUG) log("Adding course with name: '" + name + "'");
@@ -192,6 +224,34 @@ public class TaskCommander
       }
       return selectedCourse;
     }
+    public static Task getSelectedTask()
+    {
+      if (DEBUG) log("Attempting to determine selected task");
+      Task selectedTask = null;
+      if (tasks != null)
+      {
+        for(Task t : tasks)
+        {
+          if (t.isSelected())
+          {
+            selectedTask = t;
+            break;
+          }
+        }
+      }
+      if (DEBUG)
+      {
+        if (selectedTask != null)
+        {
+          log("Found selected task to be: " + selectedTask.getName());
+        }
+        else
+        {
+          log("There was no selected task.");
+        }
+      }
+      return selectedTask;
+    }
 
     public void setSelected(Course course, boolean selection)
     {
@@ -210,8 +270,9 @@ public class TaskCommander
       }
     }
 
-    public static ArrayList<Task> getTasks() { return tasks; }
     public static ArrayList<Course> getCourses() { return courses; }
+    public static ArrayList<Task> getTasks() { return tasks; }
+    public static ArrayList<SubTask> getSubTasks() { return subTasks; }
 
 
 
@@ -268,6 +329,7 @@ public class TaskCommander
   {
     courses = new ArrayList<Course>();
     tasks = new ArrayList<Task>();
+    subTasks = new ArrayList<SubTask>();
 
     JFrame frame = new JFrame("TaskCommander");
     frame.setPreferredSize(new Dimension(startingWidth, startingHeight));

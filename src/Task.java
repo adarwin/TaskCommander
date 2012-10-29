@@ -24,6 +24,7 @@ public class Task
   private int priority = 5; //Range of 0 to 10
   private String note;
   private Course associatedCourse;
+  private boolean selected;
 
   /*
   public Task(String name)
@@ -35,7 +36,9 @@ public class Task
   {
     taskName = name;
     associatedCourse = course;
+    selected = false;
   }
+
   public Course getCourse() { return associatedCourse; }
   public void setCourse(Course newCourse) { associatedCourse = newCourse; }
   public String getName() { return taskName; }
@@ -46,4 +49,6 @@ public class Task
   public void setPriority(int value) { priority = value; }
   public String getNote() { return note; }
   public void setNote(String newNote) { note = newNote; }
+  public boolean isSelected() { return selected; }
+  public void setSelected(boolean value) { selected = value; }
 }

@@ -32,12 +32,14 @@ public class TaskEntryPanel extends JPanel implements TaskView
   JPanel leftContent, centerContent, rightContent;
   JPanel leftPane, centerPane, rightPane;
   JScrollPane leftScrollPane, centerScrollPane, rightScrollPane;
-  JTextField quickTaskField, quickCourseField;
-  JButton taskAddButton, courseAddButton;
-  SpringLayout layout, centerLayout, leftLayout;
-  private ArrayList<TaskWidget> taskWidgets;
+  JTextField quickTaskField, quickCourseField, quickSubTaskField;
+  JButton taskAddButton, courseAddButton, subTaskAddButton;
+  SpringLayout layout, centerLayout, leftLayout, rightLayout;
   private ArrayList<CourseWidget> courseWidgets;
+  private ArrayList<TaskWidget> taskWidgets;
+  private ArrayList<SubTaskWidget> subTaskWidgets;
   private String quickTaskText = "Enter new task name here";
+  private String quickSubTaskText = "Enter new subtask here";
   private String quickCourseText = "Enter new course name here";
   private final boolean DEBUG = true;
   private final String CLASS = "TaskEntryPanel";
@@ -49,8 +51,9 @@ public class TaskEntryPanel extends JPanel implements TaskView
 
   public TaskEntryPanel()
   {
-    taskWidgets = new ArrayList<TaskWidget>();
     courseWidgets = new ArrayList<CourseWidget>();
+    taskWidgets = new ArrayList<TaskWidget>();
+    subTaskWidgets = new ArrayList<SubTaskWidget>();
     // Initialize Components and Containers
       // Split Panes
         mainSplitPane = new JSplitPane();
@@ -70,24 +73,30 @@ public class TaskEntryPanel extends JPanel implements TaskView
         rightScrollPane = new JScrollPane(rightContent);
 
       // Other Components
-        quickTaskField = new JTextField();
         quickCourseField = new JTextField();
-        taskAddButton = new JButton("+");
+        quickTaskField = new JTextField();
+        quickSubTaskField = new JTextField();
         courseAddButton = new JButton("+");
+        taskAddButton = new JButton("+");
+        subTaskAddButton = new JButton("+");
 
       // Layouts
         centerLayout = new SpringLayout();
         leftLayout = new SpringLayout();
+        rightLayout = new SpringLayout();
         layout = new SpringLayout();
 
 
     //Configure Components
-      taskAddButton.setPreferredSize(new Dimension(40, 20));
       courseAddButton.setPreferredSize(new Dimension(40, 20));
-      quickTaskField.setText(quickTaskText);
-      quickTaskField.setForeground(Color.gray);
+      taskAddButton.setPreferredSize(new Dimension(40, 20));
+      subTaskAddButton.setPreferredSize(new Dimension(40, 20));
       quickCourseField.setText(quickCourseText);
       quickCourseField.setForeground(Color.gray);
+      quickTaskField.setText(quickTaskText);
+      quickTaskField.setForeground(Color.gray);
+      quickSubTaskField.setText(quickSubTaskText);
+      quickSubTaskField.setForeground(Color.gray);
       centerScrollPane.setMinimumSize(new Dimension(300, 0));
 
 
@@ -95,7 +104,7 @@ public class TaskEntryPanel extends JPanel implements TaskView
       mainSplitPane.setRightComponent(nestedSplitPane);
       mainSplitPane.setLeftComponent(leftPane);
       nestedSplitPane.setLeftComponent(centerPane);
-      nestedSplitPane.setRightComponent(rightScrollPane);
+      nestedSplitPane.setRightComponent(rightPane);
 
       mainSplitPane.setContinuousLayout(true);
       nestedSplitPane.setContinuousLayout(true);
@@ -116,6 +125,10 @@ public class TaskEntryPanel extends JPanel implements TaskView
       leftPane.add(courseAddButton);
       leftPane.add(leftScrollPane);
 
+      rightPane.add(quickSubTaskField);
+      rightPane.add(subTaskAddButton);
+      rightPane.add(rightScrollPane);
+
       add(mainSplitPane);
 
 
@@ -126,6 +139,7 @@ public class TaskEntryPanel extends JPanel implements TaskView
       rightContent.setLayout(new BoxLayout(rightContent, BoxLayout.PAGE_AXIS));
       centerPane.setLayout(centerLayout);
       leftPane.setLayout(leftLayout);
+      rightPane.setLayout(rightLayout);
 
 
     //Configure Layouts
@@ -162,6 +176,25 @@ public class TaskEntryPanel extends JPanel implements TaskView
 
 
 
+
+      rightLayout.putConstraint(SpringLayout.NORTH, subTaskAddButton, 0, SpringLayout.NORTH, quickSubTaskField);
+      rightLayout.putConstraint(SpringLayout.SOUTH, subTaskAddButton, 0, SpringLayout.SOUTH, quickSubTaskField);
+      rightLayout.putConstraint(SpringLayout.EAST, subTaskAddButton, 0, SpringLayout.EAST, rightPane);
+
+      rightLayout.putConstraint(SpringLayout.NORTH, quickSubTaskField, 0, SpringLayout.NORTH, rightPane);
+      rightLayout.putConstraint(SpringLayout.EAST, quickSubTaskField, 0, SpringLayout.WEST, subTaskAddButton);
+      rightLayout.putConstraint(SpringLayout.WEST, quickSubTaskField, 0, SpringLayout.WEST, rightPane);
+
+      rightLayout.putConstraint(SpringLayout.NORTH, rightScrollPane, 0, SpringLayout.SOUTH,
+                                 quickSubTaskField.getPreferredSize().height > subTaskAddButton.getPreferredSize().height ? quickSubTaskField : subTaskAddButton);
+      rightLayout.putConstraint(SpringLayout.SOUTH, rightScrollPane, 0, SpringLayout.SOUTH, rightPane);
+      rightLayout.putConstraint(SpringLayout.EAST, rightScrollPane, 0, SpringLayout.EAST, rightPane);
+      rightLayout.putConstraint(SpringLayout.WEST, rightScrollPane, 0, SpringLayout.WEST, rightPane);
+
+
+
+
+
       layout.putConstraint(SpringLayout.NORTH, mainSplitPane, 0, SpringLayout.NORTH, this);
       layout.putConstraint(SpringLayout.SOUTH, mainSplitPane, 0, SpringLayout.SOUTH, this);
       layout.putConstraint(SpringLayout.EAST, mainSplitPane, 0, SpringLayout.EAST, this);
@@ -170,6 +203,28 @@ public class TaskEntryPanel extends JPanel implements TaskView
 
 
     //Add Listeners
+      quickCourseField.addActionListener(new ActionListener()
+      {
+        public void actionPerformed(ActionEvent e)
+        {
+          if (DEBUG) log("Intercepted entry from quickCourseField");
+          TaskCommander.addCourse(quickCourseField.getText());
+          quickCourseField.selectAll();
+        }
+      });
+      quickCourseField.addFocusListener(new FocusListener()
+      {
+        public void focusGained(FocusEvent e)
+        {
+          quickCourseField.setText("");
+          quickCourseField.setForeground(Color.black);
+        }
+        public void focusLost(FocusEvent e)
+        {
+          quickCourseField.setText(quickCourseText);
+          quickCourseField.setForeground(Color.gray);
+        }
+      });
       quickTaskField.addActionListener(new ActionListener()
       {
         public void actionPerformed(ActionEvent e)
@@ -192,26 +247,26 @@ public class TaskEntryPanel extends JPanel implements TaskView
           quickTaskField.setForeground(Color.gray);
         }
       });
-      quickCourseField.addActionListener(new ActionListener()
+      quickSubTaskField.addActionListener(new ActionListener()
       {
         public void actionPerformed(ActionEvent e)
         {
-          if (DEBUG) log("Intercepted entry from quickCourseField");
-          TaskCommander.addCourse(quickCourseField.getText());
-          quickCourseField.selectAll();
+          if (DEBUG) log("Intercepted entry from quickSubTaskField");
+          TaskCommander.addSubTask(quickSubTaskField.getText());
+          quickSubTaskField.selectAll();
         }
       });
-      quickCourseField.addFocusListener(new FocusListener()
+      quickSubTaskField.addFocusListener(new FocusListener()
       {
         public void focusGained(FocusEvent e)
         {
-          quickCourseField.setText("");
-          quickCourseField.setForeground(Color.black);
+          quickSubTaskField.setText("");
+          quickSubTaskField.setForeground(Color.black);
         }
         public void focusLost(FocusEvent e)
         {
-          quickCourseField.setText(quickCourseText);
-          quickCourseField.setForeground(Color.gray);
+          quickSubTaskField.setText(quickSubTaskText);
+          quickSubTaskField.setForeground(Color.gray);
         }
       });
       taskAddButton.addActionListener(new ActionListener()
@@ -294,6 +349,13 @@ public class TaskEntryPanel extends JPanel implements TaskView
     taskWidgets.add(taskWidget);
     centerContent.add(taskWidget);
   }
+  public void addSubTask(SubTask subTask)
+  {
+    if (DEBUG) log("Attempt to add new subTask");
+    SubTaskWidget subTaskWidget = new SubTaskWidget(subTask);
+    subTaskWidgets.add(subTaskWidget);
+    rightContent.add(subTaskWidget);
+  }
   public void removeCourse(Course course)
   {
     if (DEBUG) log("Find the courseWidget that contains the desired course");
@@ -336,6 +398,28 @@ public class TaskEntryPanel extends JPanel implements TaskView
       if (DEBUG) log("Found the desired taskWidget...now just remove it");
       taskWidgets.remove(target);
       centerContent.remove(target);
+    }
+  }
+  public void removeSubTask(SubTask subTask)
+  {
+    if (DEBUG) log("Find the subTaskWidget that contains the desired subTask");
+    SubTaskWidget target = null;
+    for (SubTaskWidget stw : subTaskWidgets)
+    {
+      if (stw.getSubTask() == subTask)
+      {
+        target = stw;
+      }
+    }
+    if (target == null)
+    {
+      if (DEBUG) log("Failed to find desired subTaskWidget");
+    }
+    else
+    {
+      if (DEBUG) log("Found the desired subTaskWidget...now just remove it");
+      subTaskWidgets.remove(target);
+      rightContent.remove(target);
     }
   }
 }

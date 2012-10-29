@@ -152,4 +152,10 @@ public class PlanningCalendar extends JPanel implements TaskView
   public void removeTask(Task task)
   {
   }
+  public void addSubTask(SubTask subTask)
+  {
+  }
+  public void removeSubTask(SubTask subTask)
+  {
+  }
 }

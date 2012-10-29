@@ -18,6 +18,13 @@ public class TaskPlanningPanel extends JPanel implements TaskView
   JPanel unPlannedContent, plannedContent;
   JScrollPane unPlannedScrollPane;
   PlanningCalendar calendar;
+  private final boolean DEBUG = true;
+  private final String CLASS = "TaskPlanningPanel";
+
+  private void log(String message)
+  {
+    TaskCommander.log(CLASS, message);
+  }
 
   public TaskPlanningPanel()
   {
@@ -47,14 +54,26 @@ public class TaskPlanningPanel extends JPanel implements TaskView
 
   public void addCourse(Course course)
   {
+    if (DEBUG) log("addCourse(Course course) currently does nothing");
   }
   public void removeCourse(Course course)
   {
+    if (DEBUG) log("removeCourse(Course course) currently does nothing");
   }
   public void addTask(Task task)
   {
+    if (DEBUG) log("addTask(Task task) currently does nothing");
   }
   public void removeTask(Task task)
   {
+    if (DEBUG) log("removeTask(Task task) currently does nothing");
+  }
+  public void addSubTask(SubTask subTask)
+  {
+    if (DEBUG) log("addSubTask(SubTask subTask) currently does nothing");
+  }
+  public void removeSubTask(SubTask subTask)
+  {
+    if (DEBUG) log("removeSubTask(SubTask subTask) currently does nothing");
   }
 }

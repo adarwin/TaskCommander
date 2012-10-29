@@ -9,6 +9,8 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseEvent;
 import java.awt.Dimension;
 import java.awt.BorderLayout;
 import javax.swing.JPanel;
@@ -33,26 +35,30 @@ public class CourseWidget extends JPanel
     course.setColor(color);
     setBackground(color);
   }
+  private boolean isSelected() { return course.isSelected(); }
   private void setSelected(boolean selected)
   {
     course.setSelected(selected);
     Color color = course.getColor();
     if (selected)
     {
+      /*
       float h, s, b;
       float[] hsb = Color.RGBtoHSB(color.getRed(), color.getGreen(), color.getBlue(), null);
       setBackground(Color.getHSBColor(hsb[0], hsb[1], hsb[2]*.8f));
+      */
+      setBackground(TaskCommander.pastelBlue);
     }
     else
     {
-      setBackground(color);
+      setBackground(TaskCommander.neutralColor);
     }
   }
 
   private void showColorChooser()
   {
     final JColorChooser colorChooser = new JColorChooser(course.getColor());
-    JColorChooser.createDialog(this,
+    JDialog dialog = JColorChooser.createDialog(this,
                                "title",
                                true,
                                colorChooser,
@@ -96,6 +102,33 @@ public class CourseWidget extends JPanel
 
 
     // Add Listeners
+      addMouseListener(new MouseListener()
+      {
+        public void mouseClicked(MouseEvent e) {}
+        public void mouseEntered(MouseEvent e)
+        {
+          if (e.getButton() == MouseEvent.BUTTON1)
+          {
+            //Select
+            setSelected(!isSelected());
+          }
+        }
+        public void mouseExited(MouseEvent e) {}
+        public void mousePressed(MouseEvent e)
+        {
+          if(e.getButton() == MouseEvent.BUTTON3)
+          {
+            //Open right-click menu
+            System.out.println("Open right-click menu");
+          }
+          else if (e.getButton() == MouseEvent.BUTTON1)
+          {
+            //Select
+            setSelected(!isSelected());
+          }
+        }
+        public void mouseReleased(MouseEvent e) {}
+      });
       courseCheckBox.addActionListener(new ActionListener()
       {
         public void actionPerformed(ActionEvent e)
