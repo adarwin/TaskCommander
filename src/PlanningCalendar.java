@@ -44,6 +44,7 @@ public class PlanningCalendar extends JPanel implements TaskView
   }
 
   Day[][] days;
+  Day today;
 
   public PlanningCalendar()
   {
@@ -79,6 +80,10 @@ public class PlanningCalendar extends JPanel implements TaskView
     }
     int dayCount = dayOfMonth;
     System.out.println("Start at week: " + weekOfMonth + " and day: " + dayOfWeek);
+    //Set today
+      today = new Day(dayCount--);
+      days[weekOfMonth][dayOfWeek--] = today;
+      today.setBackground(TaskCommander.pastelBlue);
     for (int week = weekOfMonth; week > 0; week--)
     {
       for (int day = dayOfWeek; day > 0; day--)
@@ -91,7 +96,7 @@ public class PlanningCalendar extends JPanel implements TaskView
       dayOfWeek = 7;
     }
     dayCount = dayOfMonth;
-    dayOfWeek = originalDayOfWeek;
+    dayOfWeek = originalDayOfWeek+1;
     System.out.println("Start at week: " + weekOfMonth + " and day: " + dayOfWeek);
     System.out.println(totalDays);
     System.out.println(month);
