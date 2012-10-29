@@ -15,6 +15,7 @@ import javax.swing.border.MatteBorder;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.BoxLayout;
+import javax.swing.SwingConstants;
 
 public class PlanningCalendar extends JPanel implements TaskView
 {
@@ -113,6 +114,30 @@ public class PlanningCalendar extends JPanel implements TaskView
     }
     System.out.println("| Su | Mo | Tu | We | Th | Fr | Sa |");
     System.out.println("------------------------------------");
+    //Add day titles
+      for (int i = 1; i < 8; i++)
+      {
+        GridBagConstraints c = new GridBagConstraints();
+        c.fill = GridBagConstraints.BOTH;
+        c.weightx = 0.5;
+        c.weighty = 0.5;
+        c.gridx = i;
+        c.gridy = 0;
+        String day = "";
+        switch (i)
+        {
+          case 1: day = "Sunday"; break;
+          case 2: day = "Monday"; break;
+          case 3: day = "Tuesday"; break;
+          case 4: day = "Wednesday"; break;
+          case 5: day = "Thursday"; break;
+          case 6: day = "Friday"; break;
+          case 7: day = "Saturday"; break;
+        }
+        JLabel temp = new JLabel(day);
+        temp.setHorizontalAlignment(SwingConstants.CENTER);
+        add(temp, c);
+      }
     for (int i = 1; i < days.length; i++)
     {
       for (int j = 1; j < days[i].length; j++)
