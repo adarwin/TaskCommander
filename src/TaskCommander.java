@@ -353,6 +353,16 @@ public class TaskCommander
       JMenu fileMenu = new JMenu("File");
       fileMenu.setMnemonic(KeyEvent.VK_F);
       JMenuItem menuItem = new JMenuItem("New...", KeyEvent.VK_N);
+      menuItem.addActionListener(new ActionListener()
+      {
+        public void actionPerformed(ActionEvent e)
+        {
+          JFrame temp = new JFrame("New... Window");
+          temp.setSize(new Dimension(480, 320));
+          temp.setLocationRelativeTo(null);
+          temp.setVisible(true);
+        }
+      });
       fileMenu.add(menuItem);
       menuItem = new JMenuItem("Exit", KeyEvent.VK_X);
       menuItem.addActionListener(new ActionListener()
@@ -441,8 +451,28 @@ public class TaskCommander
       JMenu macrosMenu = new JMenu("Macros");
       macrosMenu.setMnemonic(KeyEvent.VK_M);
       menuItem = new JMenuItem("Record");
+      menuItem.addActionListener(new ActionListener()
+      {
+        public void actionPerformed(ActionEvent e)
+        {
+          JFrame temp = new JFrame("Record... Window");
+          temp.setSize(new Dimension(480, 320));
+          temp.setLocationRelativeTo(null);
+          temp.setVisible(true);
+        }
+      });
       macrosMenu.add(menuItem);
       menuItem = new JMenuItem("Manage...");
+      menuItem.addActionListener(new ActionListener()
+      {
+        public void actionPerformed(ActionEvent e)
+        {
+          JFrame temp = new JFrame("Manage... Window");
+          temp.setSize(new Dimension(480, 320));
+          temp.setLocationRelativeTo(null);
+          temp.setVisible(true);
+        }
+      });
       macrosMenu.add(menuItem);
       toolsMenu.add(macrosMenu);
 
