@@ -349,10 +349,12 @@ public class TaskCommander
       mainFrame = new JFrame("TaskCommander");
       mainFrame.setPreferredSize(new Dimension(startingWidth, startingHeight));
       mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-      buildMenuBar();
+
       configureComponents();
+      buildMenuBar();
       configureLayouts();
       addComponentsToFrame();
+
       mainFrame.pack();
       mainFrame.setLocationRelativeTo(null);
       mainFrame.setVisible(true);
@@ -510,11 +512,6 @@ public class TaskCommander
       planningBoard = new TaskPlanningPanel();
       input = new JTextField();
 
-      constantsPanel.add(menuBar, BorderLayout.NORTH);
-      constantsPanel.add(toolBar, BorderLayout.SOUTH);
-
-      mainContentPanel.add(taskEntryPanel, TASK_ENTRY);
-      mainContentPanel.add(planningBoard, PLANNING);
     }
 
     private static void configureLayouts()
@@ -522,7 +519,6 @@ public class TaskCommander
       layout = new SpringLayout();
       constantsPanel.setLayout(new BorderLayout());
       contentPane.setLayout(layout);
-
       layout.putConstraint(SpringLayout.NORTH, constantsPanel, 0, SpringLayout.NORTH, contentPane);
       layout.putConstraint(SpringLayout.EAST, constantsPanel, 0, SpringLayout.EAST, contentPane);
       layout.putConstraint(SpringLayout.WEST, constantsPanel, 0, SpringLayout.WEST, contentPane);
@@ -534,9 +530,14 @@ public class TaskCommander
 
     private static void addComponentsToFrame()
     {
+      constantsPanel.add(menuBar, BorderLayout.NORTH);
+      constantsPanel.add(toolBar, BorderLayout.SOUTH);
+
+      mainContentPanel.add(taskEntryPanel, TASK_ENTRY);
+      mainContentPanel.add(planningBoard, PLANNING);
+
       contentPane.add(constantsPanel, BorderLayout.NORTH);
       contentPane.add(mainContentPanel, BorderLayout.CENTER);
-
 
       // Add general course
         generalCourse = new Course("General");

@@ -101,6 +101,8 @@ public class TaskEntryPanel extends JPanel implements TaskView
 
 
     //Configure Containers
+      leftPane.setMinimumSize(new Dimension(220, 0));
+      centerPane.setMinimumSize(new Dimension(300, 0));
       mainSplitPane.setRightComponent(nestedSplitPane);
       mainSplitPane.setLeftComponent(leftPane);
       nestedSplitPane.setLeftComponent(centerPane);

@@ -27,7 +27,8 @@ import javax.swing.SpringLayout;
 public class CourseWidget extends JPanel
 {
   // Stored Objects
-    private JCheckBox courseCheckBox;
+    //private JCheckBox courseCheckBox;
+    private JLabel courseLabel;
     private Dimension minimumSize, preferredSize, maximumSize;
     //private JButton colorButton;
     private Course course;
@@ -72,7 +73,8 @@ public class CourseWidget extends JPanel
       maximumSize = new Dimension(3000, 30);
       //colorButton = new JButton("Color");
       //colorButton.setPreferredSize(new Dimension(65, 30));
-      courseCheckBox = new JCheckBox(course.getName());
+      //courseCheckBox = new JCheckBox(course.getName());
+      courseLabel = new JLabel(course.getName());
       setBorder(new SoftBevelBorder(SoftBevelBorder.RAISED));
       setPreferredSize(preferredSize);
       setMaximumSize(maximumSize);
@@ -85,9 +87,9 @@ public class CourseWidget extends JPanel
       layout.putConstraint(SpringLayout.NORTH, colorIndicator, 0, SpringLayout.NORTH, this);
       layout.putConstraint(SpringLayout.SOUTH, colorIndicator, 0, SpringLayout.SOUTH, this);
       layout.putConstraint(SpringLayout.WEST, colorIndicator, 0, SpringLayout.WEST, this);
-      layout.putConstraint(SpringLayout.NORTH, courseCheckBox, 0, SpringLayout.NORTH, this);
-      layout.putConstraint(SpringLayout.SOUTH, courseCheckBox, 0, SpringLayout.SOUTH, this);
-      layout.putConstraint(SpringLayout.WEST, courseCheckBox, 0, SpringLayout.EAST, colorIndicator);
+      layout.putConstraint(SpringLayout.NORTH, courseLabel, 0, SpringLayout.NORTH, this);
+      layout.putConstraint(SpringLayout.SOUTH, courseLabel, 0, SpringLayout.SOUTH, this);
+      layout.putConstraint(SpringLayout.WEST, courseLabel, 5, SpringLayout.EAST, colorIndicator);
       //layout.putConstraint(SpringLayout.NORTH, colorButton, 0, SpringLayout.NORTH, this);
       //layout.putConstraint(SpringLayout.SOUTH, colorButton, 0 ,SpringLayout.SOUTH, this);
       //layout.putConstraint(SpringLayout.EAST, colorButton, 0, SpringLayout.EAST, this);
@@ -144,6 +146,7 @@ public class CourseWidget extends JPanel
         }
       });
 
+      /*
       courseCheckBox.addActionListener(new ActionListener()
       {
         public void actionPerformed(ActionEvent e)
@@ -151,6 +154,7 @@ public class CourseWidget extends JPanel
           setSelected(courseCheckBox.isSelected());
         }
       });
+      */
 
       /*
       colorButton.addActionListener(new ActionListener()
@@ -167,7 +171,7 @@ public class CourseWidget extends JPanel
     private void addComponents()
     {
       add(colorIndicator);
-      add(courseCheckBox);
+      add(courseLabel);
       //add(colorButton);
     }
 
