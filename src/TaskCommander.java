@@ -25,6 +25,7 @@ public class TaskCommander
   private static ArrayList<Task> tasks;
   private static ArrayList<SubTask> subTasks;
   private static Course generalCourse;
+  private static SpringLayout layout;
   private static boolean DEBUG = true;
   private static String CLASS = "TaskCommander";
   public static int startingWidth = 800;
@@ -342,10 +343,12 @@ public class TaskCommander
 
   private static void addComponentsToFrame(JFrame mainFrame)
   {
+    layout = new SpringLayout();
     Container contentPane = mainFrame.getContentPane();
     JPanel constantsPanel = new JPanel();
     mainContentPanel = new JPanel(new CardLayout());
     constantsPanel.setLayout(new BorderLayout());
+    contentPane.setLayout(layout);
     toolBar = new JToolBar();
 
     JMenuBar menuBar = new JMenuBar();
@@ -483,8 +486,9 @@ public class TaskCommander
     menuBar.add(toolsMenu);
 
 
-    toolBar.setFloatable(false);
+    toolBar.setFloatable(true);
     toolBar.setBorderPainted(true);
+    toolBar.setBorder(BorderFactory.createLineBorder(Color.black));
     //toolBar.setPreferredSize(new Dimension(100, 50));
     toolBar.add(new JButton("ToolbarButton"));
 
@@ -498,11 +502,22 @@ public class TaskCommander
     constantsPanel.add(menuBar, BorderLayout.NORTH);
     constantsPanel.add(toolBar, BorderLayout.SOUTH);
 
+    //mainContentPanel.setBorder(BorderFactory.createLineBorder(Color.black));
     mainContentPanel.add(taskEntryPanel, TASK_ENTRY);
     mainContentPanel.add(planningBoard, PLANNING);
 
+
+    layout.putConstraint(SpringLayout.NORTH, constantsPanel, 0, SpringLayout.NORTH, contentPane);
+    layout.putConstraint(SpringLayout.EAST, constantsPanel, 0, SpringLayout.EAST, contentPane);
+    layout.putConstraint(SpringLayout.WEST, constantsPanel, 0, SpringLayout.WEST, contentPane);
+    layout.putConstraint(SpringLayout.NORTH, mainContentPanel, 10, SpringLayout.SOUTH, constantsPanel);
+    layout.putConstraint(SpringLayout.SOUTH, mainContentPanel, 0, SpringLayout.SOUTH, contentPane);
+    layout.putConstraint(SpringLayout.EAST, mainContentPanel, 0, SpringLayout.EAST, contentPane);
+    layout.putConstraint(SpringLayout.WEST, mainContentPanel, 0, SpringLayout.WEST, contentPane);
+
+
+
     contentPane.add(constantsPanel, BorderLayout.NORTH);
-    //contentPane.add(taskEntryPanel, BorderLayout.CENTER);
     contentPane.add(mainContentPanel, BorderLayout.CENTER);
 
 

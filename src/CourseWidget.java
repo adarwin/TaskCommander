@@ -5,35 +5,176 @@ CSC 420: Graphical User Interfaces
 SUNY Oswego
 */
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseEvent;
-import java.awt.Dimension;
-import java.awt.BorderLayout;
-import javax.swing.JPanel;
-import javax.swing.JCheckBox;
-import javax.swing.JLabel;
+import javax.swing.border.SoftBevelBorder;
+import javax.swing.border.MatteBorder;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JColorChooser;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
-import javax.swing.border.SoftBevelBorder;
+import javax.swing.JPanel;
+import javax.swing.JLabel;
+import javax.swing.SpringLayout;
 
 public class CourseWidget extends JPanel
 {
-  private JCheckBox courseCheckBox;
-  private Dimension minimumSize, preferredSize, maximumSize;
-  private JButton colorButton;
-  private Course course;
-  private static JFrame colorFrame;
+  // Stored Objects
+    private JCheckBox courseCheckBox;
+    private Dimension minimumSize, preferredSize, maximumSize;
+    //private JButton colorButton;
+    private Course course;
+    private JPanel colorIndicator;
+    private SpringLayout layout;
+    private static JFrame colorFrame;
+
+
+  // Public Methods
+    public CourseWidget()
+    {
+      this("CourseName");
+    }
+    public CourseWidget(String courseName)
+    {
+      this(new Course(courseName));
+    }
+    public CourseWidget(Course course)
+    {
+      this.course = course;
+      configureComponents();
+      configureLayout();
+      addListeners();
+      addComponents();
+    }
+
+    public Course getCourse() { return course; }
+
+
+
+  // Helper/Private Methods
+    private void configureComponents()
+    {
+      int height = 20;
+      colorIndicator = new JPanel();
+      colorIndicator.setPreferredSize(new Dimension(30, 0));
+      colorIndicator.setBorder(new MatteBorder(1, 1, 1, 1, Color.black));
+      layout = new SpringLayout();
+      setLayout(layout);
+      //minimumSize = new Dimension(100, 20);
+      preferredSize = new Dimension(200, height);
+      maximumSize = new Dimension(3000, 30);
+      //colorButton = new JButton("Color");
+      //colorButton.setPreferredSize(new Dimension(65, 30));
+      courseCheckBox = new JCheckBox(course.getName());
+      setBorder(new SoftBevelBorder(SoftBevelBorder.RAISED));
+      setPreferredSize(preferredSize);
+      setMaximumSize(maximumSize);
+      setBackground(course.getColor());
+    }
+
+
+    private void configureLayout()
+    {
+      layout.putConstraint(SpringLayout.NORTH, colorIndicator, 0, SpringLayout.NORTH, this);
+      layout.putConstraint(SpringLayout.SOUTH, colorIndicator, 0, SpringLayout.SOUTH, this);
+      layout.putConstraint(SpringLayout.WEST, colorIndicator, 0, SpringLayout.WEST, this);
+      layout.putConstraint(SpringLayout.NORTH, courseCheckBox, 0, SpringLayout.NORTH, this);
+      layout.putConstraint(SpringLayout.SOUTH, courseCheckBox, 0, SpringLayout.SOUTH, this);
+      layout.putConstraint(SpringLayout.WEST, courseCheckBox, 0, SpringLayout.EAST, colorIndicator);
+      //layout.putConstraint(SpringLayout.NORTH, colorButton, 0, SpringLayout.NORTH, this);
+      //layout.putConstraint(SpringLayout.SOUTH, colorButton, 0 ,SpringLayout.SOUTH, this);
+      //layout.putConstraint(SpringLayout.EAST, colorButton, 0, SpringLayout.EAST, this);
+    }
+
+
+    private void addListeners()
+    {
+      addMouseListener(new MouseListener()
+      {
+        public void mouseClicked(MouseEvent e)
+        {
+          //setBorder(new SoftBevelBorder(SoftBevelBorder.RAISED));
+          if(e.getButton() == MouseEvent.BUTTON3)
+          {
+            //Open right-click menu
+            System.out.println("Open right-click menu");
+            showColorChooser();
+          }
+        }
+        public void mouseEntered(MouseEvent e)
+        {
+          /*
+          if (e.getButton() == MouseEvent.BUTTON1)
+          {
+            setBorder(new SoftBevelBorder(SoftBevelBorder.LOWERED));
+            //Select
+            setSelected(!isSelected());
+          }
+          */
+        }
+        public void mouseExited(MouseEvent e)
+        {
+          /*
+          if (e.getButton() == MouseEvent.BUTTON1)
+          {
+            setBorder(new SoftBevelBorder(SoftBevelBorder.RAISED));
+            setSelected(!isSelected());
+          }
+          */
+        }
+        public void mousePressed(MouseEvent e)
+        {
+          setBorder(new SoftBevelBorder(SoftBevelBorder.LOWERED));
+        }
+        public void mouseReleased(MouseEvent e)
+        {
+          setBorder(new SoftBevelBorder(SoftBevelBorder.RAISED));
+          if (e.getButton() == MouseEvent.BUTTON1)
+          {
+            //Select
+            setSelected(!isSelected());
+          }
+        }
+      });
+
+      courseCheckBox.addActionListener(new ActionListener()
+      {
+        public void actionPerformed(ActionEvent e)
+        {
+          setSelected(courseCheckBox.isSelected());
+        }
+      });
+
+      /*
+      colorButton.addActionListener(new ActionListener()
+      {
+        public void actionPerformed(ActionEvent e)
+        {
+          showColorChooser();
+        }
+      });
+      */
+    }
+
+
+    private void addComponents()
+    {
+      add(colorIndicator);
+      add(courseCheckBox);
+      //add(colorButton);
+    }
 
   private void setColor(Color color)
   {
     course.setColor(color);
-    setBackground(color);
+    colorIndicator.setBackground(color);
   }
   private boolean isSelected() { return course.isSelected(); }
   private void setSelected(boolean selected)
@@ -42,11 +183,6 @@ public class CourseWidget extends JPanel
     Color color = course.getColor();
     if (selected)
     {
-      /*
-      float h, s, b;
-      float[] hsb = Color.RGBtoHSB(color.getRed(), color.getGreen(), color.getBlue(), null);
-      setBackground(Color.getHSBColor(hsb[0], hsb[1], hsb[2]*.8f));
-      */
       setBackground(TaskCommander.pastelBlue);
     }
     else
@@ -79,77 +215,5 @@ public class CourseWidget extends JPanel
                                });
     dialog.setVisible(true);
   }
-  public Course getCourse() { return course; }
-  public CourseWidget()
-  {
-    this("CourseName");
-  }
-  public CourseWidget(String courseName)
-  {
-    this(new Course(courseName));
-  }
-  public CourseWidget(Course course)
-  {
-    this.course = course;
-    setLayout(new BorderLayout());
-    minimumSize = new Dimension(100, 20);
-    preferredSize = new Dimension(200, 20);
-    maximumSize = new Dimension(3000, 30);
-    colorButton = new JButton("Color");
-    colorButton.setPreferredSize(new Dimension(65, 30));
-    courseCheckBox = new JCheckBox(course.getName());
 
-
-
-    // Add Listeners
-      addMouseListener(new MouseListener()
-      {
-        public void mouseClicked(MouseEvent e) {}
-        public void mouseEntered(MouseEvent e)
-        {
-          if (e.getButton() == MouseEvent.BUTTON1)
-          {
-            //Select
-            setSelected(!isSelected());
-          }
-        }
-        public void mouseExited(MouseEvent e) {}
-        public void mousePressed(MouseEvent e)
-        {
-          if(e.getButton() == MouseEvent.BUTTON3)
-          {
-            //Open right-click menu
-            System.out.println("Open right-click menu");
-          }
-          else if (e.getButton() == MouseEvent.BUTTON1)
-          {
-            //Select
-            setSelected(!isSelected());
-          }
-        }
-        public void mouseReleased(MouseEvent e) {}
-      });
-      courseCheckBox.addActionListener(new ActionListener()
-      {
-        public void actionPerformed(ActionEvent e)
-        {
-          setSelected(courseCheckBox.isSelected());
-        }
-      });
-      colorButton.addActionListener(new ActionListener()
-      {
-        public void actionPerformed(ActionEvent e)
-        {
-          showColorChooser();
-        }
-      });
-
-    setBorder(new SoftBevelBorder(SoftBevelBorder.LOWERED));
-    setPreferredSize(preferredSize);
-    setMaximumSize(maximumSize);
-    add(courseCheckBox, BorderLayout.WEST);
-    add(colorButton, BorderLayout.EAST);
-
-    setBackground(course.getColor());
-  }
 }
