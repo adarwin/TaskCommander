@@ -13,12 +13,23 @@ import javax.swing.UIManager.*;
 
 public class TaskCommander 
 {
+  public static int startingWidth = 800;
+  public static int startingHeight = 600;
+
+  protected static final Color pastelGreen = new Color(210, 255, 197);
+  protected static final Color pastelBlue = new Color(208, 200, 255);
+  protected static final Color pastelYellow = new Color(255, 247, 187);
+  protected static final Color pastelCyan = new Color(183, 252, 255);
+  protected static final Color pastelPurple = new Color(255, 191, 239);
+  protected static final Color pastelRed = new Color(255, 199, 198);
+  protected static final Color neutralColor = new Color(214, 217, 223);
+
   private static Stack<Command> runCommands;
   private static Stack<Command> undonCommands;
   private static TaskEntryPanel taskEntryPanel;
   private static TaskPlanningPanel planningBoard;
-  private static JPanel mainContentPanel;
-  private static JFrame frame;
+  private static JPanel mainContentPanel, constantsPanel;
+  private static JFrame mainFrame;
   private static JTextField input;
   private static JToolBar toolBar;
   private static ArrayList<Course> courses;
@@ -26,19 +37,13 @@ public class TaskCommander
   private static ArrayList<SubTask> subTasks;
   private static Course generalCourse;
   private static SpringLayout layout;
+  private static JMenuBar menuBar;
+  private static Container contentPane;
+
   private static boolean DEBUG = true;
   private static String CLASS = "TaskCommander";
-  public static int startingWidth = 800;
-  public static int startingHeight = 600;
   private static final String TASK_ENTRY = "Task Entry Mode";
   private static final String PLANNING = "Planning Board";
-  static final Color pastelGreen = new Color(210, 255, 197);
-  static final Color pastelBlue = new Color(208, 200, 255);
-  static final Color pastelYellow = new Color(255, 247, 187);
-  static final Color pastelCyan = new Color(183, 252, 255);
-  static final Color pastelPurple = new Color(255, 191, 239);
-  static final Color pastelRed = new Color(255, 199, 198);
-  static final Color neutralColor = new Color(214, 217, 223);
 
   private static void log(String message)
   {
@@ -47,11 +52,14 @@ public class TaskCommander
 
   //Public Methods
     public static Color getDefaultCourseColor() { return neutralColor; }
+
     public static void log(String header, String message)
     {
       System.out.println(header + ": " + message);
     }
-    public static JFrame getFrame() { return frame; }
+
+    public static JFrame getFrame() { return mainFrame; }
+
     public static void undo()
     {
       if (runCommands != null && !runCommands.isEmpty())
@@ -92,6 +100,7 @@ public class TaskCommander
     }
 
     public static Stack<Command> getRunCommands() { return runCommands; }
+
     public static Stack<Command> getUndonCommands() { return undonCommands; }
 
     public static void addCourse(TaskView taskView)
@@ -104,6 +113,7 @@ public class TaskCommander
       Course course = new Course(name);
       addCourse(course, taskView);
     }
+
     public static void addCourse(Course course, TaskView taskView)
     {
       Command command = new CourseAddition(course, taskView);
@@ -160,6 +170,7 @@ public class TaskCommander
       }
       return output;
     }
+
     public static SubTask addSubTask(SubTask subTask)
     {
       if (DEBUG) log("Attempting to add SubTask object");
@@ -225,6 +236,7 @@ public class TaskCommander
       }
       return selectedCourse;
     }
+
     public static Task getSelectedTask()
     {
       if (DEBUG) log("Attempting to determine selected task");
@@ -272,7 +284,9 @@ public class TaskCommander
     }
 
     public static ArrayList<Course> getCourses() { return courses; }
+
     public static ArrayList<Task> getTasks() { return tasks; }
+
     public static ArrayList<SubTask> getSubTasks() { return subTasks; }
 
 
@@ -311,7 +325,6 @@ public class TaskCommander
       System.exit(1);
     }
 
-
     SwingUtilities.invokeLater(new Runnable()
     {
       public void run()
@@ -326,204 +339,208 @@ public class TaskCommander
 
 
 
-  private static void createAndShowGUI()
-  {
-    courses = new ArrayList<Course>();
-    tasks = new ArrayList<Task>();
-    subTasks = new ArrayList<SubTask>();
+  // Private methods
+    private static void createAndShowGUI()
+    {
+      courses = new ArrayList<Course>();
+      tasks = new ArrayList<Task>();
+      subTasks = new ArrayList<SubTask>();
 
-    JFrame frame = new JFrame("TaskCommander");
-    frame.setPreferredSize(new Dimension(startingWidth, startingHeight));
-    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    addComponentsToFrame(frame);
-    frame.pack();
-    frame.setLocationRelativeTo(null);
-    frame.setVisible(true);
-  }
+      mainFrame = new JFrame("TaskCommander");
+      mainFrame.setPreferredSize(new Dimension(startingWidth, startingHeight));
+      mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+      buildMenuBar();
+      configureComponents();
+      configureLayouts();
+      addComponentsToFrame();
+      mainFrame.pack();
+      mainFrame.setLocationRelativeTo(null);
+      mainFrame.setVisible(true);
+    }
 
-  private static void addComponentsToFrame(JFrame mainFrame)
-  {
-    layout = new SpringLayout();
-    Container contentPane = mainFrame.getContentPane();
-    JPanel constantsPanel = new JPanel();
-    mainContentPanel = new JPanel(new CardLayout());
-    constantsPanel.setLayout(new BorderLayout());
-    contentPane.setLayout(layout);
-    toolBar = new JToolBar();
-
-    JMenuBar menuBar = new JMenuBar();
-    //Build the file menu
-      JMenu fileMenu = new JMenu("File");
-      fileMenu.setMnemonic(KeyEvent.VK_F);
-      JMenuItem menuItem = new JMenuItem("New...", KeyEvent.VK_N);
-      menuItem.addActionListener(new ActionListener()
-      {
-        public void actionPerformed(ActionEvent e)
+    private static void buildMenuBar()
+    {
+      menuBar = new JMenuBar();
+      //Build the file menu
+        JMenu fileMenu = new JMenu("File");
+        fileMenu.setMnemonic(KeyEvent.VK_F);
+        JMenuItem menuItem = new JMenuItem("New...", KeyEvent.VK_N);
+        menuItem.addActionListener(new ActionListener()
         {
-          JFrame temp = new JFrame("New... Window");
-          temp.setSize(new Dimension(480, 320));
-          temp.setLocationRelativeTo(null);
-          temp.setVisible(true);
-        }
-      });
-      fileMenu.add(menuItem);
-      menuItem = new JMenuItem("Exit", KeyEvent.VK_X);
-      menuItem.addActionListener(new ActionListener()
-      {
-        public void actionPerformed(ActionEvent e)
+          public void actionPerformed(ActionEvent e)
+          {
+            JFrame temp = new JFrame("New... Window");
+            temp.setSize(new Dimension(480, 320));
+            temp.setLocationRelativeTo(null);
+            temp.setVisible(true);
+          }
+        });
+        fileMenu.add(menuItem);
+        menuItem = new JMenuItem("Exit", KeyEvent.VK_X);
+        menuItem.addActionListener(new ActionListener()
         {
-          System.exit(0);
-        }
-      });
-      fileMenu.addSeparator();
-      fileMenu.add(menuItem);
+          public void actionPerformed(ActionEvent e)
+          {
+            System.exit(0);
+          }
+        });
+        fileMenu.addSeparator();
+        fileMenu.add(menuItem);
 
-    //Build the edit menu
-      JMenu editMenu = new JMenu("Edit");
-      editMenu.setMnemonic(KeyEvent.VK_E);
-      menuItem = new JMenuItem("Undo", KeyEvent.VK_U);
-      menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, InputEvent.META_DOWN_MASK));
-      menuItem.addActionListener(new ActionListener()
-      {
-        public void actionPerformed(ActionEvent e)
+      //Build the edit menu
+        JMenu editMenu = new JMenu("Edit");
+        editMenu.setMnemonic(KeyEvent.VK_E);
+        menuItem = new JMenuItem("Undo", KeyEvent.VK_U);
+        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, InputEvent.META_DOWN_MASK));
+        menuItem.addActionListener(new ActionListener()
         {
-          undo();
-          taskEntryPanel.revalidate();
-          taskEntryPanel.repaint();
-        }
-      });
-      editMenu.add(menuItem);
-      menuItem = new JMenuItem("Redo", KeyEvent.VK_R);
-      menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Y, InputEvent.META_DOWN_MASK));
-      menuItem.addActionListener(new ActionListener()
-      {
-        public void actionPerformed(ActionEvent e)
+          public void actionPerformed(ActionEvent e)
+          {
+            undo();
+            taskEntryPanel.revalidate();
+            taskEntryPanel.repaint();
+          }
+        });
+        editMenu.add(menuItem);
+        menuItem = new JMenuItem("Redo", KeyEvent.VK_R);
+        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Y, InputEvent.META_DOWN_MASK));
+        menuItem.addActionListener(new ActionListener()
         {
-          redo();
-          taskEntryPanel.revalidate();
-          taskEntryPanel.repaint();
-        }
-      });
-      editMenu.add(menuItem);
+          public void actionPerformed(ActionEvent e)
+          {
+            redo();
+            taskEntryPanel.revalidate();
+            taskEntryPanel.repaint();
+          }
+        });
+        editMenu.add(menuItem);
 
-    //Build the view menu
-      JMenu viewMenu = new JMenu("View");
-      viewMenu.setMnemonic(KeyEvent.VK_V);
+      //Build the view menu
+        JMenu viewMenu = new JMenu("View");
+        viewMenu.setMnemonic(KeyEvent.VK_V);
 
-      ButtonGroup viewModes = new ButtonGroup();
-      JRadioButtonMenuItem rbMenuItem = new JRadioButtonMenuItem("Task Entry Mode");
-      rbMenuItem.setSelected(true);
-      rbMenuItem.setMnemonic(KeyEvent.VK_T);
-      rbMenuItem.addActionListener(new ActionListener()
-      {
-        public void actionPerformed(ActionEvent e)
+        ButtonGroup viewModes = new ButtonGroup();
+        JRadioButtonMenuItem rbMenuItem = new JRadioButtonMenuItem("Task Entry Mode");
+        rbMenuItem.setSelected(true);
+        rbMenuItem.setMnemonic(KeyEvent.VK_T);
+        rbMenuItem.addActionListener(new ActionListener()
         {
-          CardLayout c = (CardLayout)(mainContentPanel.getLayout());
-          c.show(mainContentPanel, TASK_ENTRY);
-        }
-      });
-      viewModes.add(rbMenuItem);
-      viewMenu.add(rbMenuItem);
+          public void actionPerformed(ActionEvent e)
+          {
+            CardLayout c = (CardLayout)(mainContentPanel.getLayout());
+            c.show(mainContentPanel, TASK_ENTRY);
+          }
+        });
+        viewModes.add(rbMenuItem);
+        viewMenu.add(rbMenuItem);
 
-      //Add to toolbar
-        JButton temp = new JButton(rbMenuItem.getText());
-        temp.setModel(rbMenuItem.getModel());
-        toolBar.add(temp);
+        //Add to toolbar
+          JButton temp = new JButton(rbMenuItem.getText());
+          temp.setModel(rbMenuItem.getModel());
+          toolBar.add(temp);
 
-      rbMenuItem = new JRadioButtonMenuItem("Planning Board");
-      rbMenuItem.setMnemonic(KeyEvent.VK_P);
-      rbMenuItem.addActionListener(new ActionListener()
-      {
-        public void actionPerformed(ActionEvent e)
+        rbMenuItem = new JRadioButtonMenuItem("Planning Board");
+        rbMenuItem.setMnemonic(KeyEvent.VK_P);
+        rbMenuItem.addActionListener(new ActionListener()
         {
-          CardLayout c = (CardLayout)(mainContentPanel.getLayout());
-          c.show(mainContentPanel, PLANNING);
-        }
-      });
-      viewModes.add(rbMenuItem);
-      viewMenu.add(rbMenuItem);
+          public void actionPerformed(ActionEvent e)
+          {
+            CardLayout c = (CardLayout)(mainContentPanel.getLayout());
+            c.show(mainContentPanel, PLANNING);
+          }
+        });
+        viewModes.add(rbMenuItem);
+        viewMenu.add(rbMenuItem);
 
-      //Add to toolbar
-        temp = new JButton(rbMenuItem.getText());
-        temp.setModel(rbMenuItem.getModel());
-        toolBar.add(temp);
+        //Add to toolbar
+          temp = new JButton(rbMenuItem.getText());
+          temp.setModel(rbMenuItem.getModel());
+          toolBar.add(temp);
 
-    //Build the tools menu
-      JMenu toolsMenu = new JMenu("Tools");
-      toolsMenu.setMnemonic(KeyEvent.VK_T);
-      JMenu macrosMenu = new JMenu("Macros");
-      macrosMenu.setMnemonic(KeyEvent.VK_M);
-      menuItem = new JMenuItem("Record");
-      menuItem.addActionListener(new ActionListener()
-      {
-        public void actionPerformed(ActionEvent e)
+      //Build the tools menu
+        JMenu toolsMenu = new JMenu("Tools");
+        toolsMenu.setMnemonic(KeyEvent.VK_T);
+        JMenu macrosMenu = new JMenu("Macros");
+        macrosMenu.setMnemonic(KeyEvent.VK_M);
+        menuItem = new JMenuItem("Record");
+        menuItem.addActionListener(new ActionListener()
         {
-          JFrame temp = new JFrame("Record... Window");
-          temp.setSize(new Dimension(480, 320));
-          temp.setLocationRelativeTo(null);
-          temp.setVisible(true);
-        }
-      });
-      macrosMenu.add(menuItem);
-      menuItem = new JMenuItem("Manage...");
-      menuItem.addActionListener(new ActionListener()
-      {
-        public void actionPerformed(ActionEvent e)
+          public void actionPerformed(ActionEvent e)
+          {
+            JFrame temp = new JFrame("Record... Window");
+            temp.setSize(new Dimension(480, 320));
+            temp.setLocationRelativeTo(null);
+            temp.setVisible(true);
+          }
+        });
+        macrosMenu.add(menuItem);
+        menuItem = new JMenuItem("Manage...");
+        menuItem.addActionListener(new ActionListener()
         {
-          JFrame temp = new JFrame("Manage... Window");
-          temp.setSize(new Dimension(480, 320));
-          temp.setLocationRelativeTo(null);
-          temp.setVisible(true);
-        }
-      });
-      macrosMenu.add(menuItem);
-      toolsMenu.add(macrosMenu);
+          public void actionPerformed(ActionEvent e)
+          {
+            JFrame temp = new JFrame("Manage... Window");
+            temp.setSize(new Dimension(480, 320));
+            temp.setLocationRelativeTo(null);
+            temp.setVisible(true);
+          }
+        });
+        macrosMenu.add(menuItem);
+        toolsMenu.add(macrosMenu);
+
+      // Add menus to menuBar
+        menuBar.add(fileMenu);
+        menuBar.add(editMenu);
+        menuBar.add(viewMenu);
+        menuBar.add(toolsMenu);
+    }
+
+    private static void configureComponents()
+    {
+      contentPane = mainFrame.getContentPane();
+      constantsPanel = new JPanel();
+      mainContentPanel = new JPanel(new CardLayout());
+      toolBar = new JToolBar();
+      toolBar.setFloatable(true);
+      toolBar.setBorderPainted(true);
+      toolBar.setBorder(BorderFactory.createLineBorder(Color.black));
+      toolBar.add(new JButton("ToolbarButton"));
+
+      taskEntryPanel = new TaskEntryPanel();
+      planningBoard = new TaskPlanningPanel();
+      input = new JTextField();
+
+      constantsPanel.add(menuBar, BorderLayout.NORTH);
+      constantsPanel.add(toolBar, BorderLayout.SOUTH);
+
+      mainContentPanel.add(taskEntryPanel, TASK_ENTRY);
+      mainContentPanel.add(planningBoard, PLANNING);
+    }
+
+    private static void configureLayouts()
+    {
+      layout = new SpringLayout();
+      constantsPanel.setLayout(new BorderLayout());
+      contentPane.setLayout(layout);
+
+      layout.putConstraint(SpringLayout.NORTH, constantsPanel, 0, SpringLayout.NORTH, contentPane);
+      layout.putConstraint(SpringLayout.EAST, constantsPanel, 0, SpringLayout.EAST, contentPane);
+      layout.putConstraint(SpringLayout.WEST, constantsPanel, 0, SpringLayout.WEST, contentPane);
+      layout.putConstraint(SpringLayout.NORTH, mainContentPanel, 10, SpringLayout.SOUTH, constantsPanel);
+      layout.putConstraint(SpringLayout.SOUTH, mainContentPanel, 0, SpringLayout.SOUTH, contentPane);
+      layout.putConstraint(SpringLayout.EAST, mainContentPanel, 0, SpringLayout.EAST, contentPane);
+      layout.putConstraint(SpringLayout.WEST, mainContentPanel, 0, SpringLayout.WEST, contentPane);
+    }
+
+    private static void addComponentsToFrame()
+    {
+      contentPane.add(constantsPanel, BorderLayout.NORTH);
+      contentPane.add(mainContentPanel, BorderLayout.CENTER);
 
 
-    menuBar.add(fileMenu);
-    menuBar.add(editMenu);
-    menuBar.add(viewMenu);
-    menuBar.add(toolsMenu);
-
-
-    toolBar.setFloatable(true);
-    toolBar.setBorderPainted(true);
-    toolBar.setBorder(BorderFactory.createLineBorder(Color.black));
-    //toolBar.setPreferredSize(new Dimension(100, 50));
-    toolBar.add(new JButton("ToolbarButton"));
-
-
-    taskEntryPanel = new TaskEntryPanel();
-    planningBoard = new TaskPlanningPanel();
-    JButton undo = new JButton("Undo");
-    JButton redo = new JButton("Redo");
-    input = new JTextField();
-
-    constantsPanel.add(menuBar, BorderLayout.NORTH);
-    constantsPanel.add(toolBar, BorderLayout.SOUTH);
-
-    //mainContentPanel.setBorder(BorderFactory.createLineBorder(Color.black));
-    mainContentPanel.add(taskEntryPanel, TASK_ENTRY);
-    mainContentPanel.add(planningBoard, PLANNING);
-
-
-    layout.putConstraint(SpringLayout.NORTH, constantsPanel, 0, SpringLayout.NORTH, contentPane);
-    layout.putConstraint(SpringLayout.EAST, constantsPanel, 0, SpringLayout.EAST, contentPane);
-    layout.putConstraint(SpringLayout.WEST, constantsPanel, 0, SpringLayout.WEST, contentPane);
-    layout.putConstraint(SpringLayout.NORTH, mainContentPanel, 10, SpringLayout.SOUTH, constantsPanel);
-    layout.putConstraint(SpringLayout.SOUTH, mainContentPanel, 0, SpringLayout.SOUTH, contentPane);
-    layout.putConstraint(SpringLayout.EAST, mainContentPanel, 0, SpringLayout.EAST, contentPane);
-    layout.putConstraint(SpringLayout.WEST, mainContentPanel, 0, SpringLayout.WEST, contentPane);
-
-
-
-    contentPane.add(constantsPanel, BorderLayout.NORTH);
-    contentPane.add(mainContentPanel, BorderLayout.CENTER);
-
-
-    // Add general course
-      generalCourse = new Course("General");
-      Command command = new CourseAddition(generalCourse, taskEntryPanel);
-      command.run();
-  }
+      // Add general course
+        generalCourse = new Course("General");
+        Command command = new CourseAddition(generalCourse, taskEntryPanel);
+        command.run();
+    }
 }
