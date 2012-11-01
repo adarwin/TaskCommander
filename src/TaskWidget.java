@@ -13,12 +13,17 @@ import java.awt.event.ActionEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseEvent;
 import javax.swing.border.SoftBevelBorder;
+import javax.swing.border.MatteBorder;
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.SpringLayout;
+import javax.swing.SwingConstants;
 
 public class TaskWidget extends JPanel
 {
@@ -28,114 +33,153 @@ public class TaskWidget extends JPanel
   private SpringLayout layout;
   private JButton notesButton;
   private Task task;
+  private JPopupMenu rightClickMenu;
 
-  public Task getTask() { return task; }
-  public boolean isSelected() { return task.isSelected(); }
+  // Public Methods
+    public Task getTask() { return task; }
+    public boolean isSelected() { return task.isSelected(); }
 
-  private void setSelected(boolean selected)
-  {
-    task.setSelected(selected);
-    if (selected)
+    public TaskWidget() { this("TaskNameHere", "CourseNameHere"); }
+    public TaskWidget(String taskName) { this(taskName, "SomeCourseName"); }
+    public TaskWidget(String taskName, String courseName) { this(new Task(taskName, new Course(courseName))); }
+    public TaskWidget(Task task)
     {
-      setBackground(TaskCommander.pastelBlue);
+      this.task = task;
+      configureComponents();
+      configureLayouts();
+      addComponents();
+      configurePopupMenu();
+      addListeners();
     }
-    else
+
+
+  // Private methods
+    private void displayRightClickMenu(MouseEvent e)
     {
-      setBackground(TaskCommander.neutralColor);
+      rightClickMenu.show(this, e.getX(), e.getY());
     }
-  }
 
-
-  public TaskWidget()
-  {
-    this("TaskNameHere", "CourseNameHere");
-  }
-  public TaskWidget(String taskName)
-  {
-    this(taskName, "SomeCourseName");
-  }
-  public TaskWidget(String taskName, String courseName)
-  {
-    this(new Task(taskName, new Course(courseName)));
-  }
-  public TaskWidget(Task task)
-  {
-    //super();
-    this.task = task;
-    layout = new SpringLayout();
-    setLayout(layout);
-    minimumSize = new Dimension(100, 50);
-    preferredSize = new Dimension(200, 50);
-    maximumSize = new Dimension(3000, 50);
-    notesButton = new JButton("");
-    notesButton.setIcon(new ImageIcon("images/Notes.jpg"));
-    taskCheckBox = new JCheckBox(task.getName());
-    courseLabel = new JLabel(task.getCourse().getName());
-    Calendar cal = Calendar.getInstance();
-    Integer day = cal.get(Calendar.DAY_OF_WEEK);
-    String dayString;
-    switch (day)
+    private void setSelected(boolean selected)
     {
-      case 1: dayString = "Sunday"; break;
-      case 2: dayString = "Monday"; break;
-      case 3: dayString = "Tuesday"; break;
-      case 4: dayString = "Wednesday"; break;
-      case 5: dayString = "Thursday"; break;
-      case 6: dayString = "Friday"; break;
-      case 7: dayString = "Saturday"; break;
-      default: dayString = "Unknown";
+      task.setSelected(selected);
+      if (selected)
+      {
+        setBackground(TaskCommander.pastelBlue);
+      }
+      else
+      {
+        setBackground(TaskCommander.neutralColor);
+      }
     }
-    dueDate = new JLabel(dayString);
-    setBorder(new SoftBevelBorder(SoftBevelBorder.LOWERED));
-    //setMinimumSize(minimumSize);
-    setPreferredSize(preferredSize);
-    setMaximumSize(maximumSize);
-    add(taskCheckBox);
-    add(courseLabel);
-    add(dueDate);
-    add(notesButton);
 
-    setBackground(task.getCourse().getColor());
+    private void configureComponents()
+    {
+      minimumSize = new Dimension(100, 60);
+      preferredSize = new Dimension(200, 60);
+      maximumSize = new Dimension(3000, 60);
+      notesButton = new JButton("");
+      notesButton.setIcon(new ImageIcon("images/Notes.jpg"));
+      taskCheckBox = new JCheckBox(task.getName());
+      courseLabel = new JLabel(task.getCourse().getName());
+      int newX = courseLabel.getPreferredSize().width;
+      int newY = courseLabel.getPreferredSize().height;
+      courseLabel.setPreferredSize(new Dimension(newX+10, newY+10));
+      courseLabel.setHorizontalAlignment(SwingConstants.CENTER);
+      System.out.println(newX + "   " + newY);
+      Calendar cal = Calendar.getInstance();
+      Integer day = cal.get(Calendar.DAY_OF_WEEK);
+      String dayString;
+      switch (day)
+      {
+        case 1: dayString = "Sunday"; break;
+        case 2: dayString = "Monday"; break;
+        case 3: dayString = "Tuesday"; break;
+        case 4: dayString = "Wednesday"; break;
+        case 5: dayString = "Thursday"; break;
+        case 6: dayString = "Friday"; break;
+        case 7: dayString = "Saturday"; break;
+        default: dayString = "Unknown";
+      }
+      dueDate = new JLabel(dayString);
+      setBorder(BorderFactory.createEtchedBorder());
+      setPreferredSize(preferredSize);
+      setMaximumSize(maximumSize);
+      courseLabel.setOpaque(true);
+      courseLabel.setBackground(task.getCourse().getColor());
+      courseLabel.setBorder(new MatteBorder(1, 1, 1, 1, Color.black));
+    }
 
-    int margin = 2;
+    private void configureLayouts()
+    {
+      layout = new SpringLayout();
+      setLayout(layout);
+      int margin = 2;
 
-    layout.putConstraint(SpringLayout.NORTH, taskCheckBox, 0, SpringLayout.NORTH, this);
-    layout.putConstraint(SpringLayout.WEST, taskCheckBox, 0, SpringLayout.WEST, this);
+      layout.putConstraint(SpringLayout.NORTH, taskCheckBox, margin, SpringLayout.NORTH, this);
+      layout.putConstraint(SpringLayout.WEST, taskCheckBox, margin, SpringLayout.WEST, this);
+      layout.putConstraint(SpringLayout.SOUTH, taskCheckBox, -1*margin, SpringLayout.SOUTH, notesButton);
 
-    layout.putConstraint(SpringLayout.NORTH, courseLabel, 0, SpringLayout.SOUTH, taskCheckBox);
-    layout.putConstraint(SpringLayout.WEST, courseLabel, 27, SpringLayout.WEST, this);
+      layout.putConstraint(SpringLayout.NORTH, dueDate, margin, SpringLayout.SOUTH, taskCheckBox);
+      layout.putConstraint(SpringLayout.SOUTH, dueDate, -1*margin, SpringLayout.SOUTH, this);
+      layout.putConstraint(SpringLayout.WEST, dueDate, margin + 23, SpringLayout.WEST, this);
 
-    layout.putConstraint(SpringLayout.NORTH, dueDate, margin, SpringLayout.NORTH, this);
-    layout.putConstraint(SpringLayout.EAST, dueDate, -1*margin, SpringLayout.EAST, this);
+      layout.putConstraint(SpringLayout.NORTH, notesButton, margin, SpringLayout.NORTH, this);
+      layout.putConstraint(SpringLayout.EAST, notesButton, -1*margin, SpringLayout.EAST, this);
 
-    layout.putConstraint(SpringLayout.NORTH, notesButton, 0, SpringLayout.NORTH, this);
-    layout.putConstraint(SpringLayout.EAST, notesButton, 0, SpringLayout.WEST, dueDate);
+      layout.putConstraint(SpringLayout.NORTH, courseLabel, margin, SpringLayout.SOUTH, notesButton);
+      layout.putConstraint(SpringLayout.SOUTH, courseLabel, -1*margin, SpringLayout.SOUTH, this);
+      layout.putConstraint(SpringLayout.EAST, courseLabel, -1*margin, SpringLayout.EAST, this);
+    }
 
+    private void addComponents()
+    {
+      add(taskCheckBox);
+      add(courseLabel);
+      add(dueDate);
+      add(notesButton);
+    }
 
+    private void configurePopupMenu()
+    {
+      rightClickMenu = new JPopupMenu();
+      JMenuItem menuItem = new JMenuItem("Edit");
+      menuItem.addActionListener(new ActionListener()
+      {
+        public void actionPerformed(ActionEvent e)
+        {
+          System.out.println("edit");
+        }
+      });
+      rightClickMenu.add(menuItem);
+      menuItem = new JMenuItem("Delete");
+      rightClickMenu.add(menuItem);
+      rightClickMenu.pack();
+    }
 
-    // Add Listeners
+    private void addListeners()
+    {
       addMouseListener(new MouseListener()
       {
         public void mouseClicked(MouseEvent e) {}
         public void mouseEntered(MouseEvent e)
         {
+          /*
           if (e.getButton() == MouseEvent.BUTTON1)
           {
             //Select
             setSelected(!isSelected());
           }
+          */
         }
         public void mouseExited(MouseEvent e) {}
         public void mousePressed(MouseEvent e)
         {
           if(e.getButton() == MouseEvent.BUTTON3)
           {
-            //Open right-click menu
-            System.out.println("Open right-click menu");
+            displayRightClickMenu(e);
           }
           else if (e.getButton() == MouseEvent.BUTTON1)
           {
-            //Select
             setSelected(!isSelected());
           }
         }
@@ -149,5 +193,5 @@ public class TaskWidget extends JPanel
           setSelected(taskCheckBox.isSelected());
         }
       });
-  }
+    }
 }

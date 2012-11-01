@@ -6,6 +6,8 @@ SUNY Oswego
 */
 
 import java.awt.BorderLayout;
+import java.awt.Graphics;
+import java.util.ArrayList;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
@@ -14,12 +16,14 @@ import java.awt.BorderLayout;
 
 public class TaskPlanningPanel extends JPanel implements TaskView
 {
-  JSplitPane mainSplitPane;
-  JPanel unPlannedContent, plannedContent;
-  JScrollPane unPlannedScrollPane;
-  PlanningCalendar calendar;
+  private JSplitPane mainSplitPane;
+  private JPanel unPlannedPane, unPlannedContent, plannedContent;
+  private JScrollPane unPlannedScrollPane;
+  private PlanningCalendar calendar;
   private final boolean DEBUG = true;
   private final String CLASS = "TaskPlanningPanel";
+
+
 
   private void log(String message)
   {
@@ -28,17 +32,19 @@ public class TaskPlanningPanel extends JPanel implements TaskView
 
   public TaskPlanningPanel()
   {
-    super();
     // Initialize Components and Containers
+      unPlannedPane = new JPanel();
+      unPlannedPane.setLayout(new BorderLayout());
       unPlannedContent = new JPanel();
       plannedContent = new JPanel();
       unPlannedScrollPane = new JScrollPane(unPlannedContent);
       calendar = new PlanningCalendar();
       mainSplitPane = new JSplitPane();
+      unPlannedPane.add(unPlannedScrollPane, BorderLayout.CENTER);
 
     // Configure Containers
       plannedContent.setLayout(new BorderLayout());
-      mainSplitPane.setLeftComponent(unPlannedContent);
+      mainSplitPane.setLeftComponent(unPlannedPane);
       mainSplitPane.setRightComponent(plannedContent);
       mainSplitPane.setContinuousLayout(true);
       mainSplitPane.setDividerLocation(TaskCommander.startingWidth/3);
@@ -63,6 +69,9 @@ public class TaskPlanningPanel extends JPanel implements TaskView
   public void addTask(Task task)
   {
     if (DEBUG) log("addTask(Task task) currently does nothing");
+    TaskWidget taskWidget = new TaskWidget(task);
+    //taskWidgets.add(taskWidget);
+    unPlannedContent.add(taskWidget);
   }
   public void removeTask(Task task)
   {
@@ -75,5 +84,16 @@ public class TaskPlanningPanel extends JPanel implements TaskView
   public void removeSubTask(SubTask subTask)
   {
     if (DEBUG) log("removeSubTask(SubTask subTask) currently does nothing");
+  }
+
+
+
+  private void populateUnplannedContent()
+  {
+    ArrayList<Task> tasks = TaskCommander.getTasks();
+    for (Task task : tasks)
+    {
+      addTask(task);
+    }
   }
 }

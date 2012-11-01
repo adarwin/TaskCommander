@@ -25,6 +25,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTextField;
 import javax.swing.SpringLayout;
+import javax.swing.BorderFactory;
 
 public class TaskEntryPanel extends JPanel implements TaskView
 {
@@ -101,8 +102,15 @@ public class TaskEntryPanel extends JPanel implements TaskView
 
 
     //Configure Containers
+      /*
+      leftPane.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.black),
+                                                          "Courses",
+                                                          TitledBorder.LEFT,
+                                                          TitledBorder.TOP));
+      */
       leftPane.setMinimumSize(new Dimension(220, 0));
       centerPane.setMinimumSize(new Dimension(300, 0));
+      rightPane.setMinimumSize(new Dimension(220, 0));
       mainSplitPane.setRightComponent(nestedSplitPane);
       mainSplitPane.setLeftComponent(leftPane);
       nestedSplitPane.setLeftComponent(centerPane);
@@ -111,8 +119,8 @@ public class TaskEntryPanel extends JPanel implements TaskView
       mainSplitPane.setContinuousLayout(true);
       nestedSplitPane.setContinuousLayout(true);
 
-      mainSplitPane.setDividerLocation(TaskCommander.startingWidth/3);
-      nestedSplitPane.setDividerLocation(TaskCommander.startingWidth/3);
+      //mainSplitPane.setDividerLocation(TaskCommander.startingWidth/3);
+      //nestedSplitPane.setDividerLocation(TaskCommander.startingWidth/3);
       mainSplitPane.setResizeWeight(.2);
       nestedSplitPane.setResizeWeight(1);
 
@@ -145,6 +153,7 @@ public class TaskEntryPanel extends JPanel implements TaskView
 
 
     //Configure Layouts
+      int margin = 3;
       centerLayout.putConstraint(SpringLayout.NORTH, taskAddButton, 0, SpringLayout.NORTH, quickTaskField);
       centerLayout.putConstraint(SpringLayout.SOUTH, taskAddButton, 0, SpringLayout.SOUTH, quickTaskField);
       centerLayout.putConstraint(SpringLayout.EAST, taskAddButton, 0, SpringLayout.EAST, centerPane);
@@ -154,7 +163,7 @@ public class TaskEntryPanel extends JPanel implements TaskView
       centerLayout.putConstraint(SpringLayout.WEST, quickTaskField, 0, SpringLayout.WEST, centerPane);
 
 
-      centerLayout.putConstraint(SpringLayout.NORTH, centerScrollPane, 0, SpringLayout.SOUTH,
+      centerLayout.putConstraint(SpringLayout.NORTH, centerScrollPane, margin, SpringLayout.SOUTH,
                                  quickTaskField.getPreferredSize().height > taskAddButton.getPreferredSize().height ? quickTaskField : taskAddButton);
       centerLayout.putConstraint(SpringLayout.SOUTH, centerScrollPane, 0, SpringLayout.SOUTH, centerPane);
       centerLayout.putConstraint(SpringLayout.EAST, centerScrollPane, 0, SpringLayout.EAST, centerPane);
@@ -170,7 +179,7 @@ public class TaskEntryPanel extends JPanel implements TaskView
       leftLayout.putConstraint(SpringLayout.EAST, quickCourseField, 0, SpringLayout.WEST, courseAddButton);
       leftLayout.putConstraint(SpringLayout.WEST, quickCourseField, 0, SpringLayout.WEST, leftPane);
 
-      leftLayout.putConstraint(SpringLayout.NORTH, leftScrollPane, 0, SpringLayout.SOUTH,
+      leftLayout.putConstraint(SpringLayout.NORTH, leftScrollPane, margin, SpringLayout.SOUTH,
                                  quickCourseField.getPreferredSize().height > courseAddButton.getPreferredSize().height ? quickCourseField : courseAddButton);
       leftLayout.putConstraint(SpringLayout.SOUTH, leftScrollPane, 0, SpringLayout.SOUTH, leftPane);
       leftLayout.putConstraint(SpringLayout.EAST, leftScrollPane, 0, SpringLayout.EAST, leftPane);
@@ -187,7 +196,7 @@ public class TaskEntryPanel extends JPanel implements TaskView
       rightLayout.putConstraint(SpringLayout.EAST, quickSubTaskField, 0, SpringLayout.WEST, subTaskAddButton);
       rightLayout.putConstraint(SpringLayout.WEST, quickSubTaskField, 0, SpringLayout.WEST, rightPane);
 
-      rightLayout.putConstraint(SpringLayout.NORTH, rightScrollPane, 0, SpringLayout.SOUTH,
+      rightLayout.putConstraint(SpringLayout.NORTH, rightScrollPane, margin, SpringLayout.SOUTH,
                                  quickSubTaskField.getPreferredSize().height > subTaskAddButton.getPreferredSize().height ? quickSubTaskField : subTaskAddButton);
       rightLayout.putConstraint(SpringLayout.SOUTH, rightScrollPane, 0, SpringLayout.SOUTH, rightPane);
       rightLayout.putConstraint(SpringLayout.EAST, rightScrollPane, 0, SpringLayout.EAST, rightPane);
@@ -232,7 +241,7 @@ public class TaskEntryPanel extends JPanel implements TaskView
         public void actionPerformed(ActionEvent e)
         {
           if (DEBUG) log("Intercepted entry from quickTaskField");
-          TaskCommander.addTask(quickTaskField.getText());
+          addTask(quickTaskField.getText());
           quickTaskField.selectAll();
         }
       });
@@ -276,7 +285,15 @@ public class TaskEntryPanel extends JPanel implements TaskView
         public void actionPerformed(ActionEvent e)
         {
           if (DEBUG) log("Intercepted click on taskAddButton");
-          TaskCommander.addTask(quickTaskField.getText());
+          addTask(quickTaskField.getText());
+        }
+      });
+      subTaskAddButton.addActionListener(new ActionListener()
+      {
+        public void actionPerformed(ActionEvent e)
+        {
+          if (DEBUG) log("Intercepted click on subTaskAddButton");
+          TaskCommander.addSubTask(quickSubTaskField.getText());
         }
       });
       courseAddButton.addActionListener(new ActionListener()
@@ -337,6 +354,8 @@ public class TaskEntryPanel extends JPanel implements TaskView
 
 
 
+
+
   public void addCourse(Course course)
   {
     if (DEBUG) log("Attempt to add new courseWidget");
@@ -350,6 +369,10 @@ public class TaskEntryPanel extends JPanel implements TaskView
     TaskWidget taskWidget = new TaskWidget(task);
     taskWidgets.add(taskWidget);
     centerContent.add(taskWidget);
+  }
+  private void addTask(String name)
+  {
+    TaskCommander.addTask(name, this);
   }
   public void addSubTask(SubTask subTask)
   {

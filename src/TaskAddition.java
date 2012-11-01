@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 public class TaskAddition implements Command
 {
-  private TaskView taskViewToUpdate;
+  private TaskView[] taskViewsToUpdate;
   private Task task;
   private boolean DEBUG = true;
   private String CLASS = "TaskAddition";
@@ -19,23 +19,27 @@ public class TaskAddition implements Command
   {
     TaskCommander.log(CLASS, message);
   }
-  public TaskAddition(Task task, TaskView taskViewToUpdate)
+  public TaskAddition(Task task, TaskView[] taskViewsToUpdate)
   {
-    if (DEBUG) log("Initializing new TaskAddition with task name: '" + task.getName() + "' and taskViewToUpdate: " + (taskViewToUpdate == null ? null : "non-null") + "\r\n");
+    if (DEBUG) log("Initializing new TaskAddition with task name: '" + task.getName() + "' and taskViewToUpdate: " + (taskViewsToUpdate == null ? null : "non-null") + "\r\n");
     this.task = task;
-    this.taskViewToUpdate = taskViewToUpdate;
+    this.taskViewsToUpdate = taskViewsToUpdate;
   }
   public void run()
   {
     if (DEBUG) log("Now running TaskAddition command");
-    if (taskViewToUpdate != null)
+    if (taskViewsToUpdate != null)
     {
       if (DEBUG) log("Get existing tasks from TaskCommander");
       ArrayList<Task> tasks = TaskCommander.getTasks();
       if (DEBUG) log("Add the task contained in this command to the existing tasks list");
       tasks.add(task);
       if (DEBUG) log("Add the task to the taskViewToUpdate");
-      taskViewToUpdate.addTask(task);
+      for (TaskView taskView : taskViewsToUpdate)
+      {
+        taskView.addTask(task);
+      }
+      //taskViewToUpdate.addTask(task);
     }
     else
     {
@@ -45,10 +49,14 @@ public class TaskAddition implements Command
   public void undo()
   {
     if (DEBUG) log("Attempting to undo TaskAddition");
-    if (taskViewToUpdate != null)
+    if (taskViewsToUpdate != null)
     {
       if (DEBUG) log("Remove task from taskViewToUpdate");
-      taskViewToUpdate.removeTask(task);
+      for (TaskView taskView : taskViewsToUpdate)
+      {
+        taskView.removeTask(task);
+      }
+      //taskViewToUpdate.removeTask(task);
     }
     else
     {

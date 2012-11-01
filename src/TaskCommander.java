@@ -121,12 +121,8 @@ public class TaskCommander
       addCommand(command);
     }
 
-    public static void addTask()
-    {
-      addTask(input.getText());
-    }
     
-    public static void addTask(String name)
+    public static void addTask(String name, TaskView taskView)
     {
       if (DEBUG) log("Adding task with name: '" + name + "'");
       if (DEBUG) log("Get selected course");
@@ -136,14 +132,14 @@ public class TaskCommander
         course = generalCourse;
       }
       if (DEBUG) log("Create Task object and add it");
-      addTask(new Task(name, course));
+      addTask(new Task(name, course), taskView);
     }
 
-    public static void addTask(Task task)
+    public static void addTask(Task task, TaskView taskView)
     {
       if (DEBUG) log("Attempting to add Task object");
       if (DEBUG) log("Create the TaskAddition command object");
-      Command command = new TaskAddition(task, taskEntryPanel);
+      Command command = new TaskAddition(task, new TaskView[]{taskEntryPanel, planningBoard});
       if (DEBUG) log("Run the command");
       command.run();
       if (DEBUG) log("Add the command to the list of commands");
@@ -489,6 +485,18 @@ public class TaskCommander
         });
         macrosMenu.add(menuItem);
         toolsMenu.add(macrosMenu);
+        menuItem = new JMenuItem("Options...");
+        menuItem.addActionListener(new ActionListener()
+        {
+          public void actionPerformed(ActionEvent e)
+          {
+            JFrame temp = new JFrame("Options Window");
+            temp.setSize(new Dimension(480, 320));
+            temp.setLocationRelativeTo(null);
+            temp.setVisible(true);
+          }
+        });
+        toolsMenu.add(menuItem);
 
       // Add menus to menuBar
         menuBar.add(fileMenu);
@@ -506,7 +514,6 @@ public class TaskCommander
       toolBar.setFloatable(true);
       toolBar.setBorderPainted(true);
       toolBar.setBorder(BorderFactory.createLineBorder(Color.black));
-      toolBar.add(new JButton("ToolbarButton"));
 
       taskEntryPanel = new TaskEntryPanel();
       planningBoard = new TaskPlanningPanel();
