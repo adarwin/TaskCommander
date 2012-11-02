@@ -53,6 +53,10 @@ public class PlanningCalendar extends JPanel implements TaskView
   Day monthToday, weekToday;
   JPanel monthView, weekView;
 
+  public void updateTaskColors()
+  {
+    System.out.println("This currently does nothing");
+  }
   public PlanningCalendar()
   {
     JTabbedPane tabbedPane = new JTabbedPane();

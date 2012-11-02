@@ -13,6 +13,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import javax.swing.border.SoftBevelBorder;
 import javax.swing.border.MatteBorder;
 import javax.swing.JButton;
@@ -141,7 +142,7 @@ public class CourseWidget extends JPanel
           if (e.getButton() == MouseEvent.BUTTON1)
           {
             //Select
-            setSelected(!isSelected());
+            sendSelectionRequest(!isSelected());
           }
         }
       });
@@ -179,9 +180,19 @@ public class CourseWidget extends JPanel
   {
     course.setColor(color);
     colorIndicator.setBackground(color);
+    ArrayList<TaskView> taskViews = TaskCommander.getRegisteredTaskViews();
+    for (TaskView taskView : taskViews)
+    {
+      taskView.updateTaskColors();
+    }
+    //TaskCommander.getTaskEntryPanel().updateTaskColors();
   }
   private boolean isSelected() { return course.isSelected(); }
-  private void setSelected(boolean selected)
+  private void sendSelectionRequest(boolean selectionRequest)
+  {
+    TaskCommander.getTaskEntryPanel().setSelectedCourseWidget(this, selectionRequest);
+  }
+  protected void setSelected(boolean selected)
   {
     course.setSelected(selected);
     Color color = course.getColor();

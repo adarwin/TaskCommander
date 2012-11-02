@@ -35,6 +35,7 @@ public class TaskCommander
   private static ArrayList<Course> courses;
   private static ArrayList<Task> tasks;
   private static ArrayList<SubTask> subTasks;
+  private static ArrayList<TaskView> taskViews;
   private static Course generalCourse;
   private static SpringLayout layout;
   private static JMenuBar menuBar;
@@ -51,6 +52,9 @@ public class TaskCommander
   }
 
   //Public Methods
+    public static void registerTaskView(TaskView taskView) { taskViews.add(taskView); }
+    public static ArrayList<TaskView> getRegisteredTaskViews() { return taskViews; }
+    public static TaskEntryPanel getTaskEntryPanel() { return taskEntryPanel; }
     public static Color getDefaultCourseColor() { return neutralColor; }
 
     public static void log(String header, String message)
@@ -139,7 +143,7 @@ public class TaskCommander
     {
       if (DEBUG) log("Attempting to add Task object");
       if (DEBUG) log("Create the TaskAddition command object");
-      Command command = new TaskAddition(task, new TaskView[]{taskEntryPanel, planningBoard});
+      Command command = new TaskAddition(task);
       if (DEBUG) log("Run the command");
       command.run();
       if (DEBUG) log("Add the command to the list of commands");
@@ -515,9 +519,15 @@ public class TaskCommander
       toolBar.setBorderPainted(true);
       toolBar.setBorder(BorderFactory.createLineBorder(Color.black));
 
+
       taskEntryPanel = new TaskEntryPanel();
       planningBoard = new TaskPlanningPanel();
       input = new JTextField();
+
+      taskViews = new ArrayList<TaskView>();
+      registerTaskView(taskEntryPanel);
+      registerTaskView(planningBoard);
+
 
     }
 

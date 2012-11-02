@@ -39,6 +39,7 @@ public class TaskEntryPanel extends JPanel implements TaskView
   private ArrayList<CourseWidget> courseWidgets;
   private ArrayList<TaskWidget> taskWidgets;
   private ArrayList<SubTaskWidget> subTaskWidgets;
+  private CourseWidget previouslySelectedCourseWidget;
   private String quickTaskText = "Enter new task name here";
   private String quickSubTaskText = "Enter new subtask here";
   private String quickCourseText = "Enter new course name here";
@@ -48,6 +49,23 @@ public class TaskEntryPanel extends JPanel implements TaskView
   private void log(String message)
   {
     TaskCommander.log(CLASS, message);
+  }
+
+  public void updateTaskColors()
+  {
+    for (TaskWidget taskWidget : taskWidgets)
+    {
+      taskWidget.updateColor();
+    }
+  }
+  protected void setSelectedCourseWidget(CourseWidget courseWidget, boolean selected)
+  {
+    if (previouslySelectedCourseWidget != null)
+    {
+      previouslySelectedCourseWidget.setSelected(!selected);
+    }
+    courseWidget.setSelected(selected);
+    previouslySelectedCourseWidget = courseWidget;
   }
 
   public TaskEntryPanel()
@@ -111,6 +129,8 @@ public class TaskEntryPanel extends JPanel implements TaskView
       leftPane.setMinimumSize(new Dimension(220, 0));
       centerPane.setMinimumSize(new Dimension(300, 0));
       rightPane.setMinimumSize(new Dimension(220, 0));
+      quickSubTaskField.setEnabled(false);
+      subTaskAddButton.setEnabled(false);
       mainSplitPane.setRightComponent(nestedSplitPane);
       mainSplitPane.setLeftComponent(leftPane);
       nestedSplitPane.setLeftComponent(centerPane);

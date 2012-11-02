@@ -20,6 +20,7 @@ public class TaskPlanningPanel extends JPanel implements TaskView
   private JPanel unPlannedPane, unPlannedContent, plannedContent;
   private JScrollPane unPlannedScrollPane;
   private PlanningCalendar calendar;
+  private ArrayList<TaskWidget> taskWidgets;
   private final boolean DEBUG = true;
   private final String CLASS = "TaskPlanningPanel";
 
@@ -29,6 +30,18 @@ public class TaskPlanningPanel extends JPanel implements TaskView
   {
     TaskCommander.log(CLASS, message);
   }
+
+  public void updateTaskColors()
+  {
+    if (taskWidgets != null)
+    {
+      for (TaskWidget taskWidget : taskWidgets)
+      {
+        taskWidget.updateColor();
+      }
+    }
+  }
+
 
   public TaskPlanningPanel()
   {
@@ -41,6 +54,7 @@ public class TaskPlanningPanel extends JPanel implements TaskView
       calendar = new PlanningCalendar();
       mainSplitPane = new JSplitPane();
       unPlannedPane.add(unPlannedScrollPane, BorderLayout.CENTER);
+      taskWidgets = new ArrayList<TaskWidget>();
 
     // Configure Containers
       plannedContent.setLayout(new BorderLayout());
@@ -72,6 +86,7 @@ public class TaskPlanningPanel extends JPanel implements TaskView
     TaskWidget taskWidget = new TaskWidget(task);
     //taskWidgets.add(taskWidget);
     unPlannedContent.add(taskWidget);
+    taskWidgets.add(taskWidget);
   }
   public void removeTask(Task task)
   {

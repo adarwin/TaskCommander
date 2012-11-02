@@ -36,6 +36,18 @@ public class TaskWidget extends JPanel
   private JPopupMenu rightClickMenu;
 
   // Public Methods
+    public void updateColor()
+    {
+      courseLabel.setBackground(task.getCourse().getColor());
+    }
+    /*
+    public void setColor(Color color)
+    {
+      course.setColor(color);
+      colorIndicator.setBackground(color);
+      TaskCommander.getTaskEntryPanel().updateTaskColorsForCourse(course);
+    }
+    */
     public Task getTask() { return task; }
     public boolean isSelected() { return task.isSelected(); }
 

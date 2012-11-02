@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 public class TaskAddition implements Command
 {
-  private TaskView[] taskViewsToUpdate;
+  private ArrayList<TaskView> taskViewsToUpdate;
   private Task task;
   private boolean DEBUG = true;
   private String CLASS = "TaskAddition";
@@ -19,8 +19,9 @@ public class TaskAddition implements Command
   {
     TaskCommander.log(CLASS, message);
   }
-  public TaskAddition(Task task, TaskView[] taskViewsToUpdate)
+  public TaskAddition(Task task)
   {
+    ArrayList<TaskView> taskViewsToUpdate = TaskCommander.getRegisteredTaskViews();
     if (DEBUG) log("Initializing new TaskAddition with task name: '" + task.getName() + "' and taskViewToUpdate: " + (taskViewsToUpdate == null ? null : "non-null") + "\r\n");
     this.task = task;
     this.taskViewsToUpdate = taskViewsToUpdate;
