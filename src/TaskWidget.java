@@ -163,7 +163,23 @@ public class TaskWidget extends JPanel
         }
       });
       rightClickMenu.add(menuItem);
+      menuItem = new JMenuItem("View Details");
+      menuItem.addActionListener(new ActionListener()
+      {
+        public void actionPerformed(ActionEvent e)
+        {
+          System.out.println("view details");
+        }
+      });
+      rightClickMenu.add(menuItem);
       menuItem = new JMenuItem("Delete");
+      menuItem.addActionListener(new ActionListener()
+      {
+        public void actionPerformed(ActionEvent e)
+        {
+          System.out.println("delete");
+        }
+      });
       rightClickMenu.add(menuItem);
       rightClickMenu.pack();
     }

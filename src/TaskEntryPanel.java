@@ -389,6 +389,8 @@ public class TaskEntryPanel extends JPanel implements TaskView
     TaskWidget taskWidget = new TaskWidget(task);
     taskWidgets.add(taskWidget);
     centerContent.add(taskWidget);
+    revalidate();
+    //repaint();
   }
   private void addTask(String name)
   {
@@ -444,6 +446,8 @@ public class TaskEntryPanel extends JPanel implements TaskView
       taskWidgets.remove(target);
       centerContent.remove(target);
     }
+    repaint();
+    //revalidate();
   }
   public void removeSubTask(SubTask subTask)
   {

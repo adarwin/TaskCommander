@@ -150,8 +150,8 @@ public class TaskCommander
       addCommand(command);
 
       if (DEBUG) log("Revalidate and repaint taskEntryPanel");
-      taskEntryPanel.revalidate();
-      taskEntryPanel.repaint();
+      //taskEntryPanel.revalidate();
+      //taskEntryPanel.repaint();
     }
 
     public static SubTask addSubTask(String name)
@@ -181,8 +181,8 @@ public class TaskCommander
       if (DEBUG) log("Add the command to the list of commands");
       addCommand(command);
       if (DEBUG) log("Revalidate and repaint taskEntryPanel");
-      taskEntryPanel.revalidate();
-      taskEntryPanel.repaint();
+      //taskEntryPanel.revalidate();
+      //taskEntryPanel.repaint();
       return subTask;
     }
 
@@ -204,8 +204,8 @@ public class TaskCommander
       addCommand(command);
 
       if (DEBUG) log("Revalidate and repaint taskEntryPanel");
-      taskEntryPanel.revalidate();
-      taskEntryPanel.repaint();
+      //taskEntryPanel.revalidate();
+      //taskEntryPanel.repaint();
     }
 
     public static Course getSelectedCourse()
@@ -399,8 +399,8 @@ public class TaskCommander
           public void actionPerformed(ActionEvent e)
           {
             undo();
-            taskEntryPanel.revalidate();
-            taskEntryPanel.repaint();
+            //taskEntryPanel.revalidate();
+            //taskEntryPanel.repaint();
           }
         });
         editMenu.add(menuItem);
@@ -411,8 +411,8 @@ public class TaskCommander
           public void actionPerformed(ActionEvent e)
           {
             redo();
-            taskEntryPanel.revalidate();
-            taskEntryPanel.repaint();
+            //taskEntryPanel.revalidate();
+            //taskEntryPanel.repaint();
           }
         });
         editMenu.add(menuItem);

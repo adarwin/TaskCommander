@@ -90,7 +90,26 @@ public class TaskPlanningPanel extends JPanel implements TaskView
   }
   public void removeTask(Task task)
   {
-    if (DEBUG) log("removeTask(Task task) currently does nothing");
+    if (DEBUG) log("Find the taskWidget that contains the desired task");
+    TaskWidget target = null;
+    for (TaskWidget tw : taskWidgets)
+    {
+      if (tw.getTask() == task)
+      {
+        target = tw;
+      }
+    }
+    if (target == null)
+    {
+      if (DEBUG) log("Failed to find desired taskWidget");
+    }
+    else
+    {
+      if (DEBUG) log("Found the desired taskWidget...now just remove it");
+      taskWidgets.remove(target);
+      unPlannedContent.remove(target);
+      repaint();
+    }
   }
   public void addSubTask(SubTask subTask)
   {

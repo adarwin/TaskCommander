@@ -13,6 +13,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseEvent;
+import java.awt.FlowLayout;
 import java.util.ArrayList;
 import javax.swing.border.SoftBevelBorder;
 import javax.swing.border.MatteBorder;
@@ -21,7 +22,10 @@ import javax.swing.JCheckBox;
 import javax.swing.JColorChooser;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JLabel;
 import javax.swing.SpringLayout;
 
@@ -35,6 +39,7 @@ public class CourseWidget extends JPanel
     private Course course;
     private JPanel colorIndicator;
     private SpringLayout layout;
+    private JPopupMenu rightClickMenu;
     private static JFrame colorFrame;
 
 
@@ -51,6 +56,7 @@ public class CourseWidget extends JPanel
     {
       this.course = course;
       configureComponents();
+      configurePopupMenu();
       configureLayout();
       addListeners();
       addComponents();
@@ -61,6 +67,55 @@ public class CourseWidget extends JPanel
 
 
   // Helper/Private Methods
+    private void displayRightClickMenu(MouseEvent e)
+    {
+      rightClickMenu.show(this, e.getX(), e.getY());
+    }
+    private void configurePopupMenu()
+    {
+      rightClickMenu = new JPopupMenu();
+      JMenuItem menuItem = new JMenuItem("Edit");
+      menuItem.addActionListener(new ActionListener()
+      {
+        public void actionPerformed(ActionEvent e)
+        {
+          System.out.println("CourseWidget edit");
+        }
+      });
+      rightClickMenu.add(menuItem);
+      System.out.println(menuItem.getPreferredSize().height);
+      JMenu colorMenu = new JMenu("Color");
+      menuItem = new JMenuItem();
+      menuItem.setText("");
+      menuItem.setLayout(new BorderLayout());
+      JPanel colorPanel = new JPanel();
+      colorPanel.setBackground(Color.red);
+      colorPanel.setPreferredSize(new Dimension(30, 20));
+      menuItem.add(colorPanel, BorderLayout.WEST);
+      menuItem.add(new JLabel("Red"), BorderLayout.EAST);
+      Dimension size = menuItem.getPreferredSize();
+      menuItem.setPreferredSize(new Dimension(100, 20));
+      menuItem.addActionListener(new ActionListener()
+      {
+        public void actionPerformed(ActionEvent e)
+        {
+          System.out.println("CourseWidget Red");
+          showColorChooser();
+        }
+      });
+      colorMenu.add(menuItem);
+      rightClickMenu.add(colorMenu);
+      menuItem = new JMenuItem("Delete");
+      menuItem.addActionListener(new ActionListener()
+      {
+        public void actionPerformed(ActionEvent e)
+        {
+          System.out.println("CourseWidget Delete");
+        }
+      });
+      rightClickMenu.add(menuItem);
+      rightClickMenu.pack();
+    }
     private void configureComponents()
     {
       int height = 20;
@@ -135,6 +190,10 @@ public class CourseWidget extends JPanel
         public void mousePressed(MouseEvent e)
         {
           setBorder(new SoftBevelBorder(SoftBevelBorder.LOWERED));
+          if (e.getButton() == MouseEvent.BUTTON3)
+          {
+            displayRightClickMenu(e);
+          }
         }
         public void mouseReleased(MouseEvent e)
         {
