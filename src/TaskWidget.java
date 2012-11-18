@@ -76,11 +76,12 @@ public class TaskWidget extends JPanel
       task.setSelected(selected);
       if (selected)
       {
-        setBackground(TaskCommander.pastelBlue);
+        setBackground(TaskCommander.selectionColor);
       }
       else
       {
-        setBackground(TaskCommander.neutralColor);
+        //setBackground(TaskCommander.neutralColor);
+        setBackground(null);
       }
     }
 

@@ -134,7 +134,7 @@ public class CourseWidget extends JPanel
       setBorder(new SoftBevelBorder(SoftBevelBorder.RAISED));
       setPreferredSize(preferredSize);
       setMaximumSize(maximumSize);
-      setBackground(course.getColor());
+      //setBackground(course.getColor());
     }
 
 
@@ -257,11 +257,12 @@ public class CourseWidget extends JPanel
     Color color = course.getColor();
     if (selected)
     {
-      setBackground(TaskCommander.pastelBlue);
+      setBackground(TaskCommander.selectionColor);
     }
     else
     {
-      setBackground(TaskCommander.neutralColor);
+      //setBackground(TaskCommander.neutralColor);
+      setBackground(null);
     }
   }
 

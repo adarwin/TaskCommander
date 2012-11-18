@@ -10,6 +10,7 @@ import java.awt.event.*;
 import java.util.*;
 import javax.swing.*;
 import javax.swing.UIManager.*;
+import com.jtattoo.plaf.texture.TextureLookAndFeel;
 
 public class TaskCommander 
 {
@@ -18,6 +19,7 @@ public class TaskCommander
 
   protected static final Color pastelGreen = new Color(210, 255, 197);
   protected static final Color pastelBlue = new Color(208, 200, 255);
+  protected static final Color selectionColor = new Color(208, 200, 255); //Currently the same as pastelblue
   protected static final Color pastelYellow = new Color(255, 247, 187);
   protected static final Color pastelCyan = new Color(183, 252, 255);
   protected static final Color pastelPurple = new Color(255, 191, 239);
@@ -295,19 +297,26 @@ public class TaskCommander
   {
     try
     {
-      for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels())
-      {
-        if ("Nimbus".equals(info.getName()))
-        {
-          UIManager.setLookAndFeel(info.getClassName());
-          break;
-        }
-      }
+      UIManager.setLookAndFeel("com.jtattoo.plaf.texture.TextureLookAndFeel");
     }
     catch (UnsupportedLookAndFeelException e)
     {
-      e.printStackTrace();
-      System.exit(1);
+      try
+      {
+        for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels())
+        {
+          if ("Nimbus".equals(info.getName()))
+          {
+            UIManager.setLookAndFeel(info.getClassName());
+            break;
+          }
+        }
+      }
+      catch (Exception ex)
+      {
+        ex.printStackTrace();
+        System.exit(1);
+      }
     }
     catch (ClassNotFoundException e)
     {

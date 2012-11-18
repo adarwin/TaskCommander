@@ -126,7 +126,7 @@ public class TaskEntryPanel extends JPanel implements TaskView
                                                           TitledBorder.LEFT,
                                                           TitledBorder.TOP));
       */
-      leftPane.setMinimumSize(new Dimension(220, 0));
+      leftPane.setMinimumSize(new Dimension(225, 0));
       centerPane.setMinimumSize(new Dimension(300, 0));
       rightPane.setMinimumSize(new Dimension(220, 0));
       quickSubTaskField.setEnabled(false);
