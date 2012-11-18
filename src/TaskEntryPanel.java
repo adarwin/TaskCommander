@@ -43,7 +43,7 @@ public class TaskEntryPanel extends JPanel implements TaskView
   private String quickTaskText = "Enter new task name here";
   private String quickSubTaskText = "Enter new subtask here";
   private String quickCourseText = "Enter new course name here";
-  private final boolean DEBUG = true;
+  private final boolean DEBUG = false;
   private final String CLASS = "TaskEntryPanel";
 
   private void log(String message)
@@ -51,13 +51,6 @@ public class TaskEntryPanel extends JPanel implements TaskView
     TaskCommander.log(CLASS, message);
   }
 
-  public void updateTaskColors()
-  {
-    for (TaskWidget taskWidget : taskWidgets)
-    {
-      taskWidget.updateColor();
-    }
-  }
   protected void setSelectedCourseWidget(CourseWidget courseWidget, boolean selected)
   {
     if (previouslySelectedCourseWidget != null)
@@ -470,5 +463,16 @@ public class TaskEntryPanel extends JPanel implements TaskView
       subTaskWidgets.remove(target);
       rightContent.remove(target);
     }
+  }
+  public void updateTaskColors()
+  {
+    for (TaskWidget taskWidget : taskWidgets)
+    {
+      taskWidget.updateColor();
+    }
+  }
+  public void updateTaskInfo()
+  {
+    System.out.println("updateTaskInfo() currently does nothing");
   }
 }

@@ -15,6 +15,7 @@ public interface TaskView
   public void removeSubTask(SubTask subTask);
 
   public void updateTaskColors();
+  public void updateTaskInfo();
 
   public void repaint();
   public void revalidate();

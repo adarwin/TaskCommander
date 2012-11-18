@@ -36,6 +36,13 @@ public class TaskWidget extends JPanel
   private JPopupMenu rightClickMenu;
 
   // Public Methods
+    public void updateTaskInfo()
+    {
+      taskCheckBox.setText(task.getName());
+      courseLabel.setText(task.getCourse().getName());
+      //dueDate.setText(
+      setSelected(task.isCompleted());
+    }
     public void setCompleted(boolean completed)
     {
       task.setCompleted(completed);
@@ -226,8 +233,15 @@ public class TaskWidget extends JPanel
       {
         public void actionPerformed(ActionEvent e)
         {
+          System.out.println("taskCheckBox!!!!!!!!");
+          System.out.println(task);
+          Task newState = new Task("", null);
+          newState.updateFrom(task);
+          newState.setCompleted(taskCheckBox.isSelected());
+          TaskEdit command = new TaskEdit(task, newState);
+          TaskCommander.addCommand(command);
           //setSelected(taskCheckBox.isSelected());
-          setCompleted(taskCheckBox.isSelected());
+          //setCompleted(taskCheckBox.isSelected());
           /*
           dueDate.setEnabled(!taskCheckBox.isSelected());
           notesButton.setEnabled(!taskCheckBox.isSelected());

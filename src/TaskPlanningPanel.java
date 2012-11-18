@@ -31,16 +31,6 @@ public class TaskPlanningPanel extends JPanel implements TaskView
     TaskCommander.log(CLASS, message);
   }
 
-  public void updateTaskColors()
-  {
-    if (taskWidgets != null)
-    {
-      for (TaskWidget taskWidget : taskWidgets)
-      {
-        taskWidget.updateColor();
-      }
-    }
-  }
 
 
   public TaskPlanningPanel()
@@ -118,6 +108,20 @@ public class TaskPlanningPanel extends JPanel implements TaskView
   public void removeSubTask(SubTask subTask)
   {
     if (DEBUG) log("removeSubTask(SubTask subTask) currently does nothing");
+  }
+  public void updateTaskColors()
+  {
+    if (taskWidgets != null)
+    {
+      for (TaskWidget taskWidget : taskWidgets)
+      {
+        taskWidget.updateColor();
+      }
+    }
+  }
+  public void updateTaskInfo()
+  {
+    System.out.println("updateTaskInfo() currently does nothing");
   }
 
 

@@ -48,6 +48,10 @@ public class CustomCheckBox extends JPanel
     });
   }
 
+  public void setText(String text)
+  {
+    label.setText(text);
+  }
   public boolean isSelected() { return checkBox.isSelected(); }
   public void addActionListener(ActionListener listener)
   {

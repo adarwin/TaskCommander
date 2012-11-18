@@ -12,7 +12,7 @@ public class TaskAddition implements Command
 {
   private ArrayList<TaskView> taskViewsToUpdate;
   private Task task;
-  private boolean DEBUG = true;
+  private boolean DEBUG = false;
   private String CLASS = "TaskAddition";
 
   private void log(String message)

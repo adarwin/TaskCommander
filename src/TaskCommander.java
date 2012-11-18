@@ -43,7 +43,7 @@ public class TaskCommander
   private static JMenuBar menuBar;
   private static Container contentPane;
 
-  private static boolean DEBUG = true;
+  private static boolean DEBUG = false;
   private static String CLASS = "TaskCommander";
   private static final String TASK_ENTRY = "Task Entry Mode";
   private static final String PLANNING = "Planning Board";
