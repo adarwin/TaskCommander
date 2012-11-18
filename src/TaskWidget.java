@@ -36,6 +36,13 @@ public class TaskWidget extends JPanel
   private JPopupMenu rightClickMenu;
 
   // Public Methods
+    public void setCompleted(boolean completed)
+    {
+      task.setCompleted(completed);
+      dueDate.setEnabled(!completed);
+      notesButton.setEnabled(!completed);
+      courseLabel.setEnabled(!completed);
+    }
     public void updateColor()
     {
       courseLabel.setBackground(task.getCourse().getColor());
@@ -219,7 +226,13 @@ public class TaskWidget extends JPanel
       {
         public void actionPerformed(ActionEvent e)
         {
-          setSelected(taskCheckBox.isSelected());
+          //setSelected(taskCheckBox.isSelected());
+          setCompleted(taskCheckBox.isSelected());
+          /*
+          dueDate.setEnabled(!taskCheckBox.isSelected());
+          notesButton.setEnabled(!taskCheckBox.isSelected());
+          courseLabel.setEnabled(!taskCheckBox.isSelected());
+          */
         }
       });
     }
