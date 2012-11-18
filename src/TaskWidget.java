@@ -27,7 +27,7 @@ import javax.swing.SwingConstants;
 
 public class TaskWidget extends JPanel
 {
-  private JCheckBox taskCheckBox;
+  private CustomCheckBox taskCheckBox;
   private JLabel courseLabel, dueDate;
   private Dimension minimumSize, preferredSize, maximumSize;
   private SpringLayout layout;
@@ -92,7 +92,7 @@ public class TaskWidget extends JPanel
       maximumSize = new Dimension(3000, 60);
       notesButton = new JButton("");
       notesButton.setIcon(new ImageIcon("images/Notes.jpg"));
-      taskCheckBox = new JCheckBox(task.getName());
+      taskCheckBox = new CustomCheckBox(task.getName());
       courseLabel = new JLabel(task.getCourse().getName());
       int newX = courseLabel.getPreferredSize().width;
       int newY = courseLabel.getPreferredSize().height;
