@@ -180,7 +180,7 @@ public class PlanningCalendar extends JPanel implements TaskView
       }
       else
       {
-        System.out.println(i);
+        //System.out.println(i);
       }
     }
 
@@ -191,7 +191,7 @@ public class PlanningCalendar extends JPanel implements TaskView
     int originalDayOfWeek = dayOfWeek;
     int totalDays = numberOfDaysInMonth(month);
     int dayCount = dayOfMonth;
-    System.out.println("Start at week: " + weekOfMonth + " and day: " + dayOfWeek);
+    //System.out.println("Start at week: " + weekOfMonth + " and day: " + dayOfWeek);
     //Set today
       daysOfMonth[weekOfMonth][dayOfWeek--] = monthToday;
       dayCount--;
@@ -208,9 +208,9 @@ public class PlanningCalendar extends JPanel implements TaskView
     }
     dayCount = dayOfMonth;
     dayOfWeek = originalDayOfWeek+1;
-    System.out.println("Start at week: " + weekOfMonth + " and day: " + dayOfWeek);
-    System.out.println(totalDays);
-    System.out.println(month);
+    //System.out.println("Start at week: " + weekOfMonth + " and day: " + dayOfWeek);
+    //System.out.println(totalDays);
+    //System.out.println(month);
     for (int week = weekOfMonth; week < 6; week++)
     {
       for (int day = dayOfWeek; day <  8; day++)
@@ -222,8 +222,8 @@ public class PlanningCalendar extends JPanel implements TaskView
       }
       dayOfWeek = 1;
     }
-    System.out.println("| Su | Mo | Tu | We | Th | Fr | Sa |");
-    System.out.println("------------------------------------");
+    //System.out.println("| Su | Mo | Tu | We | Th | Fr | Sa |");
+    //System.out.println("------------------------------------");
     //Add day titles
       for (int i = 1; i < 8; i++)
       {
@@ -267,7 +267,7 @@ public class PlanningCalendar extends JPanel implements TaskView
 
           dayToAdd = daysOfMonth[i][j];
         }
-        System.out.print("| " + value + " ");
+        //System.out.print("| " + value + " ");
 
         GridBagConstraints c = new GridBagConstraints();
         c.fill = GridBagConstraints.BOTH;
@@ -278,8 +278,8 @@ public class PlanningCalendar extends JPanel implements TaskView
         c.gridheight = 1;
         monthView.add(dayToAdd, c);
       }
-      System.out.println("|");
-      System.out.println("------------------------------------");
+      //System.out.println("|");
+      //System.out.println("------------------------------------");
     }
   }
   public void addCourse(Course course)

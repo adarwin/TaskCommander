@@ -34,16 +34,6 @@ public class CustomCheckBox extends JPanel
       public void actionPerformed(ActionEvent e)
       {
         label.setEnabled(!checkBox.isSelected());
-        /*
-        if (checkBox.isSelected())
-        {
-          label.setForeground(Color.gray);
-        }
-        else
-        {
-          label.setForeground(defaultColor);
-        }
-        */
       }
     });
   }
@@ -53,6 +43,11 @@ public class CustomCheckBox extends JPanel
     label.setText(text);
   }
   public boolean isSelected() { return checkBox.isSelected(); }
+  public void setSelected(boolean value)
+  {
+    checkBox.setSelected(value);
+    label.setEnabled(!value);
+  }
   public void addActionListener(ActionListener listener)
   {
     checkBox.addActionListener(listener);

@@ -83,7 +83,7 @@ public class CourseWidget extends JPanel
         }
       });
       rightClickMenu.add(menuItem);
-      System.out.println(menuItem.getPreferredSize().height);
+      //System.out.println(menuItem.getPreferredSize().height);
       JMenu colorMenu = new JMenu("Color");
       menuItem = new JMenuItem();
       menuItem.setText("");

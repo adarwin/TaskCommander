@@ -41,10 +41,13 @@ public class TaskWidget extends JPanel
       taskCheckBox.setText(task.getName());
       courseLabel.setText(task.getCourse().getName());
       //dueDate.setText(
-      setSelected(task.isCompleted());
+      boolean completed = task.isCompleted();
+      System.out.println(task.isCompleted()+"");
+      setCompleted(task.isCompleted());
     }
     public void setCompleted(boolean completed)
     {
+      taskCheckBox.setSelected(completed);
       task.setCompleted(completed);
       dueDate.setEnabled(!completed);
       notesButton.setEnabled(!completed);
@@ -112,7 +115,7 @@ public class TaskWidget extends JPanel
       int newY = courseLabel.getPreferredSize().height;
       courseLabel.setPreferredSize(new Dimension(newX+10, newY+10));
       courseLabel.setHorizontalAlignment(SwingConstants.CENTER);
-      System.out.println(newX + "   " + newY);
+      //System.out.println(newX + "   " + newY);
       Calendar cal = Calendar.getInstance();
       Integer day = cal.get(Calendar.DAY_OF_WEEK);
       String dayString;
@@ -233,12 +236,12 @@ public class TaskWidget extends JPanel
       {
         public void actionPerformed(ActionEvent e)
         {
-          System.out.println("taskCheckBox!!!!!!!!");
-          System.out.println(task);
           Task newState = new Task("", null);
           newState.updateFrom(task);
+          System.out.println("taskCheckBox selected? " + taskCheckBox.isSelected());
           newState.setCompleted(taskCheckBox.isSelected());
           TaskEdit command = new TaskEdit(task, newState);
+          command.run();
           TaskCommander.addCommand(command);
           //setSelected(taskCheckBox.isSelected());
           //setCompleted(taskCheckBox.isSelected());

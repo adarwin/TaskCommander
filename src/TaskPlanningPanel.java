@@ -72,7 +72,7 @@ public class TaskPlanningPanel extends JPanel implements TaskView
   }
   public void addTask(Task task)
   {
-    if (DEBUG) log("addTask(Task task) currently does nothing");
+    if (DEBUG) log("Attempting to add task");
     TaskWidget taskWidget = new TaskWidget(task);
     //taskWidgets.add(taskWidget);
     unPlannedContent.add(taskWidget);

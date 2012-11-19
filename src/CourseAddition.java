@@ -13,7 +13,7 @@ public class CourseAddition implements Command
   //private String courseName;
   private TaskView taskViewToUpdate;
   private Course course;
-  private boolean DEBUG = true;
+  private boolean DEBUG = false;
   private String CLASS = "CourseAddition";
 
   private void log(String message)
