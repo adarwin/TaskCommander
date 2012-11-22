@@ -10,7 +10,7 @@ import java.awt.event.*;
 import java.util.*;
 import javax.swing.*;
 import javax.swing.UIManager.*;
-import com.jtattoo.plaf.texture.TextureLookAndFeel;
+//import com.jtattoo.plaf.texture.TextureLookAndFeel;
 
 public class TaskCommander 
 {
@@ -25,6 +25,36 @@ public class TaskCommander
   protected static final Color pastelPurple = new Color(255, 191, 239);
   protected static final Color pastelRed = new Color(255, 199, 198);
   protected static final Color neutralColor = new Color(214, 217, 223);
+  //Apple
+  protected static final Color melon = new Color(255, 204, 102);
+  protected static final Color salmon = new Color(255, 102, 102);
+  protected static final Color orange = new Color(255, 128, 0);
+  protected static final Color red = new Color(255, 0, 0);
+  protected static final Color lightGreen = new Color(204, 255, 102);
+  protected static final Color banana = new Color(255, 255, 102);
+  protected static final Color lemon = new Color(255, 255, 0);
+  protected static final Color spindrift = new Color(102, 255, 204);
+  protected static final Color flora = new Color(102, 255, 102);
+  protected static final Color seaFoam = new Color(0, 255, 128);
+  protected static final Color lime = new Color(128, 255, 0);
+  protected static final Color green = new Color(0, 255, 0);
+  protected static final Color sky = new Color(102, 204, 255);
+  protected static final Color ice = new Color(102, 255, 255);
+  protected static final Color turquoise = new Color(0, 255, 255);
+  protected static final Color lavender = new Color(204, 102, 255);
+  protected static final Color orchid = new Color(102, 102, 255);
+  protected static final Color aqua = new Color(0, 128, 255);
+  //protected static final Color grape = new Color(128, 0, 255);
+  protected static final Color lightPink = new Color(255, 111, 207);
+  protected static final Color bubbleGum = new Color(255, 102, 255);
+  protected static final Color magenta = new Color(255, 0, 255);
+  protected static final Color hotPink = new Color(255, 0, 128);
+  protected static final Color black = new Color(0, 0, 0);
+  protected static final Color snow = new Color(255, 255, 255);
+
+  private static final Color[] colorList = new Color[] { pastelGreen, pastelBlue, pastelYellow, pastelCyan, pastelPurple, pastelRed};
+  private static int nextColorIndex = 0;
+  private static LinkedHashMap<String, Color> colorMap;
 
   private static Stack<Command> runCommands;
   private static Stack<Command> undonCommands;
@@ -57,7 +87,12 @@ public class TaskCommander
     public static void registerTaskView(TaskView taskView) { taskViews.add(taskView); }
     public static ArrayList<TaskView> getRegisteredTaskViews() { return taskViews; }
     public static TaskEntryPanel getTaskEntryPanel() { return taskEntryPanel; }
-    public static Color getDefaultCourseColor() { return neutralColor; }
+    //public static Color getDefaultCourseColor() { return neutralColor; }
+    public static Color getNextCourseColor()
+    {
+      return colorList[nextColorIndex++%6];
+    }
+    public static LinkedHashMap<String, Color> getColorMap() { return colorMap; }
 
     public static void log(String header, String message)
     {
@@ -117,6 +152,7 @@ public class TaskCommander
     public static void addCourse(String name, TaskView taskView)
     {
       Course course = new Course(name);
+      course.setColor(getNextCourseColor());
       addCourse(course, taskView);
     }
 
@@ -333,6 +369,39 @@ public class TaskCommander
       e.printStackTrace();
       System.exit(1);
     }
+
+    colorMap = new LinkedHashMap<String, Color>();
+    colorMap.put("Pastel Green", pastelGreen);
+    colorMap.put("Pastel Blue", pastelBlue);
+    colorMap.put("Pastel Yellow", pastelYellow);
+    colorMap.put("Pastel Cyan", pastelCyan);
+    colorMap.put("Pastel Purple", pastelPurple);
+    colorMap.put("Pastel Red", pastelRed);
+    colorMap.put("Melon", melon);
+    colorMap.put("Salmon", salmon);
+    colorMap.put("Orange", orange);
+    colorMap.put("Red", red);
+    colorMap.put("Light Green", lightGreen);
+    colorMap.put("Banana", banana);
+    colorMap.put("Lemon", lemon);
+    colorMap.put("Spindrift", spindrift);
+    colorMap.put("Flora", flora);
+    colorMap.put("Sea Foam", seaFoam);
+    colorMap.put("Lime", lime);
+    colorMap.put("Green", green);
+    colorMap.put("Sky", sky);
+    colorMap.put("Ice", ice);
+    colorMap.put("Turquoise", turquoise);
+    colorMap.put("Lavender", lavender);
+    colorMap.put("Orchid", orchid);
+    colorMap.put("Aqua", aqua);
+    //colorMap.put("Grape", grape);
+    colorMap.put("Light Pink", lightPink);
+    colorMap.put("Bubble Gum", bubbleGum);
+    colorMap.put("Magenta", magenta);
+    colorMap.put("Hot Pink", hotPink);
+    colorMap.put("Black", black);
+    colorMap.put("Snow", snow);
 
     SwingUtilities.invokeLater(new Runnable()
     {

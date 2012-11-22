@@ -15,6 +15,8 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseEvent;
 import java.awt.FlowLayout;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.Set;
 import javax.swing.border.SoftBevelBorder;
 import javax.swing.border.MatteBorder;
 import javax.swing.JButton;
@@ -44,6 +46,11 @@ public class CourseWidget extends JPanel
 
 
   // Public Methods
+    public void updateCourseInfo()
+    {
+      courseLabel.setText(course.getName());
+      colorIndicator.setBackground(course.getColor());
+    }
     public CourseWidget()
     {
       this("CourseName");
@@ -67,6 +74,37 @@ public class CourseWidget extends JPanel
 
 
   // Helper/Private Methods
+    private void addToColorMenu(JMenu colorMenu, Color color, String colorString)
+    {
+      JMenuItem menuItem = new JMenuItem();
+      menuItem.setText("");
+      menuItem.setLayout(new BorderLayout());
+      JPanel colorPanel = new JPanel();
+      colorPanel.setPreferredSize(new Dimension(25, 20));
+      JLabel colorLabel = new JLabel(" " + colorString);
+      colorLabel.setForeground(Color.white);
+      colorLabel.setHorizontalTextPosition(JLabel.LEFT);
+      colorPanel.setBackground(color);
+      menuItem.add(colorPanel, BorderLayout.WEST);
+      menuItem.add(colorLabel, BorderLayout.CENTER);
+      Dimension size = menuItem.getPreferredSize();
+      menuItem.setPreferredSize(new Dimension(120, 20));
+      final Color temp = color;
+      menuItem.addActionListener(new ActionListener()
+      {
+        public void actionPerformed(ActionEvent e)
+        {
+          Course newState = new Course("");
+          newState.updateFrom(course);
+          newState.setColor(temp);
+          CourseEdit courseEdit = new CourseEdit(course, newState);
+          TaskCommander.addCommand(courseEdit);
+          courseEdit.run();
+          //setColor(temp);
+        }
+      });
+      colorMenu.add(menuItem);
+    }
     private void displayRightClickMenu(MouseEvent e)
     {
       rightClickMenu.show(this, e.getX(), e.getY());
@@ -83,28 +121,32 @@ public class CourseWidget extends JPanel
         }
       });
       rightClickMenu.add(menuItem);
-      //System.out.println(menuItem.getPreferredSize().height);
-      JMenu colorMenu = new JMenu("Color");
-      menuItem = new JMenuItem();
-      menuItem.setText("");
-      menuItem.setLayout(new BorderLayout());
-      JPanel colorPanel = new JPanel();
-      colorPanel.setBackground(Color.red);
-      colorPanel.setPreferredSize(new Dimension(30, 20));
-      menuItem.add(colorPanel, BorderLayout.WEST);
-      menuItem.add(new JLabel("Red"), BorderLayout.EAST);
-      Dimension size = menuItem.getPreferredSize();
-      menuItem.setPreferredSize(new Dimension(100, 20));
+      menuItem = new JMenuItem("Rename");
       menuItem.addActionListener(new ActionListener()
       {
         public void actionPerformed(ActionEvent e)
         {
-          System.out.println("CourseWidget Red");
-          showColorChooser();
+          System.out.println("Rename...");
         }
       });
-      colorMenu.add(menuItem);
+      rightClickMenu.add(menuItem);
+      //System.out.println(menuItem.getPreferredSize().height);
+
+      JMenu colorMenu = new JMenu("Color");
+      LinkedHashMap<String, Color> colorMap = TaskCommander.getColorMap();
+      Set<String> keySet = colorMap.keySet();
+      for (String key : keySet)
+      {
+        addToColorMenu(colorMenu, colorMap.get(key), key);
+      }
+      /*
+      addToColorMenu(colorMenu, TaskCommander.pastelBlue, "Pastel Blue");
+      addToColorMenu(colorMenu, TaskCommander.pastelGreen, "Pastel Green");
+      addToColorMenu(colorMenu, TaskCommander.pastelYellow, "Pastel Yellow");
+      addToColorMenu(colorMenu, TaskCommander.pastelRed, "Pastel Red");
+      */
       rightClickMenu.add(colorMenu);
+
       menuItem = new JMenuItem("Delete");
       menuItem.addActionListener(new ActionListener()
       {
@@ -118,14 +160,14 @@ public class CourseWidget extends JPanel
     }
     private void configureComponents()
     {
-      int height = 20;
       colorIndicator = new JPanel();
       colorIndicator.setPreferredSize(new Dimension(30, 0));
       colorIndicator.setBorder(new MatteBorder(1, 1, 1, 1, Color.black));
+      colorIndicator.setBackground(course.getColor());
       layout = new SpringLayout();
       setLayout(layout);
       //minimumSize = new Dimension(100, 20);
-      preferredSize = new Dimension(200, height);
+      preferredSize = new Dimension(200, 30);
       maximumSize = new Dimension(3000, 30);
       //colorButton = new JButton("Color");
       //colorButton.setPreferredSize(new Dimension(65, 30));
@@ -239,11 +281,13 @@ public class CourseWidget extends JPanel
   {
     course.setColor(color);
     colorIndicator.setBackground(color);
+    /*
     ArrayList<TaskView> taskViews = TaskCommander.getRegisteredTaskViews();
     for (TaskView taskView : taskViews)
     {
       taskView.updateTaskColors();
     }
+    */
     //TaskCommander.getTaskEntryPanel().updateTaskColors();
   }
   private boolean isSelected() { return course.isSelected(); }

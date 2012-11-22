@@ -308,4 +308,8 @@ public class PlanningCalendar extends JPanel implements TaskView
   {
     System.out.println("updateTaskInfo() currently does nothing");
   }
+  public void updateCourseInfo()
+  {
+    System.out.println("updateCourseInfo() currently does nothing");
+  }
 }

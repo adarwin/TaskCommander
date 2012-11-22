@@ -36,12 +36,35 @@ public class Course
   {
     courseName = name;
     selected = false;
-    color = TaskCommander.getDefaultCourseColor();
+    color = TaskCommander.getNextCourseColor();
   }
-  public Color getColor() { return color; }
-  public void setColor(Color color) { this.color = color; }
+  public void updateFrom(Course newState)
+  {
+    courseName = newState.getName();
+    professor = newState.getProfessorName();
+    building = newState.getBuildingName();
+    roomNumber = newState.getRoomNumber();
+    startingTime = newState.getStartingTime();
+    endingTime = newState.getEndingTime();
+    courseNumber = newState.getCourseNumber();
+    grade = newState.getGrade();
+    color = newState.getColor();
+  }
+
   public String getName() { return courseName; }
   public void setName(String newName) { courseName = newName; }
+
+  public String getProfessorName() { return professor; }
+  public String getBuildingName() { return building; }
+  public int getRoomNumber() { return roomNumber; }
+  public int[] getStartingTime() { return startingTime; }
+  public int[] getEndingTime() { return endingTime; }
+  public int getCourseNumber() { return courseNumber; }
+  public double getGrade() { return grade; }
+
+  public Color getColor() { return color; }
+  public void setColor(Color color) { this.color = color; }
+
   public boolean isSelected() { return selected; }
   public void setSelected(boolean value) { selected = value; }
 }

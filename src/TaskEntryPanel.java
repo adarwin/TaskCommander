@@ -40,9 +40,9 @@ public class TaskEntryPanel extends JPanel implements TaskView
   private ArrayList<TaskWidget> taskWidgets;
   private ArrayList<SubTaskWidget> subTaskWidgets;
   private CourseWidget previouslySelectedCourseWidget;
-  private String quickTaskText = "Enter new task name here";
-  private String quickSubTaskText = "Enter new subtask here";
-  private String quickCourseText = "Enter new course name here";
+  private String quickTaskText = "New task name";
+  private String quickSubTaskText = "New subtask name";
+  private String quickCourseText = "New course name";
   private final boolean DEBUG = false;
   private final String CLASS = "TaskEntryPanel";
 
@@ -477,6 +477,14 @@ public class TaskEntryPanel extends JPanel implements TaskView
     for (TaskWidget taskWidget : taskWidgets)
     {
       taskWidget.updateTaskInfo();
+    }
+  }
+  public void updateCourseInfo()
+  {
+    if (DEBUG) log("Attempting to update course info for all course widgets");
+    for (CourseWidget courseWidget : courseWidgets)
+    {
+      courseWidget.updateCourseInfo();
     }
   }
 }

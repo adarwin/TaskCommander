@@ -121,7 +121,15 @@ public class TaskPlanningPanel extends JPanel implements TaskView
   }
   public void updateTaskInfo()
   {
-    System.out.println("updateTaskInfo() currently does nothing");
+    if (DEBUG) log("Attempting to update task info for all task widgets");
+    for (TaskWidget taskWidget : taskWidgets)
+    {
+      taskWidget.updateTaskInfo();
+    }
+  }
+  public void updateCourseInfo()
+  {
+    if (DEBUG) log("updateCourseInfo() currently does nothing");
   }
 
 

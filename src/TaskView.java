@@ -16,6 +16,7 @@ public interface TaskView
 
   public void updateTaskColors();
   public void updateTaskInfo();
+  public void updateCourseInfo();
 
   public void repaint();
   public void revalidate();
