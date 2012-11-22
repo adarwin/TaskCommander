@@ -487,4 +487,18 @@ public class TaskEntryPanel extends JPanel implements TaskView
       courseWidget.updateCourseInfo();
     }
   }
+  public void showTasksFor(Course course)
+  {
+    if (DEBUG) log("Attempting to show only tasks associated with course: " + course.getName());
+    centerContent.removeAll();
+    for (TaskWidget taskWidget : taskWidgets)
+    {
+      if (taskWidget.getTask().getCourse() == course)
+      {
+        centerContent.add(taskWidget);
+      }
+    }
+    revalidate();
+    repaint();
+  }
 }

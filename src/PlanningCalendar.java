@@ -53,6 +53,14 @@ public class PlanningCalendar extends JPanel implements TaskView
   Day monthToday, weekToday;
   JPanel monthView, weekView;
 
+  private final boolean DEBUG = true;
+  private final String CLASS = "PlanningCalendar";
+
+  private void log(String message)
+  {
+    TaskCommander.log(CLASS, message);
+  }
+
   public PlanningCalendar()
   {
     JTabbedPane tabbedPane = new JTabbedPane();
@@ -284,32 +292,42 @@ public class PlanningCalendar extends JPanel implements TaskView
   }
   public void addCourse(Course course)
   {
+    if (DEBUG) log("addCourse(Course course) currently does nothing");;
   }
   public void removeCourse(Course course)
   {
+    if (DEBUG) log("removeCourse(Course course) currently does nothing");
   }
   public void addTask(Task task)
   {
+    if (DEBUG) log("addTask(Task task) currently does nothing");
   }
   public void removeTask(Task task)
   {
+    if (DEBUG) log("removeTask(Task task) currently does nothing");
   }
   public void addSubTask(SubTask subTask)
   {
+    if (DEBUG) log("addSubTask(SubTask subTask) currently does nothing");
   }
   public void removeSubTask(SubTask subTask)
   {
+    if (DEBUG) log("removeSubTask(SubTask subTask) currently does nothing");
   }
   public void updateTaskColors()
   {
-    System.out.println("updateTaskColors() currently does nothing");
+    if (DEBUG) log("updateTaskColors() currently does nothing");
   }
   public void updateTaskInfo()
   {
-    System.out.println("updateTaskInfo() currently does nothing");
+    if (DEBUG) log("updateTaskInfo() currently does nothing");
   }
   public void updateCourseInfo()
   {
-    System.out.println("updateCourseInfo() currently does nothing");
+    if (DEBUG) log("updateCourseInfo() currently does nothing");
+  }
+  public void showTasksFor(Course course)
+  {
+    if (DEBUG) log("showTasksFor(Course course) currently does nothing");
   }
 }

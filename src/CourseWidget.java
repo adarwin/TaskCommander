@@ -201,12 +201,14 @@ public class CourseWidget extends JPanel
         public void mouseClicked(MouseEvent e)
         {
           //setBorder(new SoftBevelBorder(SoftBevelBorder.RAISED));
+          /*
           if(e.getButton() == MouseEvent.BUTTON3)
           {
             //Open right-click menu
             System.out.println("Open right-click menu");
             showColorChooser();
           }
+          */
         }
         public void mouseEntered(MouseEvent e)
         {
@@ -244,6 +246,11 @@ public class CourseWidget extends JPanel
           {
             //Select
             sendSelectionRequest(!isSelected());
+            ArrayList<TaskView> taskViews = TaskCommander.getRegisteredTaskViews();
+            for (TaskView taskView : taskViews)
+            {
+              taskView.showTasksFor(course);
+            }
           }
         }
       });

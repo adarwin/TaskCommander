@@ -131,6 +131,10 @@ public class TaskPlanningPanel extends JPanel implements TaskView
   {
     if (DEBUG) log("updateCourseInfo() currently does nothing");
   }
+  public void showTasksFor(Course course)
+  {
+    if (DEBUG) log("showTasksFor(Course couse) currently does nothing");
+  }
 
 
 
