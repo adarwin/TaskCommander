@@ -200,36 +200,12 @@ public class CourseWidget extends JPanel
       {
         public void mouseClicked(MouseEvent e)
         {
-          //setBorder(new SoftBevelBorder(SoftBevelBorder.RAISED));
-          /*
-          if(e.getButton() == MouseEvent.BUTTON3)
-          {
-            //Open right-click menu
-            System.out.println("Open right-click menu");
-            showColorChooser();
-          }
-          */
         }
         public void mouseEntered(MouseEvent e)
         {
-          /*
-          if (e.getButton() == MouseEvent.BUTTON1)
-          {
-            setBorder(new SoftBevelBorder(SoftBevelBorder.LOWERED));
-            //Select
-            setSelected(!isSelected());
-          }
-          */
         }
         public void mouseExited(MouseEvent e)
         {
-          /*
-          if (e.getButton() == MouseEvent.BUTTON1)
-          {
-            setBorder(new SoftBevelBorder(SoftBevelBorder.RAISED));
-            setSelected(!isSelected());
-          }
-          */
         }
         public void mousePressed(MouseEvent e)
         {
@@ -245,11 +221,12 @@ public class CourseWidget extends JPanel
           if (e.getButton() == MouseEvent.BUTTON1)
           {
             //Select
-            sendSelectionRequest(!isSelected());
+            boolean select = !isSelected();
+            sendSelectionRequest(select);
             ArrayList<TaskView> taskViews = TaskCommander.getRegisteredTaskViews();
             for (TaskView taskView : taskViews)
             {
-              taskView.showTasksFor(course);
+              taskView.showTasksFor(select ? course : null);
             }
           }
         }
@@ -301,6 +278,7 @@ public class CourseWidget extends JPanel
   private void sendSelectionRequest(boolean selectionRequest)
   {
     TaskCommander.getTaskEntryPanel().setSelectedCourseWidget(this, selectionRequest);
+    TaskCommander.getTaskEntryPanel().setTaskEntryEnabled(selectionRequest);
   }
   protected void setSelected(boolean selected)
   {

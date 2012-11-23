@@ -84,6 +84,12 @@ public class TaskCommander
   }
 
   //Public Methods
+    public static void removeTask(Task task)
+    {
+      TaskRemoval command = new TaskRemoval(task);
+      command.run();
+      TaskCommander.addCommand(command);
+    }
     public static void registerTaskView(TaskView taskView) { taskViews.add(taskView); }
     public static ArrayList<TaskView> getRegisteredTaskViews() { return taskViews; }
     public static TaskEntryPanel getTaskEntryPanel() { return taskEntryPanel; }

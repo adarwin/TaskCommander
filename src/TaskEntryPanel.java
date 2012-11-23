@@ -51,6 +51,12 @@ public class TaskEntryPanel extends JPanel implements TaskView
     TaskCommander.log(CLASS, message);
   }
 
+  protected void setTaskEntryEnabled(boolean enabled)
+  {
+    taskAddButton.setEnabled(enabled);
+    quickTaskField.setText(enabled ? quickTaskText : "");
+    quickTaskField.setEnabled(enabled);
+  }
   protected void setSelectedCourseWidget(CourseWidget courseWidget, boolean selected)
   {
     if (previouslySelectedCourseWidget != null)
@@ -105,9 +111,9 @@ public class TaskEntryPanel extends JPanel implements TaskView
       subTaskAddButton.setPreferredSize(new Dimension(40, 20));
       quickCourseField.setText(quickCourseText);
       quickCourseField.setForeground(Color.gray);
-      quickTaskField.setText(quickTaskText);
+      //quickTaskField.setText(quickTaskText);
       quickTaskField.setForeground(Color.gray);
-      quickSubTaskField.setText(quickSubTaskText);
+      //quickSubTaskField.setText(quickSubTaskText);
       quickSubTaskField.setForeground(Color.gray);
       centerScrollPane.setMinimumSize(new Dimension(300, 0));
 
@@ -124,6 +130,8 @@ public class TaskEntryPanel extends JPanel implements TaskView
       rightPane.setMinimumSize(new Dimension(220, 0));
       quickSubTaskField.setEnabled(false);
       subTaskAddButton.setEnabled(false);
+      quickTaskField.setEnabled(false);
+      taskAddButton.setEnabled(false);
       mainSplitPane.setRightComponent(nestedSplitPane);
       mainSplitPane.setLeftComponent(leftPane);
       nestedSplitPane.setLeftComponent(centerPane);
@@ -440,7 +448,7 @@ public class TaskEntryPanel extends JPanel implements TaskView
       centerContent.remove(target);
     }
     repaint();
-    //revalidate();
+    revalidate();
   }
   public void removeSubTask(SubTask subTask)
   {

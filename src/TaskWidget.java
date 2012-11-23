@@ -42,7 +42,6 @@ public class TaskWidget extends JPanel
       courseLabel.setText(task.getCourse().getName());
       //dueDate.setText(
       boolean completed = task.isCompleted();
-      System.out.println(task.isCompleted()+"");
       setCompleted(task.isCompleted());
     }
     public void setCompleted(boolean completed)
@@ -79,6 +78,7 @@ public class TaskWidget extends JPanel
       addComponents();
       configurePopupMenu();
       addListeners();
+      setCompleted(task.isCompleted());
     }
 
 
@@ -189,6 +189,14 @@ public class TaskWidget extends JPanel
           System.out.println("view details");
         }
       });
+      menuItem = new JMenuItem("Change Course...");
+      menuItem.addActionListener(new ActionListener()
+      {
+        public void actionPerformed(ActionEvent e)
+        {
+          System.out.println("Change Course");
+        }
+      });
       rightClickMenu.add(menuItem);
       menuItem = new JMenuItem("Delete");
       menuItem.addActionListener(new ActionListener()
@@ -196,6 +204,7 @@ public class TaskWidget extends JPanel
         public void actionPerformed(ActionEvent e)
         {
           System.out.println("delete");
+          TaskCommander.removeTask(task);
         }
       });
       rightClickMenu.add(menuItem);
