@@ -634,8 +634,8 @@ public class TaskCommander
       constantsPanel.add(menuBar, BorderLayout.NORTH);
       constantsPanel.add(toolBar, BorderLayout.SOUTH);
 
-      mainContentPanel.add(taskEntryPanel, TASK_ENTRY);
       mainContentPanel.add(planningBoard, PLANNING);
+      mainContentPanel.add(taskEntryPanel, TASK_ENTRY);
 
       contentPane.add(constantsPanel, BorderLayout.NORTH);
       contentPane.add(mainContentPanel, BorderLayout.CENTER);
