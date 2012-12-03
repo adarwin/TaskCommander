@@ -6,9 +6,12 @@ SUNY Oswego
 */
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import javax.swing.JTabbedPane;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseEvent;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.util.Calendar;
@@ -32,6 +35,17 @@ public class PlanningCalendar extends JPanel implements TaskView
     {
       this();
       setCalendar(calendar);
+      addMouseListener(new MouseListener()
+      {
+        public void mouseEntered(MouseEvent e) {}
+        public void mouseExited(MouseEvent e) {}
+        public void mousePressed(MouseEvent e)
+        {
+          displayDayOfWeek();
+        }
+        public void mouseReleased(MouseEvent e) {}
+        public void mouseClicked(MouseEvent e) {}
+      });
     }
     public Day()
     {
@@ -41,13 +55,12 @@ public class PlanningCalendar extends JPanel implements TaskView
       dateLabel = new JLabel("");
       add(dateLabel);
     }
-    /*
-    public Day(Integer dayOfMonth)
+
+    private void displayDayOfWeek()
     {
-      this();
-      setDayOfMonth(dayOfMonth);
+      log("Clicked day: " + calendar.get(Calendar.DAY_OF_WEEK));
     }
-    */
+
     public Integer getDayOfMonth() { return dayOfMonth; }
     public Calendar getCalendar() { return calendar; }
     public void setCalendar(Calendar calendar)
@@ -59,6 +72,11 @@ public class PlanningCalendar extends JPanel implements TaskView
     {
       this.dayOfMonth = dayOfMonth;
       dateLabel.setText(dayOfMonth.toString());
+    }
+    public void setGrayedOut()
+    {
+      dateLabel.setForeground(Color.gray);
+      setBorder(new MatteBorder(1, 1, 1, 1, Color.lightGray));
     }
   }
 
@@ -82,6 +100,9 @@ public class PlanningCalendar extends JPanel implements TaskView
     {
       configureComponents();
       configureLayouts();
+      configureMonthView();
+      configureWeekView();
+      configureDayView();
       addComponents();
       addListeners();
     }
@@ -137,18 +158,18 @@ public class PlanningCalendar extends JPanel implements TaskView
         int daysInMonth;
         switch (month)
         {
-          case 0: daysInMonth = 31; break;
-          case 1: daysInMonth = 28; break;
-          case 2: daysInMonth = 31; break;
-          case 3: daysInMonth = 30; break;
-          case 4: daysInMonth = 31; break;
-          case 5: daysInMonth = 30; break;
-          case 6: daysInMonth = 31; break;
-          case 7: daysInMonth = 31; break;
-          case 8: daysInMonth = 30; break;
-          case 9: daysInMonth = 31; break;
-          case 10: daysInMonth = 30; break;
-          case 11: daysInMonth = 31; break;
+          case Calendar.JANUARY: daysInMonth = 31; break;
+          case Calendar.FEBRUARY: daysInMonth = 28; break;
+          case Calendar.MARCH: daysInMonth = 31; break;
+          case Calendar.APRIL: daysInMonth = 30; break;
+          case Calendar.MAY: daysInMonth = 31; break;
+          case Calendar.JUNE: daysInMonth = 30; break;
+          case Calendar.JULY: daysInMonth = 31; break;
+          case Calendar.AUGUST: daysInMonth = 31; break;
+          case Calendar.SEPTEMBER: daysInMonth = 30; break;
+          case Calendar.OCTOBER: daysInMonth = 31; break;
+          case Calendar.NOVEMBER: daysInMonth = 30; break;
+          case Calendar.DECEMBER: daysInMonth = 31; break;
           default: daysInMonth = 0;
         }
         return daysInMonth;
@@ -169,6 +190,35 @@ public class PlanningCalendar extends JPanel implements TaskView
         }
         return day;
       }
+      private String dayOfMonth(Integer dayOfMonth)
+      {
+        return dayOfMonth.toString();
+      }
+      private String weekOfMonth(Integer weekOfMonth)
+      {
+        return weekOfMonth.toString();
+      }
+      private String month(Integer month)
+      {
+        String output;
+        switch (month)
+        {
+          case Calendar.JANUARY: output = "Jan"; break;
+          case Calendar.FEBRUARY: output = "Feb"; break;
+          case Calendar.MARCH: output = "Mar"; break;
+          case Calendar.APRIL: output = "Apr"; break;
+          case Calendar.MAY: output = "May"; break;
+          case Calendar.JUNE: output = "Jun"; break;
+          case Calendar.JULY: output = "Jul"; break;
+          case Calendar.AUGUST: output = "Aug"; break;
+          case Calendar.SEPTEMBER: output = "Sep"; break;
+          case Calendar.OCTOBER: output = "Oct"; break;
+          case Calendar.NOVEMBER: output = "Nov"; break;
+          case Calendar.DECEMBER: output = "Dec"; break;
+          default: output = "INVALID";
+        }
+        return output;
+      }
     private void setMonth(String month)
     {
     }
@@ -179,12 +229,6 @@ public class PlanningCalendar extends JPanel implements TaskView
     {
       today = Calendar.getInstance();
       setToday(today.get(Calendar.DAY_OF_MONTH));
-      dayToday = new Day(today.get(Calendar.DAY_OF_MONTH));
-      weekToday = new Day(today.get(Calendar.DAY_OF_MONTH));
-      monthToday = new Day(dayOfMonth);
-      dayToday.setBackground(TaskCommander.pastelBlue);
-      weekToday.setBackground(TaskCommander.pastelBlue);
-      monthToday.setBackground(TaskCommander.pastelBlue);
       tabbedPane = new JTabbedPane();
       monthView = new JPanel();
       weekView = new JPanel();
@@ -192,17 +236,8 @@ public class PlanningCalendar extends JPanel implements TaskView
       tabbedPane.add("Month", monthView);
       tabbedPane.add("Week", weekView);
       tabbedPane.add("Day", dayView);
-      daysOfMonth = new Day[6][8]; //Create extra row and column for index by 1 purposes
+      daysOfMonth = new Day[7][8]; //Create extra row and column for index by 1 purposes
       daysOfWeek = new Day[8]; //Create extra column for index by 1 purposes
-      //Integer dayOfWeek = cal.get(Calendar.DAY_OF_WEEK);
-      //Integer dayOfMonth = cal.get(Calendar.DAY_OF_MONTH);
-      //Integer weekOfMonth = cal.get(Calendar.WEEK_OF_MONTH);
-      //Integer dayOfWeekInMonth = cal.get(Calendar.DAY_OF_WEEK_IN_MONTH);
-      //configureMonthView(cal.get(Calendar.DAY_OF_WEEK), cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.WEEK_OF_MONTH), cal.get(Calendar.MONTH));
-      //configureWeekView(cal.get(Calendar.DAY_OF_WEEK), cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.MONTH));
-      configureMonthView();
-      configureWeekView();
-      configureDayView();
     }
     private void configureLayouts()
     {
@@ -221,9 +256,9 @@ public class PlanningCalendar extends JPanel implements TaskView
     }
     private void setToday(int dayOfMonth)
     {
-      dayToday = new Day(dayOfMonth);
-      weekToday = new Day(dayOfMonth);
-      monthToday = new Day(dayOfMonth);
+      dayToday = new Day(today);
+      weekToday = new Day(today);
+      monthToday = new Day(today);
       dayToday.setBackground(TaskCommander.pastelBlue);
       weekToday.setBackground(TaskCommander.pastelBlue);
       monthToday.setBackground(TaskCommander.pastelBlue);
@@ -239,6 +274,7 @@ public class PlanningCalendar extends JPanel implements TaskView
     }
     private void configureWeekView(int dayOfWeek, int dayOfMonth, int month)
     {
+      /*
       int daysInMonth = numberOfDaysInMonth(month);
       int count = dayOfMonth-1;
       // Set up past days
@@ -299,108 +335,79 @@ public class PlanningCalendar extends JPanel implements TaskView
           //System.out.println(i);
         }
       }
+      */
+    }
+    private void addToMonthView(int x, int y, Day dayToAdd)
+    {
+      addToMonthView(0.5, 0.5, x, y, 1, dayToAdd);
+    }
+    private void addToMonthView(double weightX, double weightY, int gridX, int gridY, int gridHeight, Component component)
+    {
+      GridBagConstraints c = new GridBagConstraints();
+      c.fill = GridBagConstraints.BOTH;
+      c.weightx = weightX;
+      c.weighty = weightY;
+      c.gridx = gridX;
+      c.gridy = gridY;
+      c.gridheight = gridHeight;
+      monthView.add(component, c);
     }
     private void configureMonthView()
     {
-      configureMonthView(today.get(Calendar.DAY_OF_WEEK),
-                         today.get(Calendar.DAY_OF_MONTH),
-                         today.get(Calendar.WEEK_OF_MONTH),
-                         today.get(Calendar.MONTH));
+      configureMonthView(today);
     }
-    private void configureMonthView(int dayOfWeek, int dayOfMonth, int weekOfMonth, int month)
+    private void configureMonthView(Calendar calendar)
     {
-      int originalDayOfWeek = dayOfWeek;
-      int totalDays = numberOfDaysInMonth(month);
-      int dayCount = dayOfMonth;
-      //System.out.println("Start at week: " + weekOfMonth + " and day: " + dayOfWeek);
-      //Set today
-        daysOfMonth[weekOfMonth][dayOfWeek--] = monthToday;
-        dayCount--;
-      for (int week = weekOfMonth; week > 0; week--)
-      {
-        for (int day = dayOfWeek; day > 0; day--)
-        {
-          if (dayCount > 0)
-          {
-            daysOfMonth[week][day] = new Day(dayCount--);
-          }
-        }
-        dayOfWeek = 7;
-      }
-      dayCount = dayOfMonth;
-      dayOfWeek = originalDayOfWeek+1;
-      //System.out.println("Start at week: " + weekOfMonth + " and day: " + dayOfWeek);
-      //System.out.println(totalDays);
-      //System.out.println(month);
-      for (int week = weekOfMonth; week < 6; week++)
-      {
-        for (int day = dayOfWeek; day <  8; day++)
-        {
-          if (dayCount <= totalDays)
-          {
-            daysOfMonth[week][day] = new Day(dayCount++);
-          }
-        }
-        dayOfWeek = 1;
-      }
-      //System.out.println("| Su | Mo | Tu | We | Th | Fr | Sa |");
-      //System.out.println("------------------------------------");
+      int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
+      int weekOfMonth = calendar.get(Calendar.WEEK_OF_MONTH);
+
       //Add day titles
         for (int i = 1; i < 8; i++)
         {
-          GridBagConstraints c = new GridBagConstraints();
-          c.fill = GridBagConstraints.BOTH;
-          c.weightx = 0.5;
-          c.weighty = 0;
-          c.gridx = i;
-          c.gridy = 0;
-          c.gridheight = 1;
-          String day = "";
-          switch (i)
-          {
-            case 1: day = "Sun"; break;
-            case 2: day = "Mon"; break;
-            case 3: day = "Tues"; break;
-            case 4: day = "Wed"; break;
-            case 5: day = "Thurs"; break;
-            case 6: day = "Fri"; break;
-            case 7: day = "Sat"; break;
-          }
-          JLabel temp = new JLabel(day);
+          JLabel temp = new JLabel(dayOfWeek(i));
           temp.setHorizontalAlignment(SwingConstants.CENTER);
-          monthView.add(temp, c);
+          addToMonthView(0.5, 0, i, 0, 1, temp);
         }
-      for (int i = 1; i < daysOfMonth.length; i++)
-      {
-        for (int j = 1; j < daysOfMonth[i].length; j++)
+
+      int daysInMonth = numberOfDaysInMonth(calendar.get(Calendar.MONTH));
+      //Add days
+        for (int i = 1; i <= daysInMonth; i++)
         {
-          String value;
-          Day dayToAdd;
-          if (daysOfMonth[i][j] == null)
-          {
-            value = "  ";
-            dayToAdd = new Day();
-          }
-          else
-          {
-            String orig = daysOfMonth[i][j].getDayOfMonth().toString();
-            value = orig.length() > 1 ? orig : "0" + orig;
-
-            dayToAdd = daysOfMonth[i][j];
-          }
-          //System.out.print("| " + value + " ");
-
-          GridBagConstraints c = new GridBagConstraints();
-          c.fill = GridBagConstraints.BOTH;
-          c.weightx = 0.5;
-          c.weighty = 0.5;
-          c.gridx = j;
-          c.gridy = i;
-          c.gridheight = 1;
-          monthView.add(dayToAdd, c);
+          calendar.set(Calendar.DAY_OF_MONTH, i);
+          dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
+          weekOfMonth = calendar.get(Calendar.WEEK_OF_MONTH);
+          Day dayToAdd = new Day((Calendar)calendar.clone());
+          daysOfMonth[weekOfMonth][dayOfWeek] = dayToAdd;
+          addToMonthView(dayOfWeek, weekOfMonth, dayToAdd);
         }
-        //System.out.println("|");
-        //System.out.println("------------------------------------");
-      }
+
+      // Add days from previous month
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
+        calendar.add(Calendar.DAY_OF_MONTH, -1);
+        for (int i = calendar.get(Calendar.DAY_OF_WEEK); i >= 1; i--)
+        {
+          dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
+          weekOfMonth = calendar.get(Calendar.WEEK_OF_MONTH);
+          Day dayToAdd = new Day((Calendar)calendar.clone());
+          dayToAdd.setGrayedOut();
+          daysOfMonth[1][dayOfWeek] = dayToAdd;
+          addToMonthView(i, 1, dayToAdd);
+          calendar.roll(Calendar.DAY_OF_MONTH, -1);
+        }
+
+      // Add days from next month
+        calendar.add(Calendar.MONTH, 1);
+        calendar.set(Calendar.DAY_OF_MONTH, numberOfDaysInMonth(calendar.get(Calendar.MONTH)));
+        calendar.add(Calendar.DAY_OF_MONTH, 1);
+        for (int i = calendar.get(Calendar.DAY_OF_WEEK); i <= 7; i++)
+        {
+          dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
+          weekOfMonth = calendar.get(Calendar.WEEK_OF_MONTH);
+          Day dayToAdd = new Day((Calendar)calendar.clone());
+          dayToAdd.setGrayedOut();
+          daysOfMonth[6][dayOfWeek] = dayToAdd;
+          addToMonthView(i, 6, dayToAdd);
+          calendar.roll(Calendar.DAY_OF_MONTH, 1);
+        }
     }
 }
