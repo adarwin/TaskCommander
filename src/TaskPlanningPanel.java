@@ -9,6 +9,7 @@ import java.awt.BorderLayout;
 import java.awt.Graphics;
 import java.util.ArrayList;
 import javax.swing.BoxLayout;
+import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.JScrollPane;
@@ -17,7 +18,8 @@ import java.awt.BorderLayout;
 public class TaskPlanningPanel extends JPanel implements TaskView
 {
   private JSplitPane mainSplitPane;
-  private JPanel unPlannedPane, unPlannedContent, plannedContent;
+  private JPanel unPlannedPane, unPlannedHeader, unPlannedContent, plannedContent;
+  private JButton newCourseButton, newTaskButton;
   private JScrollPane unPlannedScrollPane;
   private PlanningCalendar calendar;
   private ArrayList<TaskWidget> taskWidgets;
@@ -33,33 +35,78 @@ public class TaskPlanningPanel extends JPanel implements TaskView
 
 
 
+  private void configureComponents()
+  {
+    taskWidgets = new ArrayList<TaskWidget>();
+
+    unPlannedPane = new JPanel();
+    unPlannedHeader = new JPanel();
+    newCourseButton = new JButton("New Course");
+    newTaskButton = new JButton("New Task");
+    unPlannedContent = new JPanel();
+    unPlannedScrollPane = new JScrollPane(unPlannedContent);
+
+    plannedContent = new JPanel();
+
+    calendar = new PlanningCalendar();
+
+    mainSplitPane = new JSplitPane();
+
+    mainSplitPane.setLeftComponent(unPlannedPane);
+    mainSplitPane.setRightComponent(plannedContent);
+    mainSplitPane.setContinuousLayout(true);
+    mainSplitPane.setDividerLocation(TaskCommander.startingWidth/3);
+  }
+
+
+  private void configureLayouts()
+  {
+    setLayout(new BorderLayout());
+
+    unPlannedPane.setLayout(new BorderLayout());
+    unPlannedHeader.setLayout(new BorderLayout());
+    unPlannedContent.setLayout(new BoxLayout(unPlannedContent, BoxLayout.PAGE_AXIS));
+
+    plannedContent.setLayout(new BorderLayout());
+  }
+
+
+  private void addComponents()
+  {
+    unPlannedHeader.add(newCourseButton, BorderLayout.WEST);
+    unPlannedHeader.add(newTaskButton, BorderLayout.EAST);
+    unPlannedPane.add(unPlannedHeader, BorderLayout.NORTH);
+    unPlannedPane.add(unPlannedScrollPane, BorderLayout.CENTER);
+    plannedContent.add(calendar, BorderLayout.CENTER);
+    add(mainSplitPane, BorderLayout.CENTER);
+  }
+
+
+  private void addListeners()
+  {
+    newCourseButton.addActionListener(new ActionListener()
+    {
+      public void actionPerformed(ActionEvent e)
+      {
+        TaskCommander.showNewCourseDialog();
+      }
+    });
+    newTaskButton.addActionListener(new ActionListener()
+    {
+      public void actionPerformed(ActionEvent e)
+      {
+        TaskCommander.showNewTaskDialog();
+      }
+    });
+  }
+
+
   public TaskPlanningPanel()
   {
-    // Initialize Components and Containers
-      unPlannedPane = new JPanel();
-      unPlannedPane.setLayout(new BorderLayout());
-      unPlannedContent = new JPanel();
-      plannedContent = new JPanel();
-      unPlannedScrollPane = new JScrollPane(unPlannedContent);
-      calendar = new PlanningCalendar();
-      mainSplitPane = new JSplitPane();
-      unPlannedPane.add(unPlannedScrollPane, BorderLayout.CENTER);
-      taskWidgets = new ArrayList<TaskWidget>();
-
-    // Configure Containers
-      plannedContent.setLayout(new BorderLayout());
-      mainSplitPane.setLeftComponent(unPlannedPane);
-      mainSplitPane.setRightComponent(plannedContent);
-      mainSplitPane.setContinuousLayout(true);
-      mainSplitPane.setDividerLocation(TaskCommander.startingWidth/3);
-
-    // Set Layouts
-      unPlannedContent.setLayout(new BoxLayout(unPlannedContent, BoxLayout.PAGE_AXIS));
-      setLayout(new BorderLayout());
-
-    // Add components
-      plannedContent.add(calendar, BorderLayout.CENTER);
-      add(mainSplitPane, BorderLayout.CENTER);
+    configureComponents();
+    configureLayouts();
+    addComponents();
+    addListeners();
   }
 
   public void addCourse(Course course)

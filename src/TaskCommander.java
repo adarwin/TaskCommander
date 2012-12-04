@@ -84,6 +84,12 @@ public class TaskCommander
   }
 
   //Public Methods
+    public static void showNewCourseDialog()
+    {
+    }
+    public static void showNewTaskDialog()
+    {
+    }
     public static void removeTask(Task task)
     {
       TaskRemoval command = new TaskRemoval(task);
