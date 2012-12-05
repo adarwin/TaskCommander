@@ -6,6 +6,7 @@ SUNY Oswego
 */
 
 import java.util.Date;
+import java.util.Calendar;
 import java.awt.Color;
 
 public class Course
@@ -24,8 +25,8 @@ public class Course
   */
   private String courseName, professor, building;
   private int roomNumber;
-  private int[] startingTime;
-  private int[] endingTime;
+  private Calendar startingTime;
+  private Calendar endingTime;
   private int courseNumber;
   private double grade;
   private Color color;
@@ -55,12 +56,15 @@ public class Course
   public void setName(String newName) { courseName = newName; }
 
   public String getProfessorName() { return professor; }
+  public void setProfessorName(String name) { professor = name; }
   public String getBuildingName() { return building; }
+  public void setBuildingName(String name) { building = name; }
   public int getRoomNumber() { return roomNumber; }
-  public int[] getStartingTime() { return startingTime; }
-  public int[] getEndingTime() { return endingTime; }
+  public void setRoomNumber(int value) { roomNumber = value; }
+  public Calendar getStartingTime() { return startingTime; }
+  public Calendar getEndingTime() { return endingTime; }
   public int getCourseNumber() { return courseNumber; }
-  public double getGrade() { return grade; }
+  public Double getGrade() { return grade; }
 
   public Color getColor() { return color; }
   public void setColor(Color color) { this.color = color; }

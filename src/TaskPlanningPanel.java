@@ -7,6 +7,8 @@ SUNY Oswego
 
 import java.awt.BorderLayout;
 import java.awt.Graphics;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -41,8 +43,8 @@ public class TaskPlanningPanel extends JPanel implements TaskView
 
     unPlannedPane = new JPanel();
     unPlannedHeader = new JPanel();
-    newCourseButton = new JButton("New Course");
-    newTaskButton = new JButton("New Task");
+    newCourseButton = new JButton("Add Course");
+    newTaskButton = new JButton("Add Task");
     unPlannedContent = new JPanel();
     unPlannedScrollPane = new JScrollPane(unPlannedContent);
 

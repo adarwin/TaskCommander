@@ -6,6 +6,7 @@ SUNY Oswego
 */
 
 import java.awt.*;
+import java.awt.Dialog.ModalityType;
 import java.awt.event.*;
 import java.util.*;
 import javax.swing.*;
@@ -86,6 +87,135 @@ public class TaskCommander
   //Public Methods
     public static void showNewCourseDialog()
     {
+      showCourseDialog(null);
+    }
+    public static void showCourseDialog(final Course course)
+    {
+      final boolean existingCourse = !(course == null);
+      JDialog dialog = new JDialog(mainFrame);
+      dialog.setModalityType(ModalityType.APPLICATION_MODAL);
+      dialog.setLocationRelativeTo(null);
+      dialog.setSize(new Dimension(640, 480));
+
+      final JTextField courseName, professor, buildingName, roomNumber, startingTime, endingTime, courseNumber, gradeTextField;
+      JLabel courseNameLabel, professorLabel, buildingLabel, roomNumberLabel, startingTimeLabel, endingTimeLabel, courseNumberLabel, gradeLabel;
+      JPanel name, prof, building, room, start, end, crn, grade;
+
+      Course temp;
+      if (course == null)
+      {
+        temp = new Course("");
+      }
+      else
+      {
+        temp = course;
+      }
+
+
+      courseNameLabel = new JLabel("Course Name:");
+      courseName = new JTextField(temp.getName());
+      name = new JPanel(new BorderLayout());
+      name.add(courseNameLabel, BorderLayout.WEST);
+      name.add(courseName, BorderLayout.CENTER);
+
+      professorLabel = new JLabel("Professor:");
+      professor = new JTextField(temp.getProfessorName());
+      prof = new JPanel(new BorderLayout());
+      prof.add(professorLabel, BorderLayout.WEST);
+      prof.add(professor, BorderLayout.CENTER);
+
+      buildingLabel = new JLabel("Building:");
+      buildingName = new JTextField(temp.getBuildingName());
+      building = new JPanel(new BorderLayout());
+      building.add(buildingLabel, BorderLayout.WEST);
+      building.add(buildingName, BorderLayout.CENTER);
+
+      roomNumberLabel = new JLabel("Room Number:");
+      roomNumber = new JTextField(temp.getRoomNumber());
+      room = new JPanel(new BorderLayout());
+      room.add(roomNumberLabel, BorderLayout.WEST);
+      room.add(roomNumber, BorderLayout.CENTER);
+
+      startingTimeLabel = new JLabel("Starting Time:");
+      startingTime = new JTextField(temp.getStartingTime() == null ? "" : temp.getStartingTime().toString());
+      start = new JPanel(new BorderLayout());
+      start.add(startingTimeLabel, BorderLayout.WEST);
+      start.add(startingTime, BorderLayout.CENTER);
+
+      endingTimeLabel = new JLabel("Ending Time:");
+      endingTime = new JTextField(temp.getEndingTime() == null ? "" : temp.getEndingTime().toString());
+      end = new JPanel(new BorderLayout());
+      end.add(endingTimeLabel, BorderLayout.WEST);
+      end.add(endingTime, BorderLayout.CENTER);
+
+      courseNumberLabel = new JLabel("Course Number:");
+      courseNumber = new JTextField(temp.getCourseNumber());
+      crn = new JPanel(new BorderLayout());
+      crn.add(courseNumberLabel, BorderLayout.WEST);
+      crn.add(courseNumber, BorderLayout.CENTER);
+
+      gradeLabel = new JLabel("Grade:");
+      gradeTextField = new JTextField(temp.getGrade().toString());
+      grade = new JPanel(new BorderLayout());
+      grade.add(gradeLabel, BorderLayout.WEST);
+      grade.add(gradeTextField, BorderLayout.CENTER);
+
+      JPanel buttonPanel = new JPanel(new FlowLayout());
+      JButton ok = new JButton("Ok");
+      JButton cancel = new JButton("Cancel");
+      final JDialog resultDialog = dialog;
+      ok.addActionListener(new ActionListener()
+      {
+        public void actionPerformed(ActionEvent e)
+        {
+          if (existingCourse)
+          {
+            log("Generate course edit command");
+            Course editedCourse = new Course(courseName.getText());
+            editedCourse.setProfessorName(professor.getText());
+            editedCourse.setBuildingName(buildingName.getText());
+            //editedCourse.setRoomNumber(Integer.parseInt(roomNumber.getText()));
+            Command command = new CourseEdit(course, editedCourse);
+            command.run();
+            TaskCommander.addCommand(command);
+          }
+          else
+          {
+            log("Generate new course command");
+            Course newCourse = new Course(courseName.getText());
+            Command command = new CourseAddition(newCourse, TaskCommander.getTaskEntryPanel());
+            command.run();
+            TaskCommander.addCommand(command);
+          }
+          resultDialog.dispose();
+        }
+      });
+      cancel.addActionListener(new ActionListener()
+      {
+        public void actionPerformed(ActionEvent e)
+        {
+          resultDialog.dispose();
+        }
+      });
+      buttonPanel.add(cancel);
+      buttonPanel.add(ok);
+
+      Container contentPane = dialog.getContentPane();
+      contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.PAGE_AXIS));
+
+      // Add components to content pane
+        contentPane.add(name);
+        contentPane.add(prof);
+        contentPane.add(building);
+        contentPane.add(room);
+        contentPane.add(start);
+        contentPane.add(end);
+        contentPane.add(crn);
+        contentPane.add(grade);
+        contentPane.add(buttonPanel);
+
+      dialog.pack();
+      dialog.setVisible(true);
     }
     public static void showNewTaskDialog()
     {

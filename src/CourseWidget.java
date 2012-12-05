@@ -109,6 +109,10 @@ public class CourseWidget extends JPanel
     {
       rightClickMenu.show(this, e.getX(), e.getY());
     }
+    private void showEditWindow()
+    {
+      TaskCommander.showCourseDialog(this.course);
+    }
     private void configurePopupMenu()
     {
       rightClickMenu = new JPopupMenu();
@@ -118,6 +122,7 @@ public class CourseWidget extends JPanel
         public void actionPerformed(ActionEvent e)
         {
           System.out.println("CourseWidget edit");
+          showEditWindow();
         }
       });
       rightClickMenu.add(menuItem);
