@@ -247,7 +247,9 @@ public class PlanningCalendar extends JPanel implements TaskView
       weekToday.setBackground(TaskCommander.selectionColor);
       monthToday.setBackground(TaskCommander.selectionColor);
       prevMonthButton = new JButton("<");
+      prevMonthButton.setToolTipText("Switch to the previous month");
       nextMonthButton = new JButton(">");
+      nextMonthButton.setToolTipText("Switch to the next month");
       tabbedPane = new JTabbedPane();
       monthTab = new JPanel();
       monthView = new JPanel();

@@ -169,6 +169,10 @@ public class TaskWidget extends JPanel
       add(notesButton);
     }
 
+    private void showTaskEditDialog()
+    {
+      TaskCommander.showTaskDialog(this.task);
+    }
     private void configurePopupMenu()
     {
       rightClickMenu = new JPopupMenu();
@@ -178,6 +182,7 @@ public class TaskWidget extends JPanel
         public void actionPerformed(ActionEvent e)
         {
           System.out.println("edit");
+          showTaskEditDialog();
         }
       });
       rightClickMenu.add(menuItem);

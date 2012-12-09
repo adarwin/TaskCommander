@@ -5,8 +5,9 @@ CSC 420: Graphical User Interfaces
 SUNY Oswego
 */
 
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.awt.Color;
 
 public class Course
@@ -30,6 +31,8 @@ public class Course
   private int courseNumber;
   private double grade;
   private Color color;
+
+  private ArrayList<Object> fields;
 
   private boolean selected;
 

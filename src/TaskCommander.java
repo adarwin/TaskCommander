@@ -85,80 +85,57 @@ public class TaskCommander
   }
 
   //Public Methods
+    public static void setTitle(String value)
+    {
+      mainFrame.setTitle(CLASS + ": " + value);
+    }
+    public static Course getGeneralCourse() { return generalCourse; }
     public static void showNewCourseDialog()
     {
-      showCourseDialog(null);
+      CourseDialog dialog = new CourseDialog(mainFrame);
+      dialog.setVisible(true);
+      //showCourseDialog(null);
     }
     public static void showCourseDialog(final Course course)
     {
-      final boolean existingCourse = !(course == null);
+      CourseDialog dialog = new CourseDialog(mainFrame, course);
+      dialog.setVisible(true);
+    }
+    public static void showNewTaskDialog()
+    {
+      showTaskDialog(null);
+    }
+    public static void showTaskDialog(final Task task)
+    {
+      TaskDialog dialog = new TaskDialog(mainFrame, task);
+      dialog.setVisible(true);
+
+      /*
+      final boolean existingTask = !(task == null);
       JDialog dialog = new JDialog(mainFrame);
       dialog.setModalityType(ModalityType.APPLICATION_MODAL);
       dialog.setLocationRelativeTo(null);
       dialog.setSize(new Dimension(640, 480));
 
-      final JTextField courseName, professor, buildingName, roomNumber, startingTime, endingTime, courseNumber, gradeTextField;
-      JLabel courseNameLabel, professorLabel, buildingLabel, roomNumberLabel, startingTimeLabel, endingTimeLabel, courseNumberLabel, gradeLabel;
-      JPanel name, prof, building, room, start, end, crn, grade;
+      final JTextField taskNameTextField, dueDateTextField, assignedDateTextField, priorityTextField, associatedCourseTextField;
+      JLabel taskNameLabel, dueDateLabel, assignedDateLabel, priorityLabel, associatedCourseLabel;
+      JPanel taskName, dueDate, assignedDate, priority, associatedCourse;
 
-      Course temp;
-      if (course == null)
+      Task temp;
+      if (existingTask)
       {
-        temp = new Course("");
+        temp = task;
       }
       else
       {
-        temp = course;
+        temp = new Task("", null);
       }
 
-
-      courseNameLabel = new JLabel("Course Name:");
-      courseName = new JTextField(temp.getName());
-      name = new JPanel(new BorderLayout());
-      name.add(courseNameLabel, BorderLayout.WEST);
-      name.add(courseName, BorderLayout.CENTER);
-
-      professorLabel = new JLabel("Professor:");
-      professor = new JTextField(temp.getProfessorName());
-      prof = new JPanel(new BorderLayout());
-      prof.add(professorLabel, BorderLayout.WEST);
-      prof.add(professor, BorderLayout.CENTER);
-
-      buildingLabel = new JLabel("Building:");
-      buildingName = new JTextField(temp.getBuildingName());
-      building = new JPanel(new BorderLayout());
-      building.add(buildingLabel, BorderLayout.WEST);
-      building.add(buildingName, BorderLayout.CENTER);
-
-      roomNumberLabel = new JLabel("Room Number:");
-      roomNumber = new JTextField(temp.getRoomNumber());
-      room = new JPanel(new BorderLayout());
-      room.add(roomNumberLabel, BorderLayout.WEST);
-      room.add(roomNumber, BorderLayout.CENTER);
-
-      startingTimeLabel = new JLabel("Starting Time:");
-      startingTime = new JTextField(temp.getStartingTime() == null ? "" : temp.getStartingTime().toString());
-      start = new JPanel(new BorderLayout());
-      start.add(startingTimeLabel, BorderLayout.WEST);
-      start.add(startingTime, BorderLayout.CENTER);
-
-      endingTimeLabel = new JLabel("Ending Time:");
-      endingTime = new JTextField(temp.getEndingTime() == null ? "" : temp.getEndingTime().toString());
-      end = new JPanel(new BorderLayout());
-      end.add(endingTimeLabel, BorderLayout.WEST);
-      end.add(endingTime, BorderLayout.CENTER);
-
-      courseNumberLabel = new JLabel("Course Number:");
-      courseNumber = new JTextField(temp.getCourseNumber());
-      crn = new JPanel(new BorderLayout());
-      crn.add(courseNumberLabel, BorderLayout.WEST);
-      crn.add(courseNumber, BorderLayout.CENTER);
-
-      gradeLabel = new JLabel("Grade:");
-      gradeTextField = new JTextField(temp.getGrade().toString());
-      grade = new JPanel(new BorderLayout());
-      grade.add(gradeLabel, BorderLayout.WEST);
-      grade.add(gradeTextField, BorderLayout.CENTER);
+      taskNameLabel = new JLabel("Task Name:");
+      taskNameTextField = new JTextField(temp.getName());
+      taskName = new JPanel(new BorderLayout());
+      taskName.add(taskNameLabel, BorderLayout.WEST);
+      taskName.add(taskNameTextField, BorderLayout.CENTER);
 
       JPanel buttonPanel = new JPanel(new FlowLayout());
       JButton ok = new JButton("Ok");
@@ -168,22 +145,21 @@ public class TaskCommander
       {
         public void actionPerformed(ActionEvent e)
         {
-          if (existingCourse)
+          if (existingTask)
           {
-            log("Generate course edit command");
-            Course editedCourse = new Course(courseName.getText());
-            editedCourse.setProfessorName(professor.getText());
-            editedCourse.setBuildingName(buildingName.getText());
-            //editedCourse.setRoomNumber(Integer.parseInt(roomNumber.getText()));
-            Command command = new CourseEdit(course, editedCourse);
+            log("Generate task edit command");
+            Task editedTask = new Task("", null);
+            editedTask.updateFrom(task);
+            editedTask.setName(taskNameTextField.getText());
+            Command command = new TaskEdit(task, editedTask);
             command.run();
             TaskCommander.addCommand(command);
           }
           else
           {
-            log("Generate new course command");
-            Course newCourse = new Course(courseName.getText());
-            Command command = new CourseAddition(newCourse, TaskCommander.getTaskEntryPanel());
+            log("Generate new task command");
+            Task newTask = new Task(taskNameTextField.getText(), null);
+            Command command = new TaskAddition(newTask);
             command.run();
             TaskCommander.addCommand(command);
           }
@@ -204,21 +180,13 @@ public class TaskCommander
       contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.PAGE_AXIS));
 
       // Add components to content pane
-        contentPane.add(name);
-        contentPane.add(prof);
-        contentPane.add(building);
-        contentPane.add(room);
-        contentPane.add(start);
-        contentPane.add(end);
-        contentPane.add(crn);
-        contentPane.add(grade);
+        contentPane.add(taskName);
         contentPane.add(buttonPanel);
 
       dialog.pack();
       dialog.setVisible(true);
-    }
-    public static void showNewTaskDialog()
-    {
+
+      */
     }
     public static void removeTask(Task task)
     {
@@ -560,6 +528,12 @@ public class TaskCommander
 
 
   // Private methods
+    private static void addToToolbar(AbstractButton button, ImageIcon icon)
+    {
+      JButton temp = new JButton(icon);
+      temp.setModel(button.getModel());
+      toolBar.add(temp);
+    }
     private static void createAndShowGUI()
     {
       courses = new ArrayList<Course>();
@@ -624,6 +598,8 @@ public class TaskCommander
           }
         });
         editMenu.add(menuItem);
+        addToToolbar(menuItem, new ImageIcon("images/Undo24.png"));
+
         menuItem = new JMenuItem("Redo", KeyEvent.VK_R);
         menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Y, InputEvent.META_DOWN_MASK));
         menuItem.addActionListener(new ActionListener()
@@ -636,6 +612,8 @@ public class TaskCommander
           }
         });
         editMenu.add(menuItem);
+        addToToolbar(menuItem, new ImageIcon("images/Redo24.png"));
+        toolBar.addSeparator();
 
       //Build the view menu
         JMenu viewMenu = new JMenu("View");
@@ -643,7 +621,7 @@ public class TaskCommander
 
         ButtonGroup viewModes = new ButtonGroup();
         JRadioButtonMenuItem rbMenuItem = new JRadioButtonMenuItem("Task Entry Mode");
-        rbMenuItem.setSelected(true);
+        rbMenuItem.setSelected(false);
         rbMenuItem.setMnemonic(KeyEvent.VK_T);
         rbMenuItem.addActionListener(new ActionListener()
         {
@@ -651,17 +629,16 @@ public class TaskCommander
           {
             CardLayout c = (CardLayout)(mainContentPanel.getLayout());
             c.show(mainContentPanel, TASK_ENTRY);
+            setTitle("Task Entry");
           }
         });
         viewModes.add(rbMenuItem);
         viewMenu.add(rbMenuItem);
-
-        //Add to toolbar
-          JButton temp = new JButton(rbMenuItem.getText());
-          temp.setModel(rbMenuItem.getModel());
-          toolBar.add(temp);
+        
+        addToToolbar(rbMenuItem, new ImageIcon("images/TaskEntry24.png"));
 
         rbMenuItem = new JRadioButtonMenuItem("Planning Board");
+        rbMenuItem.setSelected(true);
         rbMenuItem.setMnemonic(KeyEvent.VK_P);
         rbMenuItem.addActionListener(new ActionListener()
         {
@@ -669,15 +646,14 @@ public class TaskCommander
           {
             CardLayout c = (CardLayout)(mainContentPanel.getLayout());
             c.show(mainContentPanel, PLANNING);
+            setTitle("Planning Board");
           }
         });
         viewModes.add(rbMenuItem);
         viewMenu.add(rbMenuItem);
 
-        //Add to toolbar
-          temp = new JButton(rbMenuItem.getText());
-          temp.setModel(rbMenuItem.getModel());
-          toolBar.add(temp);
+        addToToolbar(rbMenuItem, new ImageIcon("images/PlanningBoard24.png"));
+
 
       //Build the tools menu
         JMenu toolsMenu = new JMenu("Tools");
@@ -747,8 +723,6 @@ public class TaskCommander
       taskViews = new ArrayList<TaskView>();
       registerTaskView(taskEntryPanel);
       registerTaskView(planningBoard);
-
-
     }
 
     private static void configureLayouts()

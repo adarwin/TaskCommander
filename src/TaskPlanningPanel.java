@@ -44,7 +44,9 @@ public class TaskPlanningPanel extends JPanel implements TaskView
     unPlannedPane = new JPanel();
     unPlannedHeader = new JPanel();
     newCourseButton = new JButton("Add Course");
+    newCourseButton.setToolTipText("Note that the new course will not be visible in Planning Board");
     newTaskButton = new JButton("Add Task");
+    newTaskButton.setToolTipText("This will add a new task to the 'General' course.");
     unPlannedContent = new JPanel();
     unPlannedScrollPane = new JScrollPane(unPlannedContent);
 
