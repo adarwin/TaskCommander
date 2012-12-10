@@ -70,4 +70,10 @@ public class CourseAddition implements Command
     if (DEBUG) log("Attempting to redo this CourseAddition");
     run();
   }
+
+
+  public String toString()
+  {
+    return "Course Addition: " + course.getName();
+  }
 }
