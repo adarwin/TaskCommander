@@ -560,15 +560,21 @@ public class TaskCommander
       //Build the file menu
         JMenu fileMenu = new JMenu("File");
         fileMenu.setMnemonic(KeyEvent.VK_F);
-        JMenuItem menuItem = new JMenuItem("New...", KeyEvent.VK_N);
+        JMenuItem menuItem = new JMenuItem("New Course", KeyEvent.VK_N);
         menuItem.addActionListener(new ActionListener()
         {
           public void actionPerformed(ActionEvent e)
           {
-            JFrame temp = new JFrame("New... Window");
-            temp.setSize(new Dimension(480, 320));
-            temp.setLocationRelativeTo(null);
-            temp.setVisible(true);
+            TaskCommander.showNewCourseDialog();
+          }
+        });
+        fileMenu.add(menuItem);
+        menuItem = new JMenuItem("New Task", KeyEvent.VK_N);
+        menuItem.addActionListener(new ActionListener()
+        {
+          public void actionPerformed(ActionEvent e)
+          {
+            TaskCommander.showNewTaskDialog();
           }
         });
         fileMenu.add(menuItem);
