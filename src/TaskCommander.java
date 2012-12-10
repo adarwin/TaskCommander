@@ -20,38 +20,39 @@ public class TaskCommander
 
   protected static final Color pastelGreen = new Color(210, 255, 197);
   protected static final Color pastelBlue = new Color(208, 200, 255);
-  protected static final Color selectionColor = new Color(208, 200, 255); //Currently the same as pastelblue
+  protected static final Color selectionColor = new Color(255, 250, 212); //Currently the same as pastelblue
   protected static final Color pastelYellow = new Color(255, 247, 187);
   protected static final Color pastelCyan = new Color(183, 252, 255);
   protected static final Color pastelPurple = new Color(255, 191, 239);
   protected static final Color pastelRed = new Color(255, 199, 198);
   protected static final Color neutralColor = new Color(214, 217, 223);
-  //Apple
-  protected static final Color melon = new Color(255, 204, 102);
-  protected static final Color salmon = new Color(255, 102, 102);
-  protected static final Color orange = new Color(255, 128, 0);
-  protected static final Color red = new Color(255, 0, 0);
-  protected static final Color lightGreen = new Color(204, 255, 102);
-  protected static final Color banana = new Color(255, 255, 102);
-  protected static final Color lemon = new Color(255, 255, 0);
-  protected static final Color spindrift = new Color(102, 255, 204);
-  protected static final Color flora = new Color(102, 255, 102);
-  protected static final Color seaFoam = new Color(0, 255, 128);
-  protected static final Color lime = new Color(128, 255, 0);
-  protected static final Color green = new Color(0, 255, 0);
-  protected static final Color sky = new Color(102, 204, 255);
-  protected static final Color ice = new Color(102, 255, 255);
-  protected static final Color turquoise = new Color(0, 255, 255);
-  protected static final Color lavender = new Color(204, 102, 255);
-  protected static final Color orchid = new Color(102, 102, 255);
-  protected static final Color aqua = new Color(0, 128, 255);
-  //protected static final Color grape = new Color(128, 0, 255);
-  protected static final Color lightPink = new Color(255, 111, 207);
-  protected static final Color bubbleGum = new Color(255, 102, 255);
-  protected static final Color magenta = new Color(255, 0, 255);
-  protected static final Color hotPink = new Color(255, 0, 128);
-  protected static final Color black = new Color(0, 0, 0);
-  protected static final Color snow = new Color(255, 255, 255);
+
+  // Colors from Apple Corporation
+    protected static final Color melon = new Color(255, 204, 102);
+    protected static final Color salmon = new Color(255, 102, 102);
+    protected static final Color orange = new Color(255, 128, 0);
+    protected static final Color red = new Color(255, 0, 0);
+    protected static final Color lightGreen = new Color(204, 255, 102);
+    protected static final Color banana = new Color(255, 255, 102);
+    protected static final Color lemon = new Color(255, 255, 0);
+    protected static final Color spindrift = new Color(102, 255, 204);
+    protected static final Color flora = new Color(102, 255, 102);
+    protected static final Color seaFoam = new Color(0, 255, 128);
+    protected static final Color lime = new Color(128, 255, 0);
+    protected static final Color green = new Color(0, 255, 0);
+    protected static final Color sky = new Color(102, 204, 255);
+    protected static final Color ice = new Color(102, 255, 255);
+    protected static final Color turquoise = new Color(0, 255, 255);
+    protected static final Color lavender = new Color(204, 102, 255);
+    protected static final Color orchid = new Color(102, 102, 255);
+    protected static final Color aqua = new Color(0, 128, 255);
+    //protected static final Color grape = new Color(128, 0, 255);
+    protected static final Color lightPink = new Color(255, 111, 207);
+    protected static final Color bubbleGum = new Color(255, 102, 255);
+    protected static final Color magenta = new Color(255, 0, 255);
+    protected static final Color hotPink = new Color(255, 0, 128);
+    protected static final Color black = new Color(0, 0, 0);
+    protected static final Color snow = new Color(255, 255, 255);
 
   private static final Color[] colorList = new Color[] { pastelGreen, pastelBlue, pastelYellow, pastelCyan, pastelPurple, pastelRed};
   private static int nextColorIndex = 0;
@@ -73,6 +74,8 @@ public class TaskCommander
   private static SpringLayout layout;
   private static JMenuBar menuBar;
   private static Container contentPane;
+  private static boolean recording;
+  private static MacroRecDialog macroRecDialog;
 
   private static boolean DEBUG = false;
   private static String CLASS = "TaskCommander";
@@ -85,6 +88,7 @@ public class TaskCommander
   }
 
   //Public Methods
+    public static void setRecording(boolean value) { recording = value; }
     public static void setTitle(String value)
     {
       mainFrame.setTitle(CLASS + ": " + value);
@@ -216,6 +220,10 @@ public class TaskCommander
       if (runCommands != null && !runCommands.isEmpty())
         {
         Command lastCommand = runCommands.pop();
+        if (recording)
+        {
+          macroRecDialog.removeCommand(lastCommand);
+        }
         lastCommand.undo();
         if (undonCommands == null)
         {
@@ -230,6 +238,10 @@ public class TaskCommander
       if(undonCommands != null && !undonCommands.isEmpty())
       {
         Command lastCommand = undonCommands.pop();
+        if (recording)
+        {
+          macroRecDialog.addCommand(lastCommand);
+        }
         lastCommand.redo();
         runCommands.push(lastCommand);
       }
@@ -237,6 +249,10 @@ public class TaskCommander
 
     public static void addCommand(Command command)
     {
+      if (recording)
+      {
+        macroRecDialog.addCommand(command);
+      }
       if (DEBUG) log("Adding new command");
       if (runCommands == null)
       {
@@ -671,10 +687,13 @@ public class TaskCommander
         {
           public void actionPerformed(ActionEvent e)
           {
-            JFrame temp = new JFrame("Record... Window");
-            temp.setSize(new Dimension(480, 320));
-            temp.setLocationRelativeTo(null);
-            temp.setVisible(true);
+            recording = true;
+            macroRecDialog = new MacroRecDialog();
+            macroRecDialog.setVisible(true);
+            //JFrame temp = new JFrame("Record... Window");
+            //temp.setSize(new Dimension(480, 320));
+            //temp.setLocationRelativeTo(null);
+            //temp.setVisible(true);
           }
         });
         macrosMenu.add(menuItem);
@@ -713,6 +732,8 @@ public class TaskCommander
 
     private static void configureComponents()
     {
+      recording = false;
+      macroRecDialog = null;
       contentPane = mainFrame.getContentPane();
       constantsPanel = new JPanel();
       mainContentPanel = new JPanel(new CardLayout());
@@ -729,6 +750,7 @@ public class TaskCommander
       taskViews = new ArrayList<TaskView>();
       registerTaskView(taskEntryPanel);
       registerTaskView(planningBoard);
+
     }
 
     private static void configureLayouts()

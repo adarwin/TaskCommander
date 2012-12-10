@@ -17,6 +17,7 @@ import java.awt.datatransfer.Transferable;
 
 import java.awt.dnd.DragGestureRecognizer;
 import java.awt.dnd.DragGestureListener;
+import java.awt.dnd.DragGestureEvent;
 import java.awt.dnd.DragSource;
 import java.awt.dnd.DragSourceListener;
 

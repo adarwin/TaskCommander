@@ -56,4 +56,17 @@ public class CourseEdit implements Command
     if (DEBUG) log("Attempting to redo this CourseEdit");
     run();
   }
+
+
+  public String toString()
+  {
+    if (previousState.getName().equals(newState.getName()))
+    {
+      return "Course Edit: " + newState.getName();
+    }
+    else
+    {
+      return "Course Edit: " + previousState.getName() + " --> " + newState.getName();
+    }
+  }
 }

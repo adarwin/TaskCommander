@@ -75,4 +75,18 @@ public class TaskEdit implements Command
     if (DEBUG) log("Attempting to redo this TaskEdit");
     run();
   }
+
+
+
+  public String toString()
+  {
+    if (previousState.getName().equals(newState.getName()))
+    {
+      return "Task Edit: " + newState.getName();
+    }
+    else
+    {
+      return "Task Edit: " + previousState.getName() + " --> " + newState.getName();
+    }
+  }
 }

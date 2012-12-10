@@ -69,4 +69,11 @@ public class TaskAddition implements Command
     if (DEBUG) log("Attempting to redo this TaskAddition.");
     run();
   }
+
+
+
+  public String toString()
+  {
+    return "Task Addition: " + task.getName();
+  }
 }
