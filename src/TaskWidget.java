@@ -5,15 +5,21 @@ CSC 420: Graphical User Interfaces
 SUNY Oswego
 */
 
-import java.util.Calendar;
 import java.awt.Color;
 import java.awt.Dimension;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseEvent;
-import javax.swing.border.SoftBevelBorder;
-import javax.swing.border.MatteBorder;
+
+import java.awt.datatransfer.Transferable;
+
+import java.awt.dnd.DragGestureRecognizer;
+import java.awt.dnd.DragGestureListener;
+import java.awt.dnd.DragSource;
+import java.awt.dnd.DragSourceListener;
+
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -24,8 +30,14 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.SpringLayout;
 import javax.swing.SwingConstants;
+import javax.swing.TransferHandler;
 
-public class TaskWidget extends JPanel
+import javax.swing.border.SoftBevelBorder;
+import javax.swing.border.MatteBorder;
+
+import java.util.Calendar;
+
+public class TaskWidget extends JPanel implements DragGestureListener
 {
   private CustomCheckBox taskCheckBox;
   private JLabel courseLabel, dueDate;
@@ -34,8 +46,14 @@ public class TaskWidget extends JPanel
   private JButton notesButton;
   private Task task;
   private JPopupMenu rightClickMenu;
+  private TransferHandler customTransferHandler;
+  private DragSource dragSource;
 
   // Public Methods
+    public void dragGestureRecognized(DragGestureEvent dge)
+    {
+      System.out.println("DRAG");
+    }
     public void updateTaskInfo()
     {
       taskCheckBox.setText(task.getName());
@@ -137,6 +155,16 @@ public class TaskWidget extends JPanel
       courseLabel.setOpaque(true);
       courseLabel.setBackground(task.getCourse().getColor());
       courseLabel.setBorder(new MatteBorder(1, 1, 1, 1, Color.black));
+
+      customTransferHandler = new TransferHandler()
+      {
+      };
+
+      setTransferHandler(new TransferHandler()
+      {
+      });
+
+      dragSource = DragSource.getDefaultDragSource();
     }
 
     private void configureLayouts()
