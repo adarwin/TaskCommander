@@ -33,6 +33,7 @@ public class PlanningCalendar extends JPanel implements TaskView
     private Integer dayOfMonth;
     private JLabel dateLabel;
     private Calendar calendar;
+    private boolean selected;
 
     public Day(Calendar calendar)
     {
@@ -61,7 +62,15 @@ public class PlanningCalendar extends JPanel implements TaskView
 
     private void displayDayOfWeek()
     {
-      setBackground(TaskCommander.selectionColor);
+      if (selected)
+      {
+        setBackground(null);
+      }
+      else
+      {
+        setBackground(TaskCommander.selectionColor);
+      }
+      selected = !selected;
       log("Clicked day: " + calendar.get(Calendar.DAY_OF_WEEK));
     }
 
@@ -93,8 +102,10 @@ public class PlanningCalendar extends JPanel implements TaskView
   JPanel monthView, weekView, dayView;
   JPanel monthHeader, weekHeader, dayHeader;
   JTabbedPane tabbedPane;
-  JLabel monthHeaderLabel;
+  JLabel monthHeaderLabel, weekHeaderLabel, dayHeaderLabel;
   JButton prevMonthButton, nextMonthButton;
+  JButton prevWeekButton, nextWeekButton;
+  JButton prevDayButton, nextDayButton;
 
   private final boolean DEBUG = true;
   private final String CLASS = "PlanningCalendar";
@@ -246,15 +257,33 @@ public class PlanningCalendar extends JPanel implements TaskView
       dayToday.setBackground(TaskCommander.selectionColor);
       weekToday.setBackground(TaskCommander.selectionColor);
       monthToday.setBackground(TaskCommander.selectionColor);
+
       prevMonthButton = new JButton("<");
       prevMonthButton.setToolTipText("Switch to the previous month");
       nextMonthButton = new JButton(">");
       nextMonthButton.setToolTipText("Switch to the next month");
+
+      prevWeekButton = new JButton("<");
+      prevWeekButton.setToolTipText("Switch to the previous week");
+      nextWeekButton = new JButton(">");
+      nextWeekButton.setToolTipText("Switch to the next week");
+
+      prevDayButton = new JButton("<");
+      prevDayButton.setToolTipText("Switch to the previous day");
+      nextDayButton = new JButton(">");
+      nextDayButton.setToolTipText("Switch to the next day");
+
       tabbedPane = new JTabbedPane();
       monthTab = new JPanel();
       monthView = new JPanel();
       monthHeader = new JPanel();
       monthHeaderLabel = new JLabel(month(today.get(Calendar.MONTH)) + " " + today.get(Calendar.YEAR));
+      
+      weekHeader = new JPanel();
+      weekHeaderLabel = new JLabel("Week " + today.get(Calendar.WEEK_OF_MONTH) + " of " + month(today.get(Calendar.MONTH)) + " " + today.get(Calendar.YEAR));
+
+      dayHeader = new JPanel();
+      dayHeaderLabel = new JLabel(date(today));
 
       weekTab = new JPanel();
       weekView = new JPanel();
@@ -291,6 +320,15 @@ public class PlanningCalendar extends JPanel implements TaskView
       monthHeader.add(prevMonthButton);
       monthHeader.add(monthHeaderLabel);
       monthHeader.add(nextMonthButton);
+
+      weekHeader.add(prevWeekButton);
+      weekHeader.add(weekHeaderLabel);
+      weekHeader.add(nextWeekButton);
+
+      dayHeader.add(prevDayButton);
+      dayHeader.add(dayHeaderLabel);
+      dayHeader.add(nextDayButton);
+
       tabbedPane.add("Month", monthTab);
       tabbedPane.add("Week", weekTab);
       tabbedPane.add("Day", dayTab);
@@ -322,6 +360,34 @@ public class PlanningCalendar extends JPanel implements TaskView
           moveMonth(1);
         }
       });
+      prevWeekButton.addActionListener(new ActionListener()
+      {
+        public void actionPerformed(ActionEvent e)
+        {
+          moveWeek(-1);
+        }
+      });
+      nextWeekButton.addActionListener(new ActionListener()
+      {
+        public void actionPerformed(ActionEvent e)
+        {
+          moveWeek(1);
+        }
+      });
+      prevDayButton.addActionListener(new ActionListener()
+      {
+        public void actionPerformed(ActionEvent e)
+        {
+          moveDay(-1);
+        }
+      });
+      nextDayButton.addActionListener(new ActionListener()
+      {
+        public void actionPerformed(ActionEvent e)
+        {
+          moveDay(1);
+        }
+      });
     }
     private String date(Calendar calendar)
     {
@@ -329,6 +395,39 @@ public class PlanningCalendar extends JPanel implements TaskView
              month(calendar.get(Calendar.MONTH)) + " " +
              calendar.get(Calendar.DAY_OF_MONTH) + ", " +
              calendar.get(Calendar.YEAR);
+    }
+    private void moveDay(int numberToMove)
+    {
+      if (DEBUG) log("Beginning moveDay(int numberToMove) method");
+      if (DEBUG) log("1. Clone today");
+      if (DEBUG) log("   Current date: " + date(currentCalendar));
+      Calendar temp = (Calendar)currentCalendar.clone();
+      if (DEBUG) log("2. Add " + numberToMove + " day(s) to clone");
+      temp.add(Calendar.DAY_OF_MONTH, numberToMove);
+      if (DEBUG) log("3. Configure Week View using clone");
+      configureDayView(temp);
+      if (DEBUG) log("4. Change day label");
+      if (DEBUG) log("   Started with " + dayHeaderLabel.getText());
+      dayHeaderLabel.setText(date(temp));
+      if (DEBUG) log("   Ended with " + dayHeaderLabel.getText());
+      dayView.repaint();
+    }
+    private void moveWeek(int numberToMove)
+    {
+      if (DEBUG) log("Beginning moveWeek(int numberToMove) method");
+      if (DEBUG) log("1. Clone today");
+      if (DEBUG) log("   Current date: " + date(currentCalendar));
+      Calendar temp = (Calendar)currentCalendar.clone();
+      if (DEBUG) log("2. Add " + numberToMove + " week(s) to clone");
+      temp.add(Calendar.WEEK_OF_MONTH, numberToMove);
+      if (DEBUG) log("3. Configure Week View using clone");
+      configureWeekView(temp);
+      if (DEBUG) log("4. Change week label");
+      if (DEBUG) log("   Started with " + weekHeaderLabel.getText());
+      weekHeaderLabel.setText("Week " + currentCalendar.get(Calendar.WEEK_OF_MONTH) + " of " +
+                              month(currentCalendar.get(Calendar.MONTH)) + " " + currentCalendar.get(Calendar.YEAR));
+      if (DEBUG) log("   Ended with " + weekHeaderLabel.getText());
+      weekView.repaint();
     }
     private void moveMonth(int numberToMove)
     {
@@ -358,15 +457,75 @@ public class PlanningCalendar extends JPanel implements TaskView
     }
     private void configureDayView()
     {
+      configureDayView((Calendar)today.clone());
     }
+    private void configureDayView(Calendar calendar)
+    {
+      if (DEBUG) log("Beginning configuration of day view...");
+      if (DEBUG) log("    Starting date = " + date(calendar));
+      currentCalendar = (Calendar)calendar.clone();
+      dayView.removeAll();
+      if (DEBUG) log("1. Remove any existing components");
+      if (DEBUG) log("2. Add day title");
+      JLabel temp = new JLabel(dayOfWeek(calendar.get(Calendar.DAY_OF_WEEK)));
+      temp.setHorizontalAlignment(SwingConstants.CENTER);
+      if (DEBUG) log("   Add day title: " + temp.getText());
+      addToDayView(0.5, 0, 0, 0, 1, temp);
+      
+      if (DEBUG) log("3. Add day");
+      if (DEBUG) log("    Create new day: " + date(calendar));
+      Day dayToAdd = new Day((Calendar)calendar.clone());
+      dayToday = dayToAdd;
+      if (DEBUG) log("    Add newly created day to day view");
+      addToDayView(dayToAdd);
+    }
+
     private void configureWeekView()
     {
-      configureWeekView(today.get(Calendar.DAY_OF_WEEK),
-                        today.get(Calendar.DAY_OF_MONTH),
-                        today.get(Calendar.MONTH));
+      configureWeekView((Calendar)today.clone());
     }
-    private void configureWeekView(int dayOfWeek, int dayOfMonth, int month)
+    private void configureWeekView(Calendar calendar)
     {
+      if (DEBUG) log("Beginning configuration of week view...");
+      if (DEBUG) log("   Starting date = " + date(calendar));
+      currentCalendar = (Calendar)calendar.clone();
+      weekView.removeAll();
+      if (DEBUG) log("1. Remove any existing components");
+      int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
+      int weekOfMonth = calendar.get(Calendar.WEEK_OF_MONTH);
+      int totalWeeksInMainMonth;
+
+      if (DEBUG) log("2. Add day titles");
+      //Add day titles
+        for (int i = 1; i < 8; i++)
+        {
+          JLabel temp = new JLabel(dayOfWeek(i));
+          temp.setHorizontalAlignment(SwingConstants.CENTER);
+          if (DEBUG) log("   Add day title: " + temp.getText());
+          addToWeekView(0.5, 0, i, 0, 1, temp);
+        }
+
+      if (DEBUG) log("3. Add days");
+      // Add days
+        if (DEBUG) log("   Determine date of first day of week");
+        calendar.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
+        if (DEBUG) log("    Set calendar to " + date(calendar));
+        for (int i = 1; i < 8; i++)
+        {
+          dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
+          if (DEBUG) log("    Create new day: " + date(calendar));
+          Day dayToAdd = new Day((Calendar)calendar.clone());
+          daysOfWeek[i] = dayToAdd;
+          if (DEBUG) log("    Add newly created day to week view");
+          addToWeekView(dayOfWeek, 1, dayToAdd);
+          if (DEBUG) log("    Increment day of month by 1");
+          calendar.add(Calendar.DAY_OF_MONTH, 1);
+        }
+
+
+
+
+
       /*
       int daysInMonth = numberOfDaysInMonth(month);
       int count = dayOfMonth-1;
@@ -429,6 +588,36 @@ public class PlanningCalendar extends JPanel implements TaskView
         }
       }
       */
+    }
+    private void addToDayView(Day dayToAdd)
+    {
+      addToDayView(0.5, 0.5, 0, 1, 1, dayToAdd);
+    }
+    private void addToDayView(double weightX, double weightY, int gridX, int gridY, int gridHeight, Component component)
+    {
+      GridBagConstraints c = new GridBagConstraints();
+      c.fill = GridBagConstraints.BOTH;
+      c.weightx = weightX;
+      c.weighty = weightY;
+      c.gridx = gridX;
+      c.gridy = gridY;
+      c.gridheight = gridHeight;
+      dayView.add(component, c);
+    }
+    private void addToWeekView(int x, int y, Day dayToAdd)
+    {
+      addToWeekView(0.5, 0.5, x, y, 1, dayToAdd);
+    }
+    private void addToWeekView(double weightX, double weightY, int gridX, int gridY, int gridHeight, Component component)
+    {
+      GridBagConstraints c = new GridBagConstraints();
+      c.fill = GridBagConstraints.BOTH;
+      c.weightx = weightX;
+      c.weighty = weightY;
+      c.gridx = gridX;
+      c.gridy = gridY;
+      c.gridheight = gridHeight;
+      weekView.add(component, c);
     }
     private void addToMonthView(int x, int y, Day dayToAdd)
     {
