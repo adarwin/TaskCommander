@@ -169,6 +169,8 @@ public class CourseWidget extends JPanel
       colorIndicator.setPreferredSize(new Dimension(30, 0));
       colorIndicator.setBorder(new MatteBorder(1, 1, 1, 1, Color.black));
       colorIndicator.setBackground(course.getColor());
+      colorIndicator.setToolTipText("<html>This is the color associated with this course.<br>"+
+                                    "This color will be set for all tasks associated with this course.</html>");
       layout = new SpringLayout();
       setLayout(layout);
       //minimumSize = new Dimension(100, 20);
@@ -178,6 +180,7 @@ public class CourseWidget extends JPanel
       //colorButton.setPreferredSize(new Dimension(65, 30));
       //courseCheckBox = new JCheckBox(course.getName());
       courseLabel = new JLabel(course.getName());
+      courseLabel.setToolTipText("Course Title");
       setBorder(new SoftBevelBorder(SoftBevelBorder.RAISED));
       setPreferredSize(preferredSize);
       setMaximumSize(maximumSize);

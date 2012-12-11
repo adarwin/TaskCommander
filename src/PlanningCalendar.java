@@ -35,6 +35,14 @@ public class PlanningCalendar extends JPanel implements TaskView
     private Calendar calendar;
     private boolean selected;
 
+    public Day(Calendar calendar, boolean setToolTip)
+    {
+      this(calendar);
+      if (setToolTip)
+      {
+        setToolTipText(date(calendar));
+      }
+    }
     public Day(Calendar calendar)
     {
       this();
@@ -671,7 +679,7 @@ public class PlanningCalendar extends JPanel implements TaskView
           dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
           weekOfMonth = calendar.get(Calendar.WEEK_OF_MONTH);
           if (DEBUG) log("   Create new day: " + date(calendar));
-          Day dayToAdd = new Day((Calendar)calendar.clone());
+          Day dayToAdd = new Day((Calendar)calendar.clone(), true);
           daysOfMonth[weekOfMonth][dayOfWeek] = dayToAdd;
           if (DEBUG) log("   Add newly created day to month view");
           addToMonthView(dayOfWeek, weekOfMonth, dayToAdd);
@@ -694,7 +702,7 @@ public class PlanningCalendar extends JPanel implements TaskView
           dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
           weekOfMonth = calendar.get(Calendar.WEEK_OF_MONTH);
           if (DEBUG) log("   Create new date: " + date(calendar));
-          Day dayToAdd = new Day((Calendar)calendar.clone());
+          Day dayToAdd = new Day((Calendar)calendar.clone(), true);
           dayToAdd.setGrayedOut();
           if (DEBUG) log("   Add new day to daysOfMonth[][] at coordinates (" + 1 + ", " + dayOfWeek + ")");
           daysOfMonth[1][dayOfWeek] = dayToAdd;
@@ -719,7 +727,7 @@ public class PlanningCalendar extends JPanel implements TaskView
           dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
           weekOfMonth = calendar.get(Calendar.WEEK_OF_MONTH);
           if (DEBUG) log("   Create new day: " + date(calendar));
-          Day dayToAdd = new Day((Calendar)calendar.clone());
+          Day dayToAdd = new Day((Calendar)calendar.clone(), true);
           dayToAdd.setGrayedOut();
           if (DEBUG) log("   Add new day to daysOfMonth[][] at coordinates (" + totalWeeksInMainMonth + ", " + dayOfWeek + ")");
           daysOfMonth[totalWeeksInMainMonth][dayOfWeek] = dayToAdd;

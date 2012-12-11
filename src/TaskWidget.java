@@ -51,6 +51,20 @@ public class TaskWidget extends JPanel implements DragGestureListener
   private DragSource dragSource;
 
   // Public Methods
+    public void setSelected(boolean selected)
+    {
+      task.setSelected(selected);
+      if (selected)
+      {
+        setBackground(TaskCommander.selectionColor);
+      }
+      else
+      {
+        //setBackground(TaskCommander.neutralColor);
+        setBackground(null);
+      }
+    }
+
     public void dragGestureRecognized(DragGestureEvent dge)
     {
       System.out.println("DRAG");
@@ -102,24 +116,16 @@ public class TaskWidget extends JPanel implements DragGestureListener
 
 
   // Private methods
+    private void sendSelectionRequest(boolean selectionRequest)
+    {
+      TaskCommander.getTaskEntryPanel().setSelectedTaskWidget(this, selectionRequest);
+      TaskCommander.getTaskEntryPanel().setSubTaskEntryEnabled(selectionRequest);
+    }
     private void displayRightClickMenu(MouseEvent e)
     {
       rightClickMenu.show(this, e.getX(), e.getY());
     }
 
-    private void setSelected(boolean selected)
-    {
-      task.setSelected(selected);
-      if (selected)
-      {
-        setBackground(TaskCommander.selectionColor);
-      }
-      else
-      {
-        //setBackground(TaskCommander.neutralColor);
-        setBackground(null);
-      }
-    }
 
     private void configureComponents()
     {
@@ -128,8 +134,12 @@ public class TaskWidget extends JPanel implements DragGestureListener
       maximumSize = new Dimension(3000, 60);
       notesButton = new JButton("");
       notesButton.setIcon(new ImageIcon("images/Notes.jpg"));
+      notesButton.setToolTipText("Click this button to add a note to this task.");
       taskCheckBox = new CustomCheckBox(task.getName());
+      taskCheckBox.setToolTipText("<html>Click this checkbox to toggle this task<br>" +
+                                  "between complete and incomplete.</html>");
       courseLabel = new JLabel(task.getCourse().getName());
+      courseLabel.setToolTipText("This indicates the course this task is associated with.");
       int newX = courseLabel.getPreferredSize().width;
       int newY = courseLabel.getPreferredSize().height;
       courseLabel.setPreferredSize(new Dimension(newX+10, newY+10));
@@ -150,6 +160,7 @@ public class TaskWidget extends JPanel implements DragGestureListener
         default: dayString = "Unknown";
       }
       dueDate = new JLabel(dayString);
+      dueDate.setToolTipText("This is the due date for this task.");
       setBorder(BorderFactory.createEtchedBorder());
       setPreferredSize(preferredSize);
       setMaximumSize(maximumSize);
@@ -269,7 +280,10 @@ public class TaskWidget extends JPanel implements DragGestureListener
           }
           else if (e.getButton() == MouseEvent.BUTTON1)
           {
-            setSelected(!isSelected());
+            //Select
+            boolean select = !isSelected();
+            sendSelectionRequest(select);
+            setSelected(select);
           }
         }
         public void mouseReleased(MouseEvent e) {}

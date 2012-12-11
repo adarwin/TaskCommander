@@ -61,8 +61,8 @@ public class TaskDialog extends JDialog
     contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.PAGE_AXIS));
 
     setModalityType(ModalityType.APPLICATION_MODAL);
-    setLocationRelativeTo(null);
     setSize(new Dimension(640, 480));
+    setLocationRelativeTo(null);
 
     configureComponents();
     addComponents();

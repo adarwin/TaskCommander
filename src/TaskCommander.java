@@ -544,11 +544,17 @@ public class TaskCommander
 
 
   // Private methods
-    private static void addToToolbar(AbstractButton button, ImageIcon icon)
+    private static void addToToolbar(AbstractButton button, ImageIcon icon, String toolTipText)
+    {
+      JButton result = addToToolbar(button, icon);
+      result.setToolTipText(toolTipText);
+    }
+    private static JButton addToToolbar(AbstractButton button, ImageIcon icon)
     {
       JButton temp = new JButton(icon);
       temp.setModel(button.getModel());
       toolBar.add(temp);
+      return temp;
     }
     private static void createAndShowGUI()
     {
@@ -609,7 +615,7 @@ public class TaskCommander
         JMenu editMenu = new JMenu("Edit");
         editMenu.setMnemonic(KeyEvent.VK_E);
         menuItem = new JMenuItem("Undo", KeyEvent.VK_U);
-        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, InputEvent.META_DOWN_MASK));
+        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, InputEvent.CTRL_DOWN_MASK));
         menuItem.addActionListener(new ActionListener()
         {
           public void actionPerformed(ActionEvent e)
@@ -620,10 +626,10 @@ public class TaskCommander
           }
         });
         editMenu.add(menuItem);
-        addToToolbar(menuItem, new ImageIcon("images/Undo24.png"));
+        addToToolbar(menuItem, new ImageIcon("images/Undo24.png"), "Undo the last action");
 
         menuItem = new JMenuItem("Redo", KeyEvent.VK_R);
-        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Y, InputEvent.META_DOWN_MASK));
+        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Y, InputEvent.CTRL_DOWN_MASK));
         menuItem.addActionListener(new ActionListener()
         {
           public void actionPerformed(ActionEvent e)
@@ -634,7 +640,7 @@ public class TaskCommander
           }
         });
         editMenu.add(menuItem);
-        addToToolbar(menuItem, new ImageIcon("images/Redo24.png"));
+        addToToolbar(menuItem, new ImageIcon("images/Redo24.png"), "Redo the last action you undid");
         toolBar.addSeparator();
 
       //Build the view menu
@@ -657,7 +663,7 @@ public class TaskCommander
         viewModes.add(rbMenuItem);
         viewMenu.add(rbMenuItem);
         
-        addToToolbar(rbMenuItem, new ImageIcon("images/TaskEntry24.png"));
+        addToToolbar(rbMenuItem, new ImageIcon("images/TaskEntry24.png"), "Switch to task entry mode");
 
         rbMenuItem = new JRadioButtonMenuItem("Planning Board");
         rbMenuItem.setSelected(true);
@@ -674,7 +680,7 @@ public class TaskCommander
         viewModes.add(rbMenuItem);
         viewMenu.add(rbMenuItem);
 
-        addToToolbar(rbMenuItem, new ImageIcon("images/PlanningBoard24.png"));
+        addToToolbar(rbMenuItem, new ImageIcon("images/PlanningBoard24.png"), "Switch view to Planning Board");
 
 
       //Build the tools menu
@@ -703,7 +709,9 @@ public class TaskCommander
           public void actionPerformed(ActionEvent e)
           {
             JFrame temp = new JFrame("Manage... Window");
-            temp.setSize(new Dimension(480, 320));
+            //temp.setSize(new Dimension(480, 320));
+            temp.add(new JLabel(new ImageIcon("images/Macro.png")));
+            temp.pack();
             temp.setLocationRelativeTo(null);
             temp.setVisible(true);
           }
@@ -716,7 +724,9 @@ public class TaskCommander
           public void actionPerformed(ActionEvent e)
           {
             JFrame temp = new JFrame("Options Window");
-            temp.setSize(new Dimension(480, 320));
+            //temp.setSize(new Dimension(480, 320));
+            temp.add(new JLabel(new ImageIcon("images/Options.jpg")));
+            temp.pack();
             temp.setLocationRelativeTo(null);
             temp.setVisible(true);
           }

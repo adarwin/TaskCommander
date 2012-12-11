@@ -40,9 +40,13 @@ public class TaskEntryPanel extends JPanel implements TaskView
   private ArrayList<TaskWidget> taskWidgets;
   private ArrayList<SubTaskWidget> subTaskWidgets;
   private CourseWidget previouslySelectedCourseWidget;
+  private TaskWidget previouslySelectedTaskWidget;
   private String quickTaskText = "New task name";
   private String quickSubTaskText = "New subtask name";
-  private String quickCourseText = "New course name";
+  private String quickCourseText = "New course title";
+  private String quickTaskButtonToolTip = "Click to add a new task";
+  private String quickSubTaskButtonToolTip = "Click to add a new sub-task";
+  private String quickCourseButtonToolTip = "Click to add a new course";
   private final boolean DEBUG = false;
   private final String CLASS = "TaskEntryPanel";
 
@@ -57,6 +61,12 @@ public class TaskEntryPanel extends JPanel implements TaskView
     quickTaskField.setText(enabled ? quickTaskText : "");
     quickTaskField.setEnabled(enabled);
   }
+  protected void setSubTaskEntryEnabled(boolean enabled)
+  {
+    subTaskAddButton.setEnabled(enabled);
+    quickSubTaskField.setText(enabled ? quickSubTaskText : "");
+    quickSubTaskField.setEnabled(enabled);
+  }
   protected void setSelectedCourseWidget(CourseWidget courseWidget, boolean selected)
   {
     if (previouslySelectedCourseWidget != null)
@@ -65,6 +75,15 @@ public class TaskEntryPanel extends JPanel implements TaskView
     }
     courseWidget.setSelected(selected);
     previouslySelectedCourseWidget = courseWidget;
+  }
+  protected void setSelectedTaskWidget(TaskWidget taskWidget, boolean selected)
+  {
+    if (previouslySelectedTaskWidget != null)
+    {
+      previouslySelectedTaskWidget.setSelected(!selected);
+    }
+    taskWidget.setSelected(selected);
+    previouslySelectedTaskWidget = taskWidget;
   }
 
   public TaskEntryPanel()
@@ -97,6 +116,20 @@ public class TaskEntryPanel extends JPanel implements TaskView
         courseAddButton = new JButton("+");
         taskAddButton = new JButton("+");
         subTaskAddButton = new JButton("+");
+
+        quickCourseField.setToolTipText("<html>Enter a new course title in this field.<br>" +
+                                        "Then press enter or click the button to the right<br>" +
+                                        "to create a new course with the desired title.</html>");
+        quickTaskField.setToolTipText("<html>Enter a new task name in this field.<br>" +
+                                      "Then press enter or click the button to the right<br>" +
+                                      "to create a new task with the desired name.</html>");
+        quickSubTaskField.setToolTipText("<html>Enter a new sub-task name in this field.<br>" +
+                                         "Then press enter or click the button to the right<br>" +
+                                         "to create a new sub-task with the desired name.</html>");
+
+        courseAddButton.setToolTipText(quickCourseButtonToolTip);
+        taskAddButton.setToolTipText(quickTaskButtonToolTip);
+        subTaskAddButton.setToolTipText(quickSubTaskButtonToolTip);
 
       // Layouts
         centerLayout = new SpringLayout();
