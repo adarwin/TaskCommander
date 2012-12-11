@@ -37,6 +37,7 @@ import javax.swing.border.SoftBevelBorder;
 import javax.swing.border.MatteBorder;
 
 import java.util.Calendar;
+import java.util.ArrayList;
 
 public class TaskWidget extends JPanel implements DragGestureListener
 {
@@ -249,7 +250,10 @@ public class TaskWidget extends JPanel implements DragGestureListener
         public void actionPerformed(ActionEvent e)
         {
           System.out.println("delete");
-          TaskCommander.removeTask(task);
+          Command command = new TaskRemoval(task);
+          command.run();
+          TaskCommander.addCommand(command);
+          //TaskCommander.removeTask(task);
         }
       });
       rightClickMenu.add(menuItem);
@@ -260,7 +264,13 @@ public class TaskWidget extends JPanel implements DragGestureListener
     {
       addMouseListener(new MouseListener()
       {
-        public void mouseClicked(MouseEvent e) {}
+        public void mouseClicked(MouseEvent e)
+        {
+          if (e.getClickCount() == 2)
+          {
+            showTaskEditDialog();
+          }
+        }
         public void mouseEntered(MouseEvent e)
         {
           /*
@@ -283,7 +293,12 @@ public class TaskWidget extends JPanel implements DragGestureListener
             //Select
             boolean select = !isSelected();
             sendSelectionRequest(select);
-            setSelected(select);
+            //setSelected(select);
+            ArrayList<TaskView> taskViews = TaskCommander.getRegisteredTaskViews();
+            for (TaskView taskView : taskViews)
+            {
+              taskView.showSubTasksFor(select ? task : null);
+            }
           }
         }
         public void mouseReleased(MouseEvent e) {}

@@ -59,4 +59,11 @@ public class SubTaskAddition implements Command
     if (DEBUG) log("Attempting to redo this SubTaskAddition.");
     run();
   }
+
+
+
+  public String toString()
+  {
+    return "Sub-Task Addition: " + subTask.getName();
+  }
 }

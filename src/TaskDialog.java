@@ -16,6 +16,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+import javax.swing.JTextArea;
 import javax.swing.JPanel;
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -25,8 +26,9 @@ public class TaskDialog extends JDialog
   private Task task;
   final boolean existingTask;
   JTextField taskNameTextField, dueDateTextField, assignedDateTextField, priorityTextField, associatedCourseTextField;
-  JLabel taskNameLabel, dueDateLabel, assignedDateLabel, priorityLabel, associatedCourseLabel;
-  JPanel taskName, dueDate, assignedDate, priority, associatedCourse, buttonPanel;
+  JTextArea noteTextArea;
+  JLabel taskNameLabel, noteLabel, dueDateLabel, assignedDateLabel, priorityLabel, associatedCourseLabel;
+  JPanel taskName, note, dueDate, assignedDate, priority, associatedCourse, buttonPanel;
   JButton okButton, cancelButton;
   private final boolean DEBUG = true;
   private final String CLASS = "TaskDialog";
@@ -62,12 +64,12 @@ public class TaskDialog extends JDialog
 
     setModalityType(ModalityType.APPLICATION_MODAL);
     setSize(new Dimension(640, 480));
-    setLocationRelativeTo(null);
 
     configureComponents();
     addComponents();
     addListeners();
     pack();
+    setLocationRelativeTo(null);
   }
 
   private void configureComponents()
@@ -75,6 +77,11 @@ public class TaskDialog extends JDialog
     taskNameLabel = new JLabel("Task Name:");
     taskNameTextField = new JTextField(task.getName());
     taskName = createFieldPanel(taskNameLabel, taskNameTextField);
+
+    noteLabel = new JLabel("Note: ");
+    noteTextArea = new JTextArea(task.getNote());
+    noteTextArea.setPreferredSize(new Dimension(200, 80));
+    note = createFieldPanel(noteLabel, noteTextArea);
 
     buttonPanel = new JPanel(new FlowLayout());
     okButton = new JButton("Ok");
@@ -86,6 +93,7 @@ public class TaskDialog extends JDialog
   {
     Container contentPane = getContentPane();
     contentPane.add(taskName);
+    contentPane.add(note);
     contentPane.add(buttonPanel);
   }
   private void addListeners()
@@ -100,6 +108,7 @@ public class TaskDialog extends JDialog
           Task editedTask = new Task("", null);
           editedTask.updateFrom(task);
           editedTask.setName(taskNameTextField.getText());
+          editedTask.setNote(noteTextArea.getText());
           Command command = new TaskEdit(task, editedTask);
           command.run();
           TaskCommander.addCommand(command);
@@ -128,6 +137,7 @@ public class TaskDialog extends JDialog
     JPanel panel = new JPanel(new BorderLayout());
     panel.add(label, BorderLayout.WEST);
     panel.add(component, BorderLayout.CENTER);
+    //panel.pack();
     return panel;
   }
 }

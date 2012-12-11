@@ -8,6 +8,7 @@ SUNY Oswego
 import java.awt.Dimension;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseEvent;
+import javax.swing.BorderFactory;
 import javax.swing.SpringLayout;
 import javax.swing.JPanel;
 import javax.swing.border.SoftBevelBorder;
@@ -19,7 +20,7 @@ import javax.swing.JDialog;
 public class SubTaskWidget extends JPanel
 {
   private SubTask subTask;
-  private JCheckBox subTaskCheckBox;
+  private CustomCheckBox subTaskCheckBox;
   private SpringLayout layout;
   private JButton notesButton;
   private Dimension preferredSize, maximumSize;
@@ -33,11 +34,11 @@ public class SubTaskWidget extends JPanel
     layout = new SpringLayout();
     setLayout(layout);
     //minimumSize = new Dimension(100, 50);
-    preferredSize = new Dimension(200, 50);
-    maximumSize = new Dimension(3000, 50);
+    preferredSize = new Dimension(200, 30);
+    maximumSize = new Dimension(3000, 30);
     notesButton = new JButton("");
     notesButton.setIcon(new ImageIcon("images/Notes.jpg"));
-    subTaskCheckBox = new JCheckBox(subTask.getName());
+    subTaskCheckBox = new CustomCheckBox(subTask.getName());
     //courseLabel = new JLabel(task.getCourse().getName());
     //Calendar cal = Calendar.getInstance();
     //Integer day = cal.get(Calendar.DAY_OF_WEEK);
@@ -54,7 +55,8 @@ public class SubTaskWidget extends JPanel
       //default: dayString = "Unknown";
     //}
     //dueDate = new JLabel(dayString);
-    setBorder(new SoftBevelBorder(SoftBevelBorder.LOWERED));
+    //setBorder(new SoftBevelBorder(SoftBevelBorder.LOWERED));
+    setBorder(BorderFactory.createEtchedBorder());
     //setMinimumSize(minimumSize);
     setPreferredSize(preferredSize);
     setMaximumSize(maximumSize);
@@ -63,7 +65,7 @@ public class SubTaskWidget extends JPanel
     //add(dueDate);
     add(notesButton);
 
-    setBackground(subTask.getTask().getCourse().getColor());
+    //setBackground(subTask.getTask().getCourse().getColor());
 
     int margin = 2;
 

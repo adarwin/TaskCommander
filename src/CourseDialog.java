@@ -60,13 +60,13 @@ public class CourseDialog extends JDialog
     contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.PAGE_AXIS));
 
     setModalityType(ModalityType.APPLICATION_MODAL);
-    setSize(new Dimension(640, 480));
+    setSize(new Dimension(300, 150));
     setLocationRelativeTo(null);
 
     configureComponents();
     addComponents();
     addListeners();
-    pack();
+    //pack();
     //setVisible(true);
   }
 

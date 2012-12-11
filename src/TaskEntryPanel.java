@@ -436,6 +436,7 @@ public class TaskEntryPanel extends JPanel implements TaskView
     SubTaskWidget subTaskWidget = new SubTaskWidget(subTask);
     subTaskWidgets.add(subTaskWidget);
     rightContent.add(subTaskWidget);
+    revalidate();
   }
   public void removeCourse(Course course)
   {
@@ -503,6 +504,7 @@ public class TaskEntryPanel extends JPanel implements TaskView
       if (DEBUG) log("Found the desired subTaskWidget...now just remove it");
       subTaskWidgets.remove(target);
       rightContent.remove(target);
+      repaint();
     }
   }
   public void updateTaskColors()
@@ -537,6 +539,20 @@ public class TaskEntryPanel extends JPanel implements TaskView
       if (taskWidget.getTask().getCourse() == course)
       {
         centerContent.add(taskWidget);
+      }
+    }
+    revalidate();
+    repaint();
+  }
+  public void showSubTasksFor(Task task)
+  {
+    if (DEBUG) log("Attempting to show only subtasks associated with task: " + task.getName());
+    rightContent.removeAll();
+    for (SubTaskWidget subTaskWidget : subTaskWidgets)
+    {
+      if (subTaskWidget.getSubTask().getTask() == task)
+      {
+        rightContent.add(subTaskWidget);
       }
     }
     revalidate();

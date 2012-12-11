@@ -178,6 +178,10 @@ public class PlanningCalendar extends JPanel implements TaskView
       {
         if (DEBUG) log("showTasksFor(Course course) currently does nothing");
       }
+      public void showSubTasksFor(Task task)
+      {
+        if (DEBUG) log("showSubTasksFor(Task task) currently does nothing");
+      }
     // ^--- TaskView Interface Methods ---^
 
 

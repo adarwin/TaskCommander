@@ -158,6 +158,11 @@ public class CourseWidget extends JPanel
         public void actionPerformed(ActionEvent e)
         {
           System.out.println("CourseWidget Delete");
+          /*
+          Command command = new CourseRemoval(course);
+          command.run();
+          TaskCommander.addCommand(command);
+          */
         }
       });
       rightClickMenu.add(menuItem);
@@ -235,6 +240,11 @@ public class CourseWidget extends JPanel
             for (TaskView taskView : taskViews)
             {
               taskView.showTasksFor(select ? course : null);
+              if (!select)
+              {
+                taskView.showSubTasksFor(null);
+                TaskCommander.getTaskEntryPanel().setSubTaskEntryEnabled(false);
+              }
             }
           }
         }

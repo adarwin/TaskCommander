@@ -19,6 +19,7 @@ public interface TaskView
   public void updateCourseInfo();
 
   public void showTasksFor(Course course);
+  public void showSubTasksFor(Task task);
 
   public void repaint();
   public void revalidate();

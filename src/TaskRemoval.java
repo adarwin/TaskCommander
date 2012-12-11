@@ -71,4 +71,11 @@ public class TaskRemoval implements Command
     if (DEBUG) log("Attempting to redo this TaskRemoval.");
     run();
   }
+
+
+
+  public String toString()
+  {
+    return "Task Removal: " + task.getName();
+  }
 }
