@@ -9,12 +9,15 @@ import javax.servlet.annotation.*;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 
 //@WebServlet("/login")
 public class LoginServlet extends HttpServlet
 {
 
-  Logbook logbook = new Logbook("../logs/LoginServlet.log");
+  private Logbook logbook = new Logbook("../logs/LoginServlet.log");
+  private HashMap<String, String> registeredUsers = new HashMap<String, String>();
+  private static List<String> loggedInUsers = new ArrayList<String>();
 
 
 
@@ -25,15 +28,18 @@ public class LoginServlet extends HttpServlet
               throws ServletException, IOException
   {
     logbook.log(Logbook.INFO, "Received get request");
+    registeredUsers.put("darwin", "vermont");
+    registeredUsers.put("alex", "professor");
     //Check to see if the user is already logged in
     if (isLoggedInUser(request))
     {
       logbook.log(Logbook.INFO, "Determined get request was from logged-in user. Forward to home.html.");
-      RequestDispatcher dispatcher = request.getRequestDispatcher("/home.html");
+      RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/home.html");
       dispatcher.forward(request, response);
     }
     else
     {
+      logbook.log(Logbook.INFO, "Determed get request was not from a logged-in user. Redirect to login.jsp");
       response.sendRedirect("/TaskCommander/login.jsp");
     }
   }
@@ -48,41 +54,29 @@ public class LoginServlet extends HttpServlet
               throws ServletException, IOException
   {
     logbook.log(Logbook.INFO, "Received post request");
-    if (true)//authenticateUser(request))
+    String username = request.getParameter("username");
+    String password = request.getParameter("password");
+    //Check against database and authenticate user
+    if (registeredUsers.containsKey(username) && registeredUsers.get(username).equals(password))
     {
-      //Check against database
-      if (true)
-      {
-        HttpSession session = request.getSession();
-        updateCookies(request, response);
-        session.setAttribute("username", request.getParameter("username"));
-        session.setAttribute("password", request.getParameter("password"));
-        response.sendRedirect("/TaskCommander/home.html");
-        /*
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/home.jsp");
-        dispatcher.forward(request, response);
-        */
-        /*
-        String htmlOutput = "<html><head></head><body>";
-        htmlOutput += "<p>session.getAttribute(\"username\") = " + session.getAttribute("username") + "</p>";
-        htmlOutput += "</body></html>";
-        PrintWriter out = response.getWriter();
-        out.println(htmlOutput);
-        */
-        /*
-        htmlOutput += "<h1>Welcome, " + username + "</h1>";
-        htmlOutput += "<p>Username = " + username + "</p>";
-        htmlOutput += "<p>Password = " + password + "</p>";
-        */
-      }
-      else
-      {
-        String htmlOutput = "<html><head></head><body>";
-        htmlOutput += "<h2>Invalid login credentials</h2>";
-        htmlOutput += "</body></html>";
-        PrintWriter out = response.getWriter();
-        out.println(htmlOutput);
-      }
+      logbook.log(Logbook.INFO, "Post request is from valid registered user, '" + username + "'");
+      HttpSession session = request.getSession();
+      //updateCookies(request, response);
+      loggedInUsers.add(session.getId());
+      logbook.log(Logbook.INFO, "Added " + username + " to list of logged-in users");
+      response.sendRedirect("/TaskCommander/private/home.html");
+      /*
+      RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/home.html");
+      dispatcher.forward(request, response);
+      */
+    }
+    else
+    {
+      String htmlOutput = "<html><head></head><body>";
+      htmlOutput += "<h2>Invalid login credentials</h2>";
+      htmlOutput += "</body></html>";
+      PrintWriter out = response.getWriter();
+      out.println(htmlOutput);
     }
   }
 
@@ -93,6 +87,8 @@ public class LoginServlet extends HttpServlet
   static protected boolean isLoggedInUser(HttpServletRequest request)
   {
     HttpSession session = request.getSession();
+    return loggedInUsers.contains(session.getId());
+    /*
     Cookie[] existingCookies = request.getCookies();
     boolean validUsername = false;
     boolean validPassword = false;
@@ -111,6 +107,7 @@ public class LoginServlet extends HttpServlet
       }
     }
     return validUsername && validPassword;
+    */
   }
 
 

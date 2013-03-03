@@ -7,7 +7,7 @@
 </head>
 
 <body>
-<h1>Welcome home, <%= session.getAttribute("username") %></h1>
+<h1>Welcome home!</h1>
 <form action="logout" method="post" name="LogoutForm">
 	<input name="logout" type="submit" value="Logout">
 </form>

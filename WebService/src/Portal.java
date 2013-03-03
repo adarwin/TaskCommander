@@ -24,8 +24,11 @@ public class Portal extends HttpServlet
     if (LoginServlet.isLoggedInUser(request))
     {
       logbook.log(Logbook.INFO, "Determined get request was from logged-in user. Forward to home.html.");
-      RequestDispatcher dispatcher = request.getRequestDispatcher("/home.html");
+      response.sendRedirect("/TaskCommander/private/home.jsp");
+      /*
+      RequestDispatcher dispatcher = request.getRequestDispatcher("/TaskCommander/private/home.html");
       dispatcher.forward(request, response);
+      */
     }
     else
     {

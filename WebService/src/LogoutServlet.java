@@ -22,30 +22,7 @@ public class LogoutServlet extends HttpServlet
     logbook.log(Logbook.INFO, "Received post request");
     HttpSession session = request.getSession();
     //Do logout process
-    Cookie[] existingCookies = request.getCookies();
-    for (Cookie cookie : existingCookies)
-    {
-      if (cookie.getName().equals("username"))
-      {
-        cookie.setValue(null);
-        cookie.setMaxAge(0);
-        response.addCookie(cookie);
-      }
-      else if (cookie.getName().equals("password"))
-      {
-        cookie.setValue(null);
-        cookie.setMaxAge(0);
-        response.addCookie(cookie);
-      }
-    }
     response.sendRedirect("/TaskCommander");
-      /*
-      String htmlOutput = "<html><head></head><body>";
-      htmlOutput += "<p>request.getServletPath() = " + request.getServletPath() + "</p>";
-      htmlOutput += "</body></html>";
-      PrintWriter out = response.getWriter();
-      out.println(htmlOutput);
-      */
   }
 }
 
