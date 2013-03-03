@@ -10,10 +10,15 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections;
 
-@WebServlet("/login")
+//@WebServlet("/login")
 public class LoginServlet extends HttpServlet
 {
+
   Logbook logbook = new Logbook("../logs/LoginServlet.log");
+
+
+
+
   @Override
   protected void doGet (HttpServletRequest request,
                      HttpServletResponse response)
@@ -21,62 +26,28 @@ public class LoginServlet extends HttpServlet
   {
     logbook.log(Logbook.INFO, "Received get request");
     //Check to see if the user is already logged in
-    response.sendRedirect("/TaskCommander/login.jsp");
-  }
-
-  private boolean authenticateUser(HttpServletRequest request)
-  {
-    String username = request.getParameter("username");
-    String password = request.getParameter("password");
-    return (username.equals("darwin") && password.equals("pass")) || isLoggedInUser(request);
-  }
-
-  static protected boolean isLoggedInUser(HttpServletRequest request)
-  {
-    HttpSession session = request.getSession();
-    Cookie[] existingCookies = request.getCookies();
-    boolean validUsername = false;
-    boolean validPassword = false;
-    if (existingCookies != null)
+    if (isLoggedInUser(request))
     {
-      for (Cookie cookie : existingCookies)
-      {
-        if (cookie.getName().equals("username") && cookie.getValue().equals("darwin"))
-        {
-          validUsername = true;
-        }
-        else if (cookie.getName().equals("password") && cookie.getValue().equals("pass"))
-        {
-          validPassword = true;
-        }
-      }
+      logbook.log(Logbook.INFO, "Determined get request was from logged-in user. Forward to home.html.");
+      RequestDispatcher dispatcher = request.getRequestDispatcher("/home.html");
+      dispatcher.forward(request, response);
     }
-    return validUsername && validPassword;
-  }
-
-  private void updateCookies(HttpServletRequest request, HttpServletResponse response)
-  {
-    Cookie[] existingCookies = request.getCookies();
-    for (Cookie cookie : existingCookies)
+    else
     {
-      if (cookie.getName().equals("username"))
-      {
-        cookie.setValue(request.getParameter("username"));
-        response.addCookie(cookie);
-      }
-      else if (cookie.getName().equals("password"))
-      {
-        cookie.setValue(request.getParameter("password"));
-        response.addCookie(cookie);
-      }
+      response.sendRedirect("/TaskCommander/login.jsp");
     }
   }
+
+
+
+
 
   @Override
   protected void doPost (HttpServletRequest request,
                       HttpServletResponse response)
               throws ServletException, IOException
   {
+    logbook.log(Logbook.INFO, "Received post request");
     if (true)//authenticateUser(request))
     {
       //Check against database
@@ -115,9 +86,66 @@ public class LoginServlet extends HttpServlet
     }
   }
 
-  private boolean isValidUser(String username, String password)
+
+
+
+
+  static protected boolean isLoggedInUser(HttpServletRequest request)
   {
-    //Check users database
-    return true;
+    HttpSession session = request.getSession();
+    Cookie[] existingCookies = request.getCookies();
+    boolean validUsername = false;
+    boolean validPassword = false;
+    if (existingCookies != null)
+    {
+      for (Cookie cookie : existingCookies)
+      {
+        if (cookie.getName().equals("username") && cookie.getValue().equals("darwin"))
+        {
+          validUsername = true;
+        }
+        else if (cookie.getName().equals("password") && cookie.getValue().equals("pass"))
+        {
+          validPassword = true;
+        }
+      }
+    }
+    return validUsername && validPassword;
+  }
+
+
+
+
+
+
+  private boolean authenticateUser(HttpServletRequest request)
+  {
+    String username = request.getParameter("username");
+    String password = request.getParameter("password");
+    return (username.equals("darwin") && password.equals("pass")) || isLoggedInUser(request);
+  }
+
+
+
+
+
+
+
+  private void updateCookies(HttpServletRequest request, HttpServletResponse response)
+  {
+    Cookie[] existingCookies = request.getCookies();
+    for (Cookie cookie : existingCookies)
+    {
+      if (cookie.getName().equals("username"))
+      {
+        cookie.setValue(request.getParameter("username"));
+        response.addCookie(cookie);
+      }
+      else if (cookie.getName().equals("password"))
+      {
+        cookie.setValue(request.getParameter("password"));
+        response.addCookie(cookie);
+      }
+    }
   }
 }

@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections;
 
-@WebServlet("/logout")
+//@WebServlet("/logout")
 public class LogoutServlet extends HttpServlet
 {
   Logbook logbook = new Logbook("../logs/LogoutServlet.log");

@@ -10,10 +10,10 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections;
 
-@WebServlet("/")
-public class HomeServlet extends HttpServlet
+//@WebServlet("/")
+public class Portal extends HttpServlet
 {
-  Logbook logbook = new Logbook("../logs/HomeServlet.log");
+  Logbook logbook = new Logbook("../logs/Portal.log");
   @Override
   protected void doGet (HttpServletRequest request,
                         HttpServletResponse response)
@@ -23,26 +23,16 @@ public class HomeServlet extends HttpServlet
     HttpSession session = request.getSession();
     if (LoginServlet.isLoggedInUser(request))
     {
+      logbook.log(Logbook.INFO, "Determined get request was from logged-in user. Forward to home.html.");
       RequestDispatcher dispatcher = request.getRequestDispatcher("/home.html");
       dispatcher.forward(request, response);
-      //response.sendRedirect("/TaskCommander/home.html");
     }
     else
     {
+      logbook.log(Logbook.INFO, "Determined get request was not from a logged-in user. Forward to login.");
       RequestDispatcher dispatcher = request.getRequestDispatcher("/login");
       dispatcher.forward(request, response);
-      //response.sendRedirect("/TaskCommander/login.jsp");
     }
-    /*
-    if (false)
-    {
-      response.sendRedirect("/TaskCommander/home.html");
-    }
-    else
-    {
-      response.sendRedirect("/TaskCommander/login.jsp");
-    }
-    */
   }
 
   @Override
@@ -50,6 +40,7 @@ public class HomeServlet extends HttpServlet
                          HttpServletResponse response)
                  throws ServletException, IOException
   {
+    logbook.log(Logbook.INFO, "Received post request");
   }
 
   /*
