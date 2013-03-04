@@ -21,7 +21,7 @@ public class Portal extends HttpServlet
   {
     logbook.log(Logbook.INFO, "Received get request");
     HttpSession session = request.getSession();
-    if (LoginServlet.isLoggedInUser(request))
+    if (Authentication.isLoggedIn(request.getSession().getId()))
     {
       logbook.log(Logbook.INFO, "Determined get request was from logged-in user. Forward to home.html.");
       response.sendRedirect("/TaskCommander/private/home.jsp");

@@ -16,8 +16,6 @@ public class LoginServlet extends HttpServlet
 {
 
   private Logbook logbook = new Logbook("../logs/LoginServlet.log");
-  private HashMap<String, String> registeredUsers = new HashMap<String, String>();
-  private static List<String> loggedInUsers = new ArrayList<String>();
 
 
 
@@ -28,10 +26,8 @@ public class LoginServlet extends HttpServlet
               throws ServletException, IOException
   {
     logbook.log(Logbook.INFO, "Received get request");
-    registeredUsers.put("darwin", "vermont");
-    registeredUsers.put("alex", "professor");
     //Check to see if the user is already logged in
-    if (isLoggedInUser(request))
+    if (Authentication.isLoggedIn(request.getSession().getId()))
     {
       logbook.log(Logbook.INFO, "Determined get request was from logged-in user. Forward to home.html.");
       RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/home.html");
@@ -57,12 +53,13 @@ public class LoginServlet extends HttpServlet
     String username = request.getParameter("username");
     String password = request.getParameter("password");
     //Check against database and authenticate user
-    if (registeredUsers.containsKey(username) && registeredUsers.get(username).equals(password))
+    if (Authentication.isRegisteredUser(username, password))
     {
       logbook.log(Logbook.INFO, "Post request is from valid registered user, '" + username + "'");
       HttpSession session = request.getSession();
       //updateCookies(request, response);
-      loggedInUsers.add(session.getId());
+      //loggedInUsers.add(session.getId());
+      Authentication.logUserIn(session.getId());
       logbook.log(Logbook.INFO, "Added " + username + " to list of logged-in users");
       response.sendRedirect("/TaskCommander/private/home.html");
       /*
@@ -84,43 +81,27 @@ public class LoginServlet extends HttpServlet
 
 
 
+  /*
   static protected boolean isLoggedInUser(HttpServletRequest request)
   {
     HttpSession session = request.getSession();
     return loggedInUsers.contains(session.getId());
-    /*
-    Cookie[] existingCookies = request.getCookies();
-    boolean validUsername = false;
-    boolean validPassword = false;
-    if (existingCookies != null)
-    {
-      for (Cookie cookie : existingCookies)
-      {
-        if (cookie.getName().equals("username") && cookie.getValue().equals("darwin"))
-        {
-          validUsername = true;
-        }
-        else if (cookie.getName().equals("password") && cookie.getValue().equals("pass"))
-        {
-          validPassword = true;
-        }
-      }
-    }
-    return validUsername && validPassword;
-    */
   }
+  */
 
 
 
 
 
 
+  /*
   private boolean authenticateUser(HttpServletRequest request)
   {
     String username = request.getParameter("username");
     String password = request.getParameter("password");
     return (username.equals("darwin") && password.equals("pass")) || isLoggedInUser(request);
   }
+  */
 
 
 
