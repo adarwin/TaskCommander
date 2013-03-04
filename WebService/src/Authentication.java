@@ -21,7 +21,7 @@ class Authentication
   {
     registeredUsers = new HashMap<String, String>();
     registeredUsers.put("darwin", "vermont");
-    registeredUsers.put("alex", "professor");
+    registeredUsers.put("alex", "gaming");
   }
 
 

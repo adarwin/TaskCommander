@@ -11,10 +11,10 @@
 <form action="/TaskCommander/login" method="post" enctype="application/x-www-form-urlencoded" name="LoginForm">
 	<p>
 	  Username:<input name="username" type="text">
-  </p>
+  Try 'alex'</p>
 	<p>
 	  Password:<input name="password" type="password">
-	</p>
+	Try 'gaming'</p>
     <p>
     	<input name="submit" type="submit" value="Submit">
         <input name="register" type="button" value="Register">

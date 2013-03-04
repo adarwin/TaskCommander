@@ -73,6 +73,9 @@ public class LoginServlet extends HttpServlet
     {
       String htmlOutput = "<html><head></head><body>";
       htmlOutput += "<h2>Invalid login credentials</h2>";
+      htmlOutput += "<form action=\"/TaskCommander\" method=\"get\" name=\"back\">";
+      htmlOutput += "<input name=\"Back\" type=\"submit\" value=\"Back\">";
+      htmlOutput += "</form>";
       htmlOutput += "</body></html>";
       PrintWriter out = response.getWriter();
       out.println(htmlOutput);
