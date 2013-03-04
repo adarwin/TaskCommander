@@ -44,12 +44,15 @@ class Authentication
   protected static void logUserIn(String sessionID)
   {
     loggedInUsers.add(sessionID);
+    logbook.log(Logbook.INFO, "User: '" + sessionID + "' successfully logged in.");
   }
 
 
 
   protected static void logUserOut(String sessionID)
   {
+    if (sessionID == null || sessionID.equals("")) logbook.log(Logbook.WARNING, "Invalid session id");
     loggedInUsers.remove(sessionID);
+    logbook.log(Logbook.INFO, "User: '" + sessionID + "' successfully logged out.");
   }
 }

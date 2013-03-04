@@ -8,7 +8,7 @@
 
 <body>
 <h1>Login Page</h1>
-<form action="login" method="post" enctype="application/x-www-form-urlencoded" name="LoginForm">
+<form action="/TaskCommander/login" method="post" enctype="application/x-www-form-urlencoded" name="LoginForm">
 	<p>
 	  Username:<input name="username" type="text">
   </p>

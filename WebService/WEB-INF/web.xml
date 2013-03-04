@@ -27,7 +27,7 @@
 
   <servlet>
     <servlet-name>LogoutServlet</servlet-name>
-    <servlet-class>com.adarwin.csc435.LoginServlet</servlet-class>
+    <servlet-class>com.adarwin.csc435.LogoutServlet</servlet-class>
   </servlet>
 
   <servlet-mapping>

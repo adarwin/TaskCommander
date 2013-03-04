@@ -21,8 +21,18 @@ public class LogoutServlet extends HttpServlet
   {
     logbook.log(Logbook.INFO, "Received post request");
     HttpSession session = request.getSession();
-    //Do logout process
+    Authentication.logUserOut(session.getId());
+    session.invalidate();
     response.sendRedirect("/TaskCommander");
+  }
+
+
+  @Override
+  protected void doGet(HttpServletRequest request,
+                       HttpServletResponse response)
+                 throws ServletException, IOException
+  {
+    logbook.log(Logbook.INFO, "Received get request");
   }
 }
 
