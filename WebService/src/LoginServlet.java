@@ -29,14 +29,16 @@ public class LoginServlet extends HttpServlet
     //Check to see if the user is already logged in
     if (Authentication.isLoggedIn(request.getSession().getId()))
     {
-      logbook.log(Logbook.INFO, "Determined get request was from logged-in user. Forward to home.html.");
-      RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/home.html");
+      logbook.log(Logbook.INFO, "Determined get request was from logged-in user. Forward to home.jsp.");
+      RequestDispatcher dispatcher = request.getRequestDispatcher("/TaskCommander/private/home.jsp");
       dispatcher.forward(request, response);
     }
     else
     {
       logbook.log(Logbook.INFO, "Determed get request was not from a logged-in user. Redirect to login.jsp");
-      response.sendRedirect("/TaskCommander/login.jsp");
+      RequestDispatcher dispatcher = request.getRequestDispatcher("login.jsp");
+      dispatcher.forward(request, response);
+      //response.sendRedirect("/TaskCommander/login.jsp");
     }
   }
 

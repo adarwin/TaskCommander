@@ -23,7 +23,7 @@ public class Portal extends HttpServlet
     HttpSession session = request.getSession();
     if (Authentication.isLoggedIn(request.getSession().getId()))
     {
-      logbook.log(Logbook.INFO, "Determined get request was from logged-in user. Forward to home.html.");
+      logbook.log(Logbook.INFO, "Determined get request was from logged-in user. Redirect to home.jsp.");
       response.sendRedirect("/TaskCommander/private/home.jsp");
       /*
       RequestDispatcher dispatcher = request.getRequestDispatcher("/TaskCommander/private/home.html");
@@ -32,9 +32,10 @@ public class Portal extends HttpServlet
     }
     else
     {
-      logbook.log(Logbook.INFO, "Determined get request was not from a logged-in user. Forward to login.");
-      RequestDispatcher dispatcher = request.getRequestDispatcher("/login");
-      dispatcher.forward(request, response);
+      logbook.log(Logbook.INFO, "Determined get request was not from a logged-in user. Redirect to login.");
+      response.sendRedirect("/TaskCommander/login");
+      //RequestDispatcher dispatcher = request.getRequestDispatcher("/login");
+      //dispatcher.forward(request, response);
     }
   }
 
