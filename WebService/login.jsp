@@ -16,8 +16,8 @@
 	  Password:<input name="password" type="password">
 	Try 'gaming'</p>
     <p>
-    	<input name="submit" type="submit" value="Submit">
-        <input name="register" type="button" value="Register">
+    	<input name="login" type="submit" value="Login">
+        <input name="register" type="submit" value="Register">
         <input name="reset" type="reset" value="Reset">
   </p>
 </form>

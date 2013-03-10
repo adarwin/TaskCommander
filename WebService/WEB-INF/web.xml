@@ -37,6 +37,18 @@
 
 
 
+  <servlet>
+    <servlet-name>TaskManagementServlet</servlet-name>
+    <servlet-class>com.adarwin.csc435.TaskManagementServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>TaskManagementServlet</servlet-name>
+    <url-pattern>/taskmanagement</url-pattern>
+  </servlet-mapping>
+
+
+
   <filter>
     <filter-name>PrivateFilter</filter-name>
     <filter-class>com.adarwin.csc435.PrivateFilter</filter-class>

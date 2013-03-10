@@ -14,45 +14,57 @@ import java.util.HashMap;
 class Authentication
 {
   private static Logbook logbook = new Logbook("../logs/Authentication.log");
-  private static HashMap<String, String> registeredUsers;
-  private static List<String> loggedInUsers = new ArrayList<String>();
+  //private static HashMap<String, String> registeredUsers;
+  //private static List<String> loggedInUsers = new ArrayList<String>();
+  protected static String loggedIn = "LoggedIn";
 
+  /*
   private static void initializeUsers()
   {
     registeredUsers = new HashMap<String, String>();
     registeredUsers.put("darwin", "vermont");
     registeredUsers.put("alex", "gaming");
   }
+  */
 
 
 
   protected static boolean isRegisteredUser(String username, String password)
   {
+    return DataTier.isRegisteredUser(username, password);
+    /*
     if (registeredUsers == null) initializeUsers();
     return registeredUsers.containsKey(username) && registeredUsers.get(username).equals(password);
+    */
   }
 
 
 
-  protected static boolean isLoggedIn(String sessionID)
+  protected static boolean isLoggedIn(HttpSession session)
   {
-    return loggedInUsers.contains(sessionID);
+    Object loggedInObject = session.getAttribute(loggedIn);
+    boolean isLoggedIn = false;
+    if (loggedInObject instanceof Boolean)
+    {
+      isLoggedIn = (boolean)loggedInObject;
+    }
+    return isLoggedIn;
   }
 
 
 
-  protected static void logUserIn(String sessionID)
+  protected static void logUserIn(HttpSession session)
   {
-    loggedInUsers.add(sessionID);
-    logbook.log(Logbook.INFO, "User: '" + sessionID + "' successfully logged in.");
+    session.setAttribute(loggedIn, true);
+    logbook.log(Logbook.INFO, "User: '" + session.getId() + "' successfully logged in.");
+    //loggedInUsers.add(sessionID);
   }
 
 
 
-  protected static void logUserOut(String sessionID)
+  protected static void logUserOut(HttpSession session)
   {
-    if (sessionID == null || sessionID.equals("")) logbook.log(Logbook.WARNING, "Invalid session id");
-    loggedInUsers.remove(sessionID);
-    logbook.log(Logbook.INFO, "User: '" + sessionID + "' successfully logged out.");
+    session.setAttribute(loggedIn, false);
+    logbook.log(Logbook.INFO, "User: '" + session.getId() + "' successfully logged out.");
   }
 }

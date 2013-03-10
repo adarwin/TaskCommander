@@ -19,4 +19,6 @@ if [ $? -eq 0 ]; then
   #if [ $? -eq 0 ]; then
     #open http://localhost:8080/TaskCommander
   #fi
+else
+  exit 1
 fi

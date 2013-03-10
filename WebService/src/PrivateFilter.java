@@ -32,7 +32,7 @@ public class PrivateFilter implements Filter
     {
       HttpServletRequest httpRequest = (HttpServletRequest)request;
       //output = ((HttpServletRequest)request).getRequestURI();
-      if (!Authentication.isLoggedIn(httpRequest.getSession().getId()))
+      if (!Authentication.isLoggedIn(httpRequest.getSession()))
       {
         if (response instanceof HttpServletResponse)
         {

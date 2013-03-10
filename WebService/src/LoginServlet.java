@@ -27,7 +27,7 @@ public class LoginServlet extends HttpServlet
   {
     logbook.log(Logbook.INFO, "Received get request");
     //Check to see if the user is already logged in
-    if (Authentication.isLoggedIn(request.getSession().getId()))
+    if (Authentication.isLoggedIn(request.getSession()))
     {
       logbook.log(Logbook.INFO, "Determined get request was from logged-in user. Forward to home.jsp.");
       RequestDispatcher dispatcher = request.getRequestDispatcher("/TaskCommander/private/home.jsp");
@@ -54,20 +54,36 @@ public class LoginServlet extends HttpServlet
     logbook.log(Logbook.INFO, "Received post request");
     String username = request.getParameter("username");
     String password = request.getParameter("password");
-    //Check against database and authenticate user
-    if (Authentication.isRegisteredUser(username, password))
+    if (request.getParameter("login") != null && Authentication.isRegisteredUser(username, password))
     {
       logbook.log(Logbook.INFO, "Post request is from valid registered user, '" + username + "'");
       HttpSession session = request.getSession();
       //updateCookies(request, response);
       //loggedInUsers.add(session.getId());
-      Authentication.logUserIn(session.getId());
-      logbook.log(Logbook.INFO, "Added " + username + " to list of logged-in users");
+      Authentication.logUserIn(session);
+      User user = new User(username);
+      user.setPassword(password);
+      session.setAttribute("user", user);
+      logbook.log(Logbook.INFO, "Logged " + username + " in");
       response.sendRedirect("/TaskCommander/private/home.html");
       /*
       RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/home.html");
       dispatcher.forward(request, response);
       */
+    }
+    else if (request.getParameter("register") != null)
+    {
+      logbook.log(Logbook.INFO, "Post request is from new user, '" + username + "'");
+      HttpSession session = request.getSession();
+      try
+      {
+        DataTier.registerUser(username, password);
+      }
+      catch (UserAlreadyExistsException ex)
+      {
+        logbook.log(ex);
+      }
+      response.sendRedirect("/TaskCommander/login");
     }
     else
     {
@@ -80,6 +96,7 @@ public class LoginServlet extends HttpServlet
       PrintWriter out = response.getWriter();
       out.println(htmlOutput);
     }
+    //Check against database and authenticate user
   }
 
 
