@@ -56,6 +56,8 @@ class DataTier
   protected static boolean userExists(String username)
   {
     boolean userExists = false;
+    if (registeredUsers == null)
+      registeredUsers = new ArrayList<User>();
     for (User user : registeredUsers)
     {
       if (user.getUsername().equals(username))

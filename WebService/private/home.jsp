@@ -1,4 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" import="java.sql.*" errorPage="" %>
+<%@ taglib uri="/WEB-INF/tlds/CustomTags.tld" prefix="adarwin" %>
 <!DOCTYPE HTML>
 <html>
 <head>
@@ -14,6 +15,7 @@
 <form action="/TaskCommander/logout" method="post" name="LogoutForm">
 	<input name="logout" type="submit" value="Logout">
 </form>
+<adarwin:TaskTable />
 <table width="400" border="1">
   <tr>
     <th scope="col">Task Name</th>

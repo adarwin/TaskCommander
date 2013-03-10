@@ -48,7 +48,14 @@ public class PrivateFilter implements Filter
       else
       {
         logbook.log(Logbook.INFO, "Received request from authenticated user and allowed to proceed.");
-        chain.doFilter(request, response);
+        if (chain == null)
+        {
+          logbook.log(Logbook.WARNING, "Filter chain == null");
+        }
+        else
+        {
+          chain.doFilter(request, response);
+        }
       }
     }
     else
