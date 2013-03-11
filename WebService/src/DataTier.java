@@ -18,6 +18,18 @@ class DataTier
   }
 
 
+  protected static User getUser(String username, String password)
+  {
+    User outputUser = null;
+    for (User user : registeredUsers)
+    {
+      if (user.getUsername().equals(username) && user.getPassword().equals(password))
+      {
+        outputUser = user;
+      }
+    }
+    return outputUser;
+  }
   protected static boolean isRegisteredUser(User user)
   {
     boolean registered = false;
@@ -51,6 +63,7 @@ class DataTier
     }
     User user = new User(username);
     user.setPassword(password);
+    user.addTask(new Task("Sign instantiation certificate"));
     registeredUsers.add(user);
   }
   protected static boolean userExists(String username)

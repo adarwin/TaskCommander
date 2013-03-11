@@ -6,9 +6,23 @@
 
   <tag>
     <description>Creates table of user's tasks</description>
-    <name>TaskTable</name>
-    <tag-class>com.adarwin.csc435.TaskTableTag</tag-class>
-    <body-content>empty</body-content>
+    <name>makeTaskRows</name>
+    <tag-class>com.adarwin.csc435.MakeTaskRowsTag</tag-class>
+    <body-content>scriptless</body-content>
+	<attribute>
+		<name>user</name>
+		<required>true</required>
+		<type>com.adarwin.csc435.User</type>
+		<rtexprvalue>true</rtexprvalue>
+	</attribute>
+	<attribute>
+		<name>taskNameKey</name>
+		<required>true</required>
+	</attribute>
+	<attribute>
+		<name>taskDueDateKey</name>
+		<required>true</required>
+	</attribute>
   </tag>
 
 </taglib>

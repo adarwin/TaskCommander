@@ -60,10 +60,7 @@ public class LoginServlet extends HttpServlet
       HttpSession session = request.getSession();
       //updateCookies(request, response);
       //loggedInUsers.add(session.getId());
-      Authentication.logUserIn(session);
-      User user = new User(username);
-      user.setPassword(password);
-      session.setAttribute("user", user);
+      Authentication.logUserIn(session, username, password);
       logbook.log(Logbook.INFO, "Logged " + username + " in");
       response.sendRedirect("/TaskCommander/private/home.html");
       /*

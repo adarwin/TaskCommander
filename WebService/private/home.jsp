@@ -8,40 +8,29 @@
 </head>
 
 <body>
-<h1>Welcome home, ${user.username}</h1>
-<form action="/TaskCommander/taskmanagement" method="post" name="FunctionForm">
-	<input name="addTask" type="submit" value="Add Task">
-</form>
-<form action="/TaskCommander/logout" method="post" name="LogoutForm">
-	<input name="logout" type="submit" value="Logout">
-</form>
-<adarwin:TaskTable />
-<table width="400" border="1">
-  <tr>
-    <th scope="col">Task Name</th>
-    <th scope="col">Task Due Date</th>
-    <th scope="col">Sub Tasks</th>
-  </tr>
-  <tr>
-    <td>Task 1</td>
-    <td></td>
-    <td></td>
-    <td>
-    <form action="/TaskCommander/taskmanagement" method="post" name="deleteForm" onSubmit="eventstext">
-    <input name="Task 1" type="submit" value="Delete">
+    <h1>Welcome home, ${user.username}</h1>
+    <form action="/TaskCommander/taskmanagement" method="post" name="FunctionForm">
+        <input name="addTask" type="submit" value="Add Task">
     </form>
-    </td>
-  </tr>
-  <tr>
-    <td>Task 2</td>
-    <td></td>
-    <td></td>
-    <td>
-    <form action="/TaskCommander/taskmanagement" method="post" name="deleteForm" onSubmit="eventstext">
-    <input name="Task 2" type="submit" value="Delete">
+    <form action="/TaskCommander/logout" method="post" name="LogoutForm">
+        <input name="logout" type="submit" value="Logout">
     </form>
-    </td>
-  </tr>
-</table>
+    <table width="400" border="1">
+      <tr>
+        <th scope="col">Task Name</th>
+        <th scope="col">Task Due Date</th>
+      </tr>
+      <adarwin:makeTaskRows user="${user}" taskNameKey="TASK_NAME" taskDueDateKey="TASK_DUE_DATE">
+      <tr>
+        <td>TASK_NAME</td>
+        <td>TASK_DUE_DATE</td>
+        <td>
+          <form action="/TaskCommander/taskmanagement" method="post" name="deleteForm" onSubmit="eventstext">
+            <input name="tempname" type="submit" value="Delete">
+            </form>
+        </td>
+      </adarwin:makeTaskRows>
+    </table>
+
 </body>
 </html>
