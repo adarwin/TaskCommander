@@ -49,7 +49,7 @@ public class MakeTaskRowsTag extends SimpleTagSupport
     }
     for (Task task : user.getTasks())
     {
-      logbook.log(Logbook.INFO, "Made it into the loop");
+      workingCopy = outputTemplate;
       workingCopy = workingCopy.replace(taskNameKey, task.getName());
       workingCopy = workingCopy.replace(taskDueDateKey, task.getDueDate());
       output += workingCopy;

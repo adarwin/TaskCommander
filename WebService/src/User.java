@@ -43,4 +43,20 @@ public class User
       logbook.log(Logbook.WARNING, "Task: '" + task.getName() + "' already exists and was therefore not added");
     }
   }
+  public void removeTask(String taskName)
+  {
+    if (tasks != null)
+    {
+      Task taskToRemove = null;
+      for (Task task : tasks)
+      {
+        if (task.getName().equals(taskName))
+        {
+          taskToRemove = task;
+          break;
+        }
+      }
+      tasks.remove(taskToRemove);
+    }
+  }
 }

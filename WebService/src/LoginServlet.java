@@ -30,7 +30,7 @@ public class LoginServlet extends HttpServlet
     if (Authentication.isLoggedIn(request.getSession()))
     {
       logbook.log(Logbook.INFO, "Determined get request was from logged-in user. Forward to home.jsp.");
-      RequestDispatcher dispatcher = request.getRequestDispatcher("/TaskCommander/private/home.jsp");
+      RequestDispatcher dispatcher = request.getRequestDispatcher("/private/home.jsp");
       dispatcher.forward(request, response);
     }
     else
@@ -48,8 +48,8 @@ public class LoginServlet extends HttpServlet
 
   @Override
   protected void doPost (HttpServletRequest request,
-                      HttpServletResponse response)
-              throws ServletException, IOException
+                         HttpServletResponse response)
+                   throws ServletException, IOException
   {
     logbook.log(Logbook.INFO, "Received post request");
     String username = request.getParameter("username");
@@ -75,12 +75,22 @@ public class LoginServlet extends HttpServlet
       try
       {
         DataTier.registerUser(username, password);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/registration.jsp");
+        dispatcher.forward(request, response);
       }
       catch (UserAlreadyExistsException ex)
       {
         logbook.log(ex);
+        String htmlOutput = "<html><head></head><body>";
+        htmlOutput += "<h2>Username Already Taken!</h2>";
+        htmlOutput += "<form action=\"/TaskCommander\" method=\"get\" name=\"back\">";
+        htmlOutput += "<input name=\"Back\" type=\"submit\" value=\"Back\">";
+        htmlOutput += "</form>";
+        htmlOutput += "</body></html>";
+        PrintWriter out = response.getWriter();
+        out.println(htmlOutput);
       }
-      response.sendRedirect("/TaskCommander/login");
+      //response.sendRedirect("/TaskCommander/registration.jsp");
     }
     else
     {

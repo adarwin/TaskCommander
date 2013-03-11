@@ -8,10 +8,9 @@
 </head>
 
 <body>
-    <h1>Welcome home, ${user.username}</h1>
-    <form action="/TaskCommander/taskmanagement" method="post" name="FunctionForm">
-        <input name="addTask" type="submit" value="Add Task">
-    </form>
+<h1>Welcome home, ${user.username}</h1>
+
+
     <form action="/TaskCommander/logout" method="post" name="LogoutForm">
         <input name="logout" type="submit" value="Logout">
     </form>
@@ -19,15 +18,24 @@
       <tr>
         <th scope="col">Task Name</th>
         <th scope="col">Task Due Date</th>
+        <th scope="col">Control</th>
       </tr>
+      <form action="/TaskCommander/taskmanagement" method="get" name="FunctionForm">
+      <tr>
+      	<td><input name="newTaskName" type="text"></td>
+        <td><input name="newTaskDueDate" type="text"></td>
+        <td><input name="addTask" type="submit" value="Add Task"></td>
+      </tr>
+    </form>
       <adarwin:makeTaskRows user="${user}" taskNameKey="TASK_NAME" taskDueDateKey="TASK_DUE_DATE">
       <tr>
         <td>TASK_NAME</td>
         <td>TASK_DUE_DATE</td>
         <td>
-          <form action="/TaskCommander/taskmanagement" method="post" name="deleteForm" onSubmit="eventstext">
-            <input name="tempname" type="submit" value="Delete">
-            </form>
+          <form action="/TaskCommander/taskmanagement" method="get" name="deleteForm" onSubmit="eventstext">
+          	<input name="taskName" type="hidden" value="TASK_NAME">
+            <input name="deleteTask" type="submit" value="Delete">
+          </form>
         </td>
       </adarwin:makeTaskRows>
     </table>

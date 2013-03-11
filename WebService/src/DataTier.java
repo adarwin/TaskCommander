@@ -63,7 +63,9 @@ class DataTier
     }
     User user = new User(username);
     user.setPassword(password);
-    user.addTask(new Task("Sign instantiation certificate"));
+    Task newTask = new Task("New User Orientation");
+    newTask.setDueDate("Today");
+    user.addTask(newTask);
     registeredUsers.add(user);
   }
   protected static boolean userExists(String username)
