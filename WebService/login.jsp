@@ -7,14 +7,14 @@
 </head>
 
 <body>
-<h1>Login Page</h1>
+<h1 align="center">Login Page</h1>
 <form action="/TaskCommander/login" method="post" enctype="application/x-www-form-urlencoded" name="LoginForm">
 	<p>
-	  Username:<input name="username" type="text">
-  Try 'alex'</p>
+	  Username: <input name="username" type="text">
+  </p>
 	<p>
-	  Password:<input name="password" type="password">
-	Try 'gaming'</p>
+	  Password: <input name="password" type="password">
+  </p>
     <p>
     	<input name="login" type="submit" value="Login">
         <input name="register" type="submit" value="Register">

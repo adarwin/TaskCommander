@@ -10,11 +10,7 @@
 <body>
 <h1>Welcome home, ${user.username}</h1>
 
-
-    <form action="/TaskCommander/logout" method="post" name="LogoutForm">
-        <input name="logout" type="submit" value="Logout">
-    </form>
-    <table width="400" border="1">
+<table width="400" border="1">
       <tr>
         <th scope="col">Task Name</th>
         <th scope="col">Task Due Date</th>
@@ -39,6 +35,9 @@
         </td>
       </adarwin:makeTaskRows>
     </table>
-
+    
+<form action="/TaskCommander/logout" method="post" name="LogoutForm">
+        <input name="logout" type="submit" value="Logout">
+    </form>
 </body>
 </html>
