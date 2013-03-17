@@ -8,6 +8,7 @@
 #  Temporary Source Files  #
 ############################
 *.java.swp
+*.swp
 
 
 ##############

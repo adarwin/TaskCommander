@@ -3,11 +3,13 @@ package com.adarwin.csc435;
 import com.adarwin.logging.Logbook;
 import java.util.List;
 import java.util.ArrayList;
+import javax.servlet.ServletContext;
 
 class DataTier
 {
   private static Logbook logbook = new Logbook("../logs/DataTier.log");
   private static List<User> registeredUsers;
+  //private static String registeredUsers = "RegisteredUsers";
   //private static HashMap<String, String> registeredUsers;
   private static List<String> loggedInUsers = new ArrayList<String>();
   protected static String loggedIn = "LoggedIn";
@@ -55,18 +57,23 @@ class DataTier
     return registered;
   }
 
-  protected static void registerUser(String username, String password) throws UserAlreadyExistsException
+  protected static void registerUser(ServletContext servletContext,
+                                     String username, String password)
+                          throws UserAlreadyExistsException
   {
     if (userExists(username))
     {
       throw new UserAlreadyExistsException("The username '" + username + "' is already in use.");
     }
+    //List<User> userList = servletContext.getAttribute(registeredUsers);
     User user = new User(username);
     user.setPassword(password);
     Task newTask = new Task("New User Orientation");
     newTask.setDueDate("Today");
     user.addTask(newTask);
     registeredUsers.add(user);
+    //userList.add(user);
+    //servletContext.setAttribute(registeredUsers, userList);
   }
   protected static boolean userExists(String username)
   {
