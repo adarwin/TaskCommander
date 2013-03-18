@@ -29,9 +29,10 @@ class Authentication
 
 
 
-  protected static boolean isRegisteredUser(String username, String password)
+  protected static boolean isRegisteredUser(ServletContext servletContext,
+                                            String username, String password)
   {
-    return DataTier.isRegisteredUser(username, password);
+    return DataTier.isRegisteredUser(servletContext, username, password);
     /*
     if (registeredUsers == null) initializeUsers();
     return registeredUsers.containsKey(username) && registeredUsers.get(username).equals(password);
@@ -55,7 +56,7 @@ class Authentication
 
   protected static void logUserIn(HttpSession session, String username, String password)
   {
-    User user = DataTier.getUser(username, password);
+    User user = DataTier.getUser(session.getServletContext(), username, password);
     if (user != null)
     {
       session.setAttribute(loggedIn, true);

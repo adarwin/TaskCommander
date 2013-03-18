@@ -9,6 +9,7 @@ import java.io.*;
 public class TaskManagementServlet extends HttpServlet
 {
   private Logbook logbook = new Logbook("../logs/TaskManagementServlet.log");
+  private static final long serialVersionUID = 1L;
 
   @Override
   protected void doGet (HttpServletRequest request,
@@ -32,7 +33,7 @@ public class TaskManagementServlet extends HttpServlet
     }
     else if (request.getParameter("deleteTask") != null)
     {
-      String taskNameToDelete = (String)(request.getParameter("taskName"));
+      String taskNameToDelete = request.getParameter("taskName");
       user.removeTask(taskNameToDelete);
     }
       RequestDispatcher dispatcher = request.getRequestDispatcher("/private/home.jsp");

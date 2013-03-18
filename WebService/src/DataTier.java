@@ -7,23 +7,24 @@ import javax.servlet.ServletContext;
 
 class DataTier
 {
-  private static Logbook logbook = new Logbook("../logs/DataTier.log");
-  private static List<User> registeredUsers;
-  //private static String registeredUsers = "RegisteredUsers";
+  private static Logbook logbook = new Logbook("../logs/TaskCommander.log");
+  //private static List<User> registeredUsers;
+  private static String registeredUsers = "RegisteredUsers";
   //private static HashMap<String, String> registeredUsers;
   private static List<String> loggedInUsers = new ArrayList<String>();
   protected static String loggedIn = "LoggedIn";
 
   DataTier()
   {
-    registeredUsers = new ArrayList<User>();
+    //registeredUsers = new ArrayList<User>();
   }
 
 
-  protected static User getUser(String username, String password)
+  protected static User getUser(ServletContext servletContext, String username, String password)
   {
     User outputUser = null;
-    for (User user : registeredUsers)
+    List<User> users = getUsersList(servletContext);
+    for (User user : users)
     {
       if (user.getUsername().equals(username) && user.getPassword().equals(password))
       {
@@ -32,22 +33,23 @@ class DataTier
     }
     return outputUser;
   }
-  protected static boolean isRegisteredUser(User user)
+  protected static boolean isRegisteredUser(ServletContext servletContext, User user)
   {
     boolean registered = false;
-    if (registeredUsers.contains(user))
+    List<User> users = getUsersList(servletContext);
+    if (users.contains(user))
     {
       registered = true;
     }
     return registered;
   }
 
-  protected static boolean isRegisteredUser(String username, String password)
+  protected static boolean isRegisteredUser(ServletContext servletContext,
+                                            String username, String password)
   {
     boolean registered = false;
-    if (registeredUsers == null)
-      registeredUsers = new ArrayList<User>();
-    for (User user : registeredUsers)
+    List<User> users = getUsersList(servletContext);
+    for (User user : users)
     {
       if (user.getUsername().equals(username) && user.getPassword().equals(password))
       {
@@ -61,26 +63,24 @@ class DataTier
                                      String username, String password)
                           throws UserAlreadyExistsException
   {
-    if (userExists(username))
+    if (userExists(servletContext, username))
     {
       throw new UserAlreadyExistsException("The username '" + username + "' is already in use.");
     }
-    //List<User> userList = servletContext.getAttribute(registeredUsers);
+    List<User> userList = getUsersList(servletContext);
     User user = new User(username);
     user.setPassword(password);
     Task newTask = new Task("New User Orientation");
     newTask.setDueDate("Today");
     user.addTask(newTask);
-    registeredUsers.add(user);
-    //userList.add(user);
-    //servletContext.setAttribute(registeredUsers, userList);
+    userList.add(user);
+    servletContext.setAttribute(registeredUsers, userList);
   }
-  protected static boolean userExists(String username)
+  protected static boolean userExists(ServletContext servletContext, String username)
   {
     boolean userExists = false;
-    if (registeredUsers == null)
-      registeredUsers = new ArrayList<User>();
-    for (User user : registeredUsers)
+    List<User> users = getUsersList(servletContext);
+    for (User user : users)
     {
       if (user.getUsername().equals(username))
       {
@@ -88,5 +88,24 @@ class DataTier
       }
     }
     return userExists;
+  }
+
+  @SuppressWarnings("unchecked")
+  private static List<User> getUsersList(ServletContext servletContext)
+  {
+    Object temp = servletContext.getAttribute(registeredUsers);
+    List<User> users = null;
+    try
+    {
+      users = (List<User>)temp;
+    }
+    catch (ClassCastException ex)
+    {
+      logbook.log(Logbook.ERROR, "ServletContext's attribute, '" +
+                                  registeredUsers + "' was not of the " +
+                                  "expected type");
+      logbook.log(ex);
+    }
+    return users;
   }
 }

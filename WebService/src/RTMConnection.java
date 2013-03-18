@@ -13,4 +13,5 @@ import java.util.ArrayList;
 
 class RTMConnection extends HttpServlet
 {
+  private static final long serialVersionUID = 1L;
 }

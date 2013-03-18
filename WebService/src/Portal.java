@@ -13,7 +13,8 @@ import java.util.Collections;
 //@WebServlet("/")
 public class Portal extends HttpServlet
 {
-  Logbook logbook = new Logbook("../logs/Portal.log");
+  private Logbook logbook = new Logbook("../logs/Portal.log");
+  private static final long serialVersionUID = 1L;
   @Override
   protected void doGet (HttpServletRequest request,
                         HttpServletResponse response)
