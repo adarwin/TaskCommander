@@ -1,5 +1,4 @@
-#set -e
-#set -v
+#Make sure WEB-INF and WEB-INF/classes exist
 if [ ! -d "WEB-INF" ]; then
   echo "Creating WEB-INF..."
   mkdir WEB-INF
@@ -7,6 +6,7 @@ fi
 if [ ! -d "WEB-INF/classes" ]; then
   mkdir WEB-INF/classes
 fi
+
 echo "Compiling .java files..."
 javac -d WEB-INF/classes src/*.java ~/prg/com/adarwin/logging/Logbook/Logbook.java
 if [ $? -eq 0 ]; then

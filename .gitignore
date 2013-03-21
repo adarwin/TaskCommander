@@ -8,9 +8,17 @@
 #  Temporary Source Files  #
 ############################
 *.java.swp
+*.swp
 
 
 ##############
 #  OS Files  #
 ##############
 *.DS_Store
+
+
+
+##############
+#  Archives  #
+##############
+*.zip

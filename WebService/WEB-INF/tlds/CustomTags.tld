@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<taglib>
+  <tlib-version>1.0</tlib-version>
+  <jsp-version>1.2</jsp-version>
+  <uri>/WEB-INF/CustomTags.tld</uri>
+
+  <tag>
+    <description>Creates table of user's tasks</description>
+    <name>makeTaskRows</name>
+    <tag-class>com.adarwin.csc435.MakeTaskRowsTag</tag-class>
+    <body-content>scriptless</body-content>
+	<attribute>
+		<name>user</name>
+		<required>true</required>
+		<type>com.adarwin.csc435.User</type>
+		<rtexprvalue>true</rtexprvalue>
+	</attribute>
+	<attribute>
+		<name>taskNameKey</name>
+		<required>true</required>
+	</attribute>
+	<attribute>
+		<name>taskDueDateKey</name>
+		<required>true</required>
+	</attribute>
+  </tag>
+
+</taglib>

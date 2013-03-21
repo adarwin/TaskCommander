@@ -18,6 +18,16 @@ public class LoginServlet extends HttpServlet
   private Logbook logbook = new Logbook("../logs/TaskCommander.log");
 
 
+  private void log(Exception ex)
+  {
+    logbook.log(ex);
+  }
+  private void log(String level, String message)
+  {
+    logbook.log(level, "LoginServlet: " + message);
+  }
+
+
 
 
   @Override
@@ -25,17 +35,17 @@ public class LoginServlet extends HttpServlet
                      HttpServletResponse response)
               throws ServletException, IOException
   {
-    logbook.log(Logbook.INFO, "Received get request");
+    log(Logbook.INFO, "Received get request");
     //Check to see if the user is already logged in
     if (Authentication.isLoggedIn(request.getSession()))
     {
-      logbook.log(Logbook.INFO, "Determined get request was from logged-in user. Forward to home.jsp.");
-      RequestDispatcher dispatcher = request.getRequestDispatcher("/TaskCommander/private/home.jsp");
+      log(Logbook.INFO, "Determined get request was from logged-in user. Forward to home.jsp.");
+      RequestDispatcher dispatcher = request.getRequestDispatcher("/private/home.jsp");
       dispatcher.forward(request, response);
     }
     else
     {
-      logbook.log(Logbook.INFO, "Determed get request was not from a logged-in user. Redirect to login.jsp");
+      log(Logbook.INFO, "Determed get request was not from a logged-in user. Redirect to login.jsp");
       RequestDispatcher dispatcher = request.getRequestDispatcher("login.jsp");
       dispatcher.forward(request, response);
       //response.sendRedirect("/TaskCommander/login.jsp");
@@ -48,23 +58,20 @@ public class LoginServlet extends HttpServlet
 
   @Override
   protected void doPost (HttpServletRequest request,
-                      HttpServletResponse response)
-              throws ServletException, IOException
+                         HttpServletResponse response)
+                   throws ServletException, IOException
   {
-    logbook.log(Logbook.INFO, "Received post request");
+    log(Logbook.INFO, "Received post request");
     String username = request.getParameter("username");
     String password = request.getParameter("password");
     if (request.getParameter("login") != null && Authentication.isRegisteredUser(username, password))
     {
-      logbook.log(Logbook.INFO, "Post request is from valid registered user, '" + username + "'");
+      log(Logbook.INFO, "Post request is from valid registered user, '" + username + "'");
       HttpSession session = request.getSession();
       //updateCookies(request, response);
       //loggedInUsers.add(session.getId());
-      Authentication.logUserIn(session);
-      User user = new User(username);
-      user.setPassword(password);
-      session.setAttribute("user", user);
-      logbook.log(Logbook.INFO, "Logged " + username + " in");
+      Authentication.logUserIn(session, username, password);
+      log(Logbook.INFO, "Logged " + username + " in");
       response.sendRedirect("/TaskCommander/private/home.html");
       /*
       RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/home.html");
@@ -73,17 +80,27 @@ public class LoginServlet extends HttpServlet
     }
     else if (request.getParameter("register") != null)
     {
-      logbook.log(Logbook.INFO, "Post request is from new user, '" + username + "'");
+      log(Logbook.INFO, "Post request is from new user, '" + username + "'");
       HttpSession session = request.getSession();
       try
       {
-        DataTier.registerUser(username, password);
+        DataTier.registerUser(request.getServletContext(), username, password);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/registration.jsp");
+        dispatcher.forward(request, response);
       }
       catch (UserAlreadyExistsException ex)
       {
-        logbook.log(ex);
+        log(ex);
+        String htmlOutput = "<html><head></head><body>";
+        htmlOutput += "<h2>Username Already Taken!</h2>";
+        htmlOutput += "<form action=\"/TaskCommander\" method=\"get\" name=\"back\">";
+        htmlOutput += "<input name=\"Back\" type=\"submit\" value=\"Back\">";
+        htmlOutput += "</form>";
+        htmlOutput += "</body></html>";
+        PrintWriter out = response.getWriter();
+        out.println(htmlOutput);
       }
-      response.sendRedirect("/TaskCommander/login");
+      //response.sendRedirect("/TaskCommander/registration.jsp");
     }
     else
     {

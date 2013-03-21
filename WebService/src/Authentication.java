@@ -51,11 +51,19 @@ class Authentication
 
 
 
-  protected static void logUserIn(HttpSession session)
+  protected static void logUserIn(HttpSession session, String username, String password)
   {
-    session.setAttribute(loggedIn, true);
-    logbook.log(Logbook.INFO, "User: '" + session.getId() + "' successfully logged in.");
-    //loggedInUsers.add(sessionID);
+    User user = DataTier.getUser(username, password);
+    if (user != null)
+    {
+      session.setAttribute(loggedIn, true);
+      session.setAttribute("user", user);
+      logbook.log(Logbook.INFO, "User: '" + user.getUsername() + "' successfully logged in.");
+    }
+    else
+    {
+      logbook.log(Logbook.ERROR, "User was null");
+    }
   }
 
 
