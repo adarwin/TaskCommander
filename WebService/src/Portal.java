@@ -13,17 +13,30 @@ import java.util.Collections;
 //@WebServlet("/")
 public class Portal extends HttpServlet
 {
-  Logbook logbook = new Logbook("../logs/TaskCommander.log");
+  private Logbook logbook = new Logbook("../logs/TaskCommander.log");
+
+
+  private void log(Exception ex)
+  {
+    logbook.log(ex);
+  }
+  private void log(String level, String message)
+  {
+    logbook.log(level, "Portal: " + message);
+  }
+
+
+
   @Override
   protected void doGet (HttpServletRequest request,
                         HttpServletResponse response)
                  throws ServletException, IOException
   {
-    logbook.log(Logbook.INFO, "Received get request");
+    log(Logbook.INFO, "Received get request");
     HttpSession session = request.getSession();
     if (Authentication.isLoggedIn(request.getSession()))
     {
-      logbook.log(Logbook.INFO, "Determined get request was from logged-in user. Redirect to home.jsp.");
+      log(Logbook.INFO, "Determined get request was from logged-in user. Redirect to home.jsp.");
       response.sendRedirect("/TaskCommander/private/home.jsp");
       /*
       RequestDispatcher dispatcher = request.getRequestDispatcher("/TaskCommander/private/home.html");
@@ -32,7 +45,7 @@ public class Portal extends HttpServlet
     }
     else
     {
-      logbook.log(Logbook.INFO, "Determined get request was not from a logged-in user. Redirect to login.");
+      log(Logbook.INFO, "Determined get request was not from a logged-in user. Redirect to login.");
       response.sendRedirect("/TaskCommander/login");
       //RequestDispatcher dispatcher = request.getRequestDispatcher("/login");
       //dispatcher.forward(request, response);
@@ -44,7 +57,7 @@ public class Portal extends HttpServlet
                          HttpServletResponse response)
                  throws ServletException, IOException
   {
-    logbook.log(Logbook.INFO, "Received post request");
+    log(Logbook.INFO, "Received post request");
   }
 
   /*

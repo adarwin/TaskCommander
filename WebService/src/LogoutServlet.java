@@ -14,12 +14,25 @@ import java.util.Collections;
 public class LogoutServlet extends HttpServlet
 {
   Logbook logbook = new Logbook("../logs/TaskCommander.log");
+
+
+  private void log(Exception ex)
+  {
+    logbook.log(ex);
+  }
+  private void log(String level, String message)
+  {
+    logbook.log(level, "LogoutServlet: " + message);
+  }
+
+
+
   @Override
   protected void doPost(HttpServletRequest request,
                        HttpServletResponse response)
                  throws ServletException, IOException
   {
-    logbook.log(Logbook.INFO, "Received post request");
+    log(Logbook.INFO, "Received post request");
     HttpSession session = request.getSession();
     Authentication.logUserOut(session);
     session.invalidate();
@@ -32,7 +45,7 @@ public class LogoutServlet extends HttpServlet
                        HttpServletResponse response)
                  throws ServletException, IOException
   {
-    logbook.log(Logbook.INFO, "Received get request");
+    log(Logbook.INFO, "Received get request");
   }
 }
 

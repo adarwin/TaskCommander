@@ -13,8 +13,18 @@ import java.util.ArrayList;
 
 public class PrivateFilter implements Filter
 {
-  Logbook logbook;
+  private Logbook logbook;
   FilterConfig filterConfig;
+
+
+  private void log(Exception ex)
+  {
+    logbook.log(ex);
+  }
+  private void log(String level, String message)
+  {
+    logbook.log(level, "PrivateFilter: " + message);
+  }
 
   public void init(FilterConfig filterConfig) throws ServletException
   {
@@ -39,25 +49,25 @@ public class PrivateFilter implements Filter
       {
         if (response instanceof HttpServletResponse)
         {
-          logbook.log(Logbook.INFO, "Received request from non-authenticated "
+          log(Logbook.INFO, "Received request from non-authenticated "
                       + "user and redirected them to /TaskCommander");
           HttpServletResponse httpResponse = (HttpServletResponse)response;
           httpResponse.sendRedirect("/TaskCommander");
         }
         else
         {
-          logbook.log(Logbook.WARNING, "Received request from non-authenticated"
+          log(Logbook.WARNING, "Received request from non-authenticated"
                       + " user, but was not able to redirect to "
                       + " /TaskCommander.");
         }
       }
       else
       {
-        logbook.log(Logbook.INFO, "Received request from authenticated user "
+        log(Logbook.INFO, "Received request from authenticated user "
                     + "and allowed to proceed.");
         if (chain == null)
         {
-          logbook.log(Logbook.WARNING, "Filter chain == null");
+          log(Logbook.WARNING, "Filter chain == null");
         }
         else
         {
@@ -67,7 +77,7 @@ public class PrivateFilter implements Filter
     }
     else
     {
-      logbook.log(Logbook.WARNING, "Received request, but was not able to "
+      log(Logbook.WARNING, "Received request, but was not able to "
       + "access the session to determine user authenticity.");
     }
   }

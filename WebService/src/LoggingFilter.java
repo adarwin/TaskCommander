@@ -11,6 +11,16 @@ public class LoggingFilter implements Filter
   Logbook logbook;
   FilterConfig filterConfig;
 
+
+  private void log(Exception ex)
+  {
+    logbook.log(ex);
+  }
+  private void log(String level, String message)
+  {
+    logbook.log(level, "LoggingFilter: " + message);
+  }
+
   public void init(FilterConfig filterConfig) throws ServletException
   {
     this.filterConfig = filterConfig;
@@ -26,10 +36,10 @@ public class LoggingFilter implements Filter
   public void doFilter(ServletRequest request, ServletResponse response,
                        FilterChain chain) throws IOException, ServletException
   {
-    logbook.log(Logbook.INFO, "LoggingFilter detected ServletRequest");
+    log(Logbook.INFO, "LoggingFilter detected ServletRequest");
     if (chain == null)
     {
-      logbook.log(Logbook.WARNING, "Filter chain == null");
+      log(Logbook.WARNING, "Filter chain == null");
     }
     else
     {

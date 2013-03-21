@@ -14,20 +14,30 @@ public class MakeTaskRowsTag extends SimpleTagSupport
   private String taskDueDateKey;
 
 
+  private void log(Exception ex)
+  {
+    logbook.log(ex);
+  }
+  private void log(String level, String message)
+  {
+    logbook.log(level, "MakeTaskRowsTag: " + message);
+  }
+
+
   public void setUser(User user)
   {
     this.user = user;
-    logbook.log(Logbook.INFO, "Set user to " + user.getUsername());
+    log(Logbook.INFO, "Set user to " + user.getUsername());
   }
   public void setTaskNameKey(String taskNameKey)
   {
     this.taskNameKey = taskNameKey;
-    logbook.log(Logbook.INFO, "Set taskNameKey to '" + taskNameKey + "'");
+    log(Logbook.INFO, "Set taskNameKey to '" + taskNameKey + "'");
   }
   public void setTaskDueDateKey(String taskDueDateKey)
   {
     this.taskDueDateKey = taskDueDateKey;
-    logbook.log(Logbook.INFO, "Set taskDueDateKey to '" + taskDueDateKey + "'");
+    log(Logbook.INFO, "Set taskDueDateKey to '" + taskDueDateKey + "'");
   }
 
 
@@ -40,12 +50,12 @@ public class MakeTaskRowsTag extends SimpleTagSupport
     StringWriter writer = new StringWriter();
     body.invoke(writer);
     String outputTemplate = writer.toString();
-    logbook.log(Logbook.INFO, "OutputTemplate = " + outputTemplate);
+    log(Logbook.INFO, "OutputTemplate = " + outputTemplate);
     String workingCopy = outputTemplate;
     String output = "";
     if (user.getTasks() == null)
     {
-      logbook.log(Logbook.ERROR, "user's task list is null");
+      log(Logbook.ERROR, "user's task list is null");
     }
     for (Task task : user.getTasks())
     {
@@ -54,7 +64,7 @@ public class MakeTaskRowsTag extends SimpleTagSupport
       workingCopy = workingCopy.replace(taskDueDateKey, task.getDueDate());
       output += workingCopy;
     }
-    logbook.log(Logbook.INFO, output);
+    log(Logbook.INFO, output);
     jspOut.print(output);
   }
 }

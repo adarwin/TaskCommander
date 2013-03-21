@@ -14,6 +14,16 @@ class DataTier
   private static List<String> loggedInUsers = new ArrayList<String>();
   protected static String loggedIn = "LoggedIn";
 
+
+  private void log(Exception ex)
+  {
+    logbook.log(ex);
+  }
+  private void log(String level, String message)
+  {
+    logbook.log(level, "DataTier: " + message);
+  }
+
   DataTier()
   {
     registeredUsers = new ArrayList<User>();

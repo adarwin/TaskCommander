@@ -16,14 +16,15 @@ class Authentication
   private static Logbook logbook = new Logbook("../logs/TaskCommander.log");
   protected static String loggedIn = "LoggedIn";
 
-  /*
-  private static void initializeUsers()
+
+  private static void log(Exception ex)
   {
-    registeredUsers = new HashMap<String, String>();
-    registeredUsers.put("darwin", "vermont");
-    registeredUsers.put("alex", "gaming");
+    logbook.log(ex);
   }
-  */
+  private static void log(String level, String message)
+  {
+    logbook.log(level, "Authentication: " + message);
+  }
 
 
 
@@ -58,11 +59,11 @@ class Authentication
     {
       session.setAttribute(loggedIn, true);
       session.setAttribute("user", user);
-      logbook.log(Logbook.INFO, "User: '" + user.getUsername() + "' successfully logged in.");
+      log(Logbook.INFO, "User: '" + user.getUsername() + "' successfully logged in.");
     }
     else
     {
-      logbook.log(Logbook.ERROR, "User was null");
+      log(Logbook.ERROR, "User was null");
     }
   }
 
@@ -71,6 +72,6 @@ class Authentication
   protected static void logUserOut(HttpSession session)
   {
     session.setAttribute(loggedIn, false);
-    logbook.log(Logbook.INFO, "User: '" + session.getId() + "' successfully logged out.");
+    log(Logbook.INFO, "User: '" + session.getId() + "' successfully logged out.");
   }
 }

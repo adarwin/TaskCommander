@@ -13,4 +13,15 @@ import java.util.ArrayList;
 
 class RTMConnection extends HttpServlet
 {
+  private Logbook logbook = new Logbook("../logs/TaskCommander.log");
+
+
+  private void log(Exception ex)
+  {
+    logbook.log(ex);
+  }
+  private void log(String level, String message)
+  {
+    logbook.log(level, "RTMConnection: " + message);
+  }
 }
