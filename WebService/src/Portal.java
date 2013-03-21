@@ -13,7 +13,7 @@ import java.util.Collections;
 //@WebServlet("/")
 public class Portal extends HttpServlet
 {
-  Logbook logbook = new Logbook("../logs/Portal.log");
+  Logbook logbook = new Logbook("../logs/TaskCommander.log");
   @Override
   protected void doGet (HttpServletRequest request,
                         HttpServletResponse response)

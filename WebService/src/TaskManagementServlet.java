@@ -7,5 +7,5 @@ import javax.servlet.annotation.*;
 
 public class TaskManagementServlet extends HttpServlet
 {
-  private Logbook logbook = new Logbook("../logs/TaskManagementServlet.log");
+  private Logbook logbook = new Logbook("../logs/TaskCommander.log");
 }

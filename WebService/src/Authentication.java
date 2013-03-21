@@ -13,9 +13,7 @@ import java.util.HashMap;
 
 class Authentication
 {
-  private static Logbook logbook = new Logbook("../logs/Authentication.log");
-  //private static HashMap<String, String> registeredUsers;
-  //private static List<String> loggedInUsers = new ArrayList<String>();
+  private static Logbook logbook = new Logbook("../logs/TaskCommander.log");
   protected static String loggedIn = "LoggedIn";
 
   /*

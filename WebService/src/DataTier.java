@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 class DataTier
 {
-  private static Logbook logbook = new Logbook("../logs/DataTier.log");
+  private static Logbook logbook = new Logbook("../logs/TaskCommander.log");
   private static List<User> registeredUsers;
   //private static HashMap<String, String> registeredUsers;
   private static List<String> loggedInUsers = new ArrayList<String>();

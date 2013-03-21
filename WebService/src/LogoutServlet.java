@@ -13,7 +13,7 @@ import java.util.Collections;
 //@WebServlet("/logout")
 public class LogoutServlet extends HttpServlet
 {
-  Logbook logbook = new Logbook("../logs/LogoutServlet.log");
+  Logbook logbook = new Logbook("../logs/TaskCommander.log");
   @Override
   protected void doPost(HttpServletRequest request,
                        HttpServletResponse response)

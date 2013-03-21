@@ -15,7 +15,7 @@ import java.util.HashMap;
 public class LoginServlet extends HttpServlet
 {
 
-  private Logbook logbook = new Logbook("../logs/LoginServlet.log");
+  private Logbook logbook = new Logbook("../logs/TaskCommander.log");
 
 
 

@@ -19,7 +19,7 @@ public class PrivateFilter implements Filter
   public void init(FilterConfig filterConfig) throws ServletException
   {
     this.filterConfig = filterConfig;
-    logbook = new Logbook("../logs/RequestFilter.log");
+    logbook = new Logbook("../logs/TaskCommander.log");
   }
   public void destroy()
   {
