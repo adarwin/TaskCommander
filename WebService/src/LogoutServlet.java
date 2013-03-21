@@ -22,7 +22,7 @@ public class LogoutServlet extends HttpServlet
   }
   private void log(String level, String message)
   {
-    logbook.log(level, "LogoutServlet: " + message);
+    logbook.log(level, "LogoutServlet", message);
   }
 
 

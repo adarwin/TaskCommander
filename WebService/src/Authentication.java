@@ -23,7 +23,7 @@ class Authentication
   }
   private static void log(String level, String message)
   {
-    logbook.log(level, "Authentication: " + message);
+    logbook.log(level, "Authentication", message);
   }
 
 

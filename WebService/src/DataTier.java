@@ -21,7 +21,7 @@ class DataTier
   }
   private void log(String level, String message)
   {
-    logbook.log(level, "DataTier: " + message);
+    logbook.log(level, "DataTier", message);
   }
 
   DataTier()

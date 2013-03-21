@@ -23,7 +23,7 @@ public class PrivateFilter implements Filter
   }
   private void log(String level, String message)
   {
-    logbook.log(level, "PrivateFilter: " + message);
+    logbook.log(level, "PrivateFilter", message);
   }
 
   public void init(FilterConfig filterConfig) throws ServletException

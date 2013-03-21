@@ -11,6 +11,20 @@ public class User
   private String password;
   private List<Task> tasks;
 
+
+
+  private void log(Exception ex)
+  {
+    logbook.log(ex);
+  }
+  private void log(String level, String message)
+  {
+    logbook.log(level, "User", message);
+  }
+
+
+
+
   public User()
   {
     tasks = new ArrayList<Task>();
@@ -36,11 +50,11 @@ public class User
     if (!tasks.contains(task))
     {
       tasks.add(task);
-      logbook.log(Logbook.INFO, "Added task: '" + task.getName() + "'");
+      log(Logbook.INFO, "Added task: '" + task.getName() + "'");
     }
     else
     {
-      logbook.log(Logbook.WARNING, "Task: '" + task.getName() + "' already exists and was therefore not added");
+      log(Logbook.WARNING, "Task: '" + task.getName() + "' already exists and was therefore not added");
     }
   }
   public void removeTask(String taskName)

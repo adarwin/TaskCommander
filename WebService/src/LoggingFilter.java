@@ -18,7 +18,7 @@ public class LoggingFilter implements Filter
   }
   private void log(String level, String message)
   {
-    logbook.log(level, "LoggingFilter: " + message);
+    logbook.log(level, "LoggingFilter", message);
   }
 
   public void init(FilterConfig filterConfig) throws ServletException

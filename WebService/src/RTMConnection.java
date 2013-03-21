@@ -22,6 +22,6 @@ class RTMConnection extends HttpServlet
   }
   private void log(String level, String message)
   {
-    logbook.log(level, "RTMConnection: " + message);
+    logbook.log(level, "RTMConnection", message);
   }
 }

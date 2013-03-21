@@ -20,7 +20,7 @@ public class MakeTaskRowsTag extends SimpleTagSupport
   }
   private void log(String level, String message)
   {
-    logbook.log(level, "MakeTaskRowsTag: " + message);
+    logbook.log(level, "MakeTaskRowsTag", message);
   }
 
 

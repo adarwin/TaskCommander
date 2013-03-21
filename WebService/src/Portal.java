@@ -22,7 +22,7 @@ public class Portal extends HttpServlet
   }
   private void log(String level, String message)
   {
-    logbook.log(level, "Portal: " + message);
+    logbook.log(level, "Portal", message);
   }
 
 

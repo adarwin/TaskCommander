@@ -24,7 +24,7 @@ public class LoginServlet extends HttpServlet
   }
   private void log(String level, String message)
   {
-    logbook.log(level, "LoginServlet: " + message);
+    logbook.log(level, "LoginServlet", message);
   }
 
 
