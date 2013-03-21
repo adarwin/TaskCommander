@@ -16,6 +16,7 @@ public class LoginServlet extends HttpServlet
 {
 
   private Logbook logbook = new Logbook("../logs/TaskCommander.log");
+  private static final long serialVersionUID = 1L;
 
 
   private void log(Exception ex)
@@ -64,7 +65,8 @@ public class LoginServlet extends HttpServlet
     log(Logbook.INFO, "Received post request");
     String username = request.getParameter("username");
     String password = request.getParameter("password");
-    if (request.getParameter("login") != null && Authentication.isRegisteredUser(username, password))
+    if (request.getParameter("login") != null
+        && Authentication.isRegisteredUser(getServletContext(), username, password))
     {
       log(Logbook.INFO, "Post request is from valid registered user, '" + username + "'");
       HttpSession session = request.getSession();

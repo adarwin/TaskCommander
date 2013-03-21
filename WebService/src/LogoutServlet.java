@@ -13,7 +13,8 @@ import java.util.Collections;
 //@WebServlet("/logout")
 public class LogoutServlet extends HttpServlet
 {
-  Logbook logbook = new Logbook("../logs/TaskCommander.log");
+  private Logbook logbook = new Logbook("../logs/TaskCommander.log");
+  private static final long serialVersionUID = 1L;
 
 
   private void log(Exception ex)

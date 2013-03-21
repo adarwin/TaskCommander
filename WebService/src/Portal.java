@@ -14,7 +14,7 @@ import java.util.Collections;
 public class Portal extends HttpServlet
 {
   private Logbook logbook = new Logbook("../logs/TaskCommander.log");
-
+  private static final long serialVersionUID = 1L;
 
   private void log(Exception ex)
   {
