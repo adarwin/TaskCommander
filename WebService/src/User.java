@@ -11,6 +11,8 @@ public class User
   private String password;
   private List<Task> tasks;
   private final String logHeader = "User";
+  private String currentTaskName;
+  private String currentTaskDueDate;
 
 
 
@@ -41,6 +43,10 @@ public class User
   public void setPassword(String password) { this.password = password; }
   public List<Task> getTasks() { return tasks; }
   public void setTasks(List<Task> tasks) { this.tasks = tasks; }
+  public String getCurrentTaskName() { return currentTaskName; }
+  public void setCurrentTaskName(String taskName) { currentTaskName = taskName; }
+  public String getCurrentTaskDueDate() { return currentTaskDueDate; }
+  public void setCurrentTaskDueDate(String dueDate) { currentTaskDueDate = dueDate; }
 
   public void addTask(Task task)
   {

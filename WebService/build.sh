@@ -11,7 +11,7 @@ echo "Compiling .java files..."
 javac -d WEB-INF/classes src/*.java ~/prg/com/adarwin/logging/Logbook/Logbook.java
 if [ $? -eq 0 ]; then
   echo "Building .war file..."
-  jar cf deployment/TaskCommander.war private WEB-INF *.html *.jsp
+  jar cf deployment/TaskCommander.war private WEB-INF *.html *.jsp img
   echo "Undeploying existing .war file..."
   asadmin undeploy TaskCommander
   echo "Deploying new .war file..."

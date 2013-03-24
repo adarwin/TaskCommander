@@ -30,7 +30,8 @@ public class TaskManagementServlet extends HttpServlet
                    throws ServletException, IOException
   {
     log(Logbook.INFO, "Received get request. Call doPost(...)");
-    doPost(request, response);
+    response.sendRedirect("/TaskCommander");
+    //doPost(request, response);
   }
   @Override
   protected void doPost (HttpServletRequest request,
@@ -46,14 +47,35 @@ public class TaskManagementServlet extends HttpServlet
                         user.getUsername());
       if (request.getParameter("addTask") != null)
       {
-        Task newTask = new Task(request.getParameter("newTaskName"));
-        newTask.setDueDate(request.getParameter("newTaskDueDate"));
-        user.addTask(newTask);
+        String newTaskName = request.getParameter("newTaskName");
+        String newTaskDueDate = request.getParameter("newTaskDueDate");
+        if (newTaskName != null && !newTaskName.equals(""))
+        {
+          Task newTask = new Task(newTaskName);
+          newTask.setDueDate(newTaskDueDate);
+          user.addTask(newTask);
+          user.setCurrentTaskName("");
+          user.setCurrentTaskDueDate("");
+        }
+        else
+        {
+          user.setCurrentTaskName("Specify a task name");
+        }
       }
       else if (request.getParameter("deleteTask") != null)
       {
         String taskNameToDelete = request.getParameter("taskName");
         user.removeTask(taskNameToDelete);
+        user.setCurrentTaskName("");
+        user.setCurrentTaskDueDate("");
+      }
+      else if (request.getParameter("editTask") != null)
+      {
+        String taskNameToEdit = request.getParameter("taskName");
+        String taskDueDateToEdit = request.getParameter("taskDueDate");
+        user.setCurrentTaskName(taskNameToEdit);
+        user.setCurrentTaskDueDate(taskDueDateToEdit);
+        user.removeTask(taskNameToEdit);
       }
       RequestDispatcher dispatcher = request.getRequestDispatcher("/private/home.jsp");
       dispatcher.forward(request, response);

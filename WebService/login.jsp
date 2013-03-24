@@ -6,14 +6,15 @@
 <title>Login</title>
 </head>
 
-<body>
-<h1>Login Page</h1>
+<body background="/TaskCommander/img/WaterColorPaperBackground.jpg">
+<div align="center">
+<h2>TaskCommander Login</h2>
 <form action="/TaskCommander/login" method="post" enctype="application/x-www-form-urlencoded" name="LoginForm">
 	<p>
-	  Username: <input name="username" type="text">
+	  Username: <input name="username" type="text" required>
   </p>
 	<p>
-	  Password: <input name="password" type="password">
+	  Password: <input name="password" type="password" required>
   </p>
     <p>
     	<input name="login" type="submit" value="Login">
@@ -21,5 +22,6 @@
         <input name="reset" type="reset" value="Reset">
   </p>
 </form>
+</div>
 </body>
 </html>

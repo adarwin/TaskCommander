@@ -159,8 +159,12 @@ public class LoginServlet extends HttpServlet
   }
   private void assertNotHTML(String input) throws MaliciousInputException
   {
-    if (input.contains("<") || input.contains(">"))
-      throw new MaliciousInputException("Input contained angled brackets");
+    String[] illegalStrings = new String[] {"<", ">", ";", "/", "\\"};
+    for(String string : illegalStrings)
+    {
+      if (input.contains(string))
+        throw new MaliciousInputException("Illegal Content");
+    }
   }
 
 

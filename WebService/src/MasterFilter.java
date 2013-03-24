@@ -41,7 +41,7 @@ public class MasterFilter implements Filter, CustomizedLogger
     restrictedURIs = new ArrayList<String>();
     restrictedURIs.add("/TaskCommander/error.html");
     restrictedURIs.add("/TaskCommander/error404.html");
-    restrictedURIs.add("/TaskCommander/taskmanagement");
+    //restrictedURIs.add("/TaskCommander/taskmanagement");
     restrictedURIs.add("/TaskCommander/malicious.html");
   }
 
