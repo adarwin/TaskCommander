@@ -14,15 +14,16 @@ class DataTier
   //private static List<String> loggedInUsers = new ArrayList<String>();
   //private static final String loggedInUsers = "LoggedInUsers";
   protected static final String loggedIn = "LoggedIn";
+  private static final String logHeader = "DataTier";
 
 
-  private void log(Exception ex)
+  private static void log(Exception ex)
   {
-    logbook.log(ex);
+    logbook.log(logHeader, ex);
   }
-  private void log(String level, String message)
+  private static void log(String level, String message)
   {
-    logbook.log(level, "DataTier", message);
+    logbook.log(level, logHeader, message);
   }
 
 
@@ -116,25 +117,25 @@ class DataTier
   private static List<User> getUsersList(ServletContext servletContext)
   {
     Object temp = servletContext.getAttribute(registeredUsers);
-    logbook.log(Logbook.INFO, "DataTier received object: '" + registeredUsers +
+    log(Logbook.INFO, "DataTier received object: '" + registeredUsers +
                               "' from servlet context");
     List<User> users = null;
     try
     {
       users = (List<User>)temp;
-      logbook.log(Logbook.INFO, "DataTier successfully cast " + registeredUsers
+      log(Logbook.INFO, "DataTier successfully cast " + registeredUsers
                                 + " object to List<User>");
     }
     catch (ClassCastException ex)
     {
-      logbook.log(Logbook.ERROR, "ServletContext's attribute, '" +
+      log(Logbook.ERROR, "ServletContext's attribute, '" +
                                   registeredUsers + "' was not of the " +
                                   "expected type");
-      logbook.log(ex);
+      log(ex);
     }
     if (users == null)
     {
-      logbook.log(Logbook.WARNING, "UsersList was found to be null in servlet "
+      log(Logbook.WARNING, "UsersList was found to be null in servlet "
                                    + "context and was therefore initialized to"
                                    + " an empty list.");
       users = new ArrayList<User>();

@@ -14,16 +14,17 @@ import java.util.ArrayList;
 public class PrivateFilter implements Filter
 {
   private Logbook logbook;
-  FilterConfig filterConfig;
+  private FilterConfig filterConfig;
+  private final String logHeader = "PrivateFilter";
 
 
   private void log(Exception ex)
   {
-    logbook.log(ex);
+    logbook.log(logHeader, ex);
   }
   private void log(String level, String message)
   {
-    logbook.log(level, "PrivateFilter", message);
+    logbook.log(level, logHeader, message);
   }
 
   public void init(FilterConfig filterConfig) throws ServletException

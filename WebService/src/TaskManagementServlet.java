@@ -10,15 +10,16 @@ public class TaskManagementServlet extends HttpServlet
 {
   private Logbook logbook = new Logbook("../logs/TaskCommander.log");
   private static final long serialVersionUID = 1L;
+  private final String logHeader = "TaskManagementServlet";
 
 
   private void log(Exception ex)
   {
-    logbook.log(ex);
+    logbook.log(logHeader, ex);
   }
   private void log(String level, String message)
   {
-    logbook.log(level, "TaskManagementServlet", message);
+    logbook.log(level, logHeader, message);
   }
 
 

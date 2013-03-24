@@ -15,13 +15,14 @@ class RTMConnection extends HttpServlet
 {
   private Logbook logbook = new Logbook("../logs/TaskCommander.log");
   private static final long serialVersionUID = 1L;
+  private final String logHeader = "RTMConnection";
 
   private void log(Exception ex)
   {
-    logbook.log(ex);
+    logbook.log(logHeader, ex);
   }
   private void log(String level, String message)
   {
-    logbook.log(level, "RTMConnection", message);
+    logbook.log(level, logHeader, message);
   }
 }

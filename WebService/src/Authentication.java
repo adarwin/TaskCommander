@@ -15,15 +15,16 @@ class Authentication
 {
   private static Logbook logbook = new Logbook("../logs/TaskCommander.log");
   protected static String loggedIn = "LoggedIn";
+  private static final String logHeader = "Authentication";
 
 
   private static void log(Exception ex)
   {
-    logbook.log(ex);
+    logbook.log(logHeader, ex);
   }
   private static void log(String level, String message)
   {
-    logbook.log(level, "Authentication", message);
+    logbook.log(level, logHeader, message);
   }
 
 

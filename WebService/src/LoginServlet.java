@@ -16,15 +16,16 @@ public class LoginServlet extends HttpServlet
 
   private Logbook logbook = new Logbook("../logs/TaskCommander.log");
   private static final long serialVersionUID = 1L;
+  private final String logHeader = "LoginServlet";
 
 
   private void log(Exception ex)
   {
-    logbook.log(ex);
+    logbook.log(logHeader, ex);
   }
   private void log(String level, String message)
   {
-    logbook.log(level, "LoginServlet", message);
+    logbook.log(level, logHeader, message);
   }
 
 
@@ -64,30 +65,46 @@ public class LoginServlet extends HttpServlet
     log(Logbook.INFO, "Received post request");
     String username = request.getParameter("username");
     String password = request.getParameter("password");
-    if (request.getParameter("login") != null
-        && Authentication.isRegisteredUser(getServletContext(), username, password))
+    // First check to make sure the input values are not malicious
+    if (!areMaliciousInputs(username, password))
     {
-      log(Logbook.INFO, "Post request is from valid registered user, '" + username + "'");
-      HttpSession session = request.getSession();
-      Authentication.logUserIn(session, username, password);
-      log(Logbook.INFO, "Logged " + username + " in");
-      response.sendRedirect("/TaskCommander/private/home.jsp");
-    }
-    else if (request.getParameter("register") != null)
-    {
-      log(Logbook.INFO, "Post request is from new user, '" + username + "'");
-      HttpSession session = request.getSession();
-      try
+      if (request.getParameter("login") != null
+          && Authentication.isRegisteredUser(getServletContext(), username, password))
       {
-        DataTier.registerUser(request.getServletContext(), username, password);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/registration.jsp");
-        dispatcher.forward(request, response);
+        log(Logbook.INFO, "Post request is from valid registered user, '" + username + "'");
+        HttpSession session = request.getSession();
+        Authentication.logUserIn(session, username, password);
+        log(Logbook.INFO, "Logged " + username + " in");
+        response.sendRedirect("/TaskCommander/private/home.jsp");
       }
-      catch (UserAlreadyExistsException ex)
+      else if (request.getParameter("register") != null)
       {
-        log(ex);
+        log(Logbook.INFO, "Post request is from new user, '" + username + "'");
+        HttpSession session = request.getSession();
+        try
+        {
+          DataTier.registerUser(request.getServletContext(), username, password);
+          RequestDispatcher dispatcher = request.getRequestDispatcher("/registration.jsp");
+          dispatcher.forward(request, response);
+        }
+        catch (UserAlreadyExistsException ex)
+        {
+          log(ex);
+          String htmlOutput = "<html><head></head><body>";
+          htmlOutput += "<h2>Username Already Taken!</h2>";
+          htmlOutput += "<form action=\"/TaskCommander\" method=\"get\" name=\"back\">";
+          htmlOutput += "<input name=\"Back\" type=\"submit\" value=\"Back\">";
+          htmlOutput += "</form>";
+          htmlOutput += "</body></html>";
+          PrintWriter out = response.getWriter();
+          out.println(htmlOutput);
+        }
+        //response.sendRedirect("/TaskCommander/registration.jsp");
+      }
+      else
+      {
         String htmlOutput = "<html><head></head><body>";
-        htmlOutput += "<h2>Username Already Taken!</h2>";
+        htmlOutput += "<h2>Invalid login credentials</h2>";
         htmlOutput += "<form action=\"/TaskCommander\" method=\"get\" name=\"back\">";
         htmlOutput += "<input name=\"Back\" type=\"submit\" value=\"Back\">";
         htmlOutput += "</form>";
@@ -95,19 +112,56 @@ public class LoginServlet extends HttpServlet
         PrintWriter out = response.getWriter();
         out.println(htmlOutput);
       }
-      //response.sendRedirect("/TaskCommander/registration.jsp");
     }
     else
     {
-      String htmlOutput = "<html><head></head><body>";
-      htmlOutput += "<h2>Invalid login credentials</h2>";
-      htmlOutput += "<form action=\"/TaskCommander\" method=\"get\" name=\"back\">";
-      htmlOutput += "<input name=\"Back\" type=\"submit\" value=\"Back\">";
-      htmlOutput += "</form>";
-      htmlOutput += "</body></html>";
-      PrintWriter out = response.getWriter();
-      out.println(htmlOutput);
+      /*
+       * Don't need to check the cast here because it is already covered by the
+       * check of the request
+       */
+      log(Logbook.WARNING, "Detected malicious login credentials input");
+      RequestDispatcher dispatcher = request.getRequestDispatcher("/malicious.html");
+      dispatcher.forward(request, response);
     }
     //Check against database and authenticate user
   }
+
+
+
+  private boolean areMaliciousInputs(String username, String password)
+  {
+    boolean maliciousInputs = false;
+    try
+    {
+      assertNotNull(username);
+      assertNotNull(password);
+      assertNotEmpty(username);
+      assertNotEmpty(password);
+      assertNotHTML(username);
+      assertNotHTML(password);
+    }
+    catch (MaliciousInputException ex)
+    {
+      log(ex);
+      maliciousInputs = true;
+    }
+    return maliciousInputs;
+  }
+  private void assertNotNull(String input) throws MaliciousInputException
+  {
+    if (input == null)
+      throw new MaliciousInputException("Input was null");
+  }
+  private void assertNotEmpty(String input) throws MaliciousInputException
+  {
+    if (input.equals(""))
+      throw new MaliciousInputException("Input was empty");
+  }
+  private void assertNotHTML(String input) throws MaliciousInputException
+  {
+    if (input.contains("<") || input.contains(">"))
+      throw new MaliciousInputException("Input contained angled brackets");
+  }
+
+
 }

@@ -12,15 +12,16 @@ public class MakeTaskRowsTag extends SimpleTagSupport
   private Task currentTask;
   private String taskNameKey;
   private String taskDueDateKey;
+  private final String logHeader = "MakeTaskRowsTag";
 
 
   private void log(Exception ex)
   {
-    logbook.log(ex);
+    logbook.log(logHeader, ex);
   }
   private void log(String level, String message)
   {
-    logbook.log(level, "MakeTaskRowsTag", message);
+    logbook.log(level, logHeader, message);
   }
 
 

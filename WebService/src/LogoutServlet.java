@@ -15,15 +15,16 @@ public class LogoutServlet extends HttpServlet
 {
   private Logbook logbook = new Logbook("../logs/TaskCommander.log");
   private static final long serialVersionUID = 1L;
+  private final String logHeader = "LogoutServlet";
 
 
   private void log(Exception ex)
   {
-    logbook.log(ex);
+    logbook.log(logHeader, ex);
   }
   private void log(String level, String message)
   {
-    logbook.log(level, "LogoutServlet", message);
+    logbook.log(level, logHeader, message);
   }
 
 

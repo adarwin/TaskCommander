@@ -10,16 +10,17 @@ public class User
   private String username;
   private String password;
   private List<Task> tasks;
+  private final String logHeader = "User";
 
 
 
   private void log(Exception ex)
   {
-    logbook.log(ex);
+    logbook.log(logHeader, ex);
   }
   private void log(String level, String message)
   {
-    logbook.log(level, "User", message);
+    logbook.log(level, logHeader, message);
   }
 
 
