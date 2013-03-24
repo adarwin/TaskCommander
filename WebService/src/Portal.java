@@ -32,20 +32,18 @@ public class Portal extends HttpServlet
                         HttpServletResponse response)
                  throws ServletException, IOException
   {
-    log(Logbook.INFO, "Received get request");
+    log(Logbook.INFO, "Received get request: " + request.getRequestURI());
     HttpSession session = request.getSession();
     if (Authentication.isLoggedIn(request.getSession()))
     {
       log(Logbook.INFO, "Determined get request was from logged-in user. Redirect to home.jsp.");
       response.sendRedirect("/TaskCommander/private/home.jsp");
-      /*
-      RequestDispatcher dispatcher = request.getRequestDispatcher("/TaskCommander/private/home.html");
-      dispatcher.forward(request, response);
-      */
     }
     else
     {
-      log(Logbook.INFO, "Determined get request was not from a logged-in user. Redirect to login.");
+      log(Logbook.INFO, "Determined get request was not from a logged-in user. "
+                        + "Redirect to login.");
+      //response.sendRedirect("/TaskCommander/error.html");
       response.sendRedirect("/TaskCommander/login");
       //RequestDispatcher dispatcher = request.getRequestDispatcher("/login");
       //dispatcher.forward(request, response);

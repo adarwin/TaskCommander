@@ -25,13 +25,9 @@ class DataTier
     logbook.log(level, "DataTier", message);
   }
 
-  DataTier()
-  {
-    registeredUsers = new ArrayList<User>();
-  }
 
 
-  protected static User getUser(String username, String password)
+  protected static User getUser(ServletContext servletContext, String username, String password)
   {
     User outputUser = null;
     List<User> users = getUsersList(servletContext);

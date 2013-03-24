@@ -1,75 +1,118 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app metadata-complete="true">
 
-  <servlet>
-    <servlet-name>Portal</servlet-name>
-	<servlet-class>com.adarwin.csc435.Portal</servlet-class>
-  </servlet>
+	<servlet>
+		<servlet-name>Portal</servlet-name>
+		<servlet-class>com.adarwin.csc435.Portal</servlet-class>
+	</servlet>
 
-  <servlet-mapping>
-    <servlet-name>Portal</servlet-name>
-    <url-pattern>/</url-pattern>
-  </servlet-mapping>
+	<!--<servlet-mapping>
+		<servlet-name>Portal</servlet-name>
+		<url-pattern>/</url-pattern>
+	</servlet-mapping>-->
   
 
 
-  <servlet>
-    <servlet-name>LoginServlet</servlet-name>
-    <servlet-class>com.adarwin.csc435.LoginServlet</servlet-class>
-  </servlet>
+	<servlet>
+		<servlet-name>LoginServlet</servlet-name>
+		<servlet-class>com.adarwin.csc435.LoginServlet</servlet-class>
+	</servlet>
 
-  <servlet-mapping>
-    <servlet-name>LoginServlet</servlet-name>
-    <url-pattern>/login</url-pattern>
-  </servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>LoginServlet</servlet-name>
+		<url-pattern>/login</url-pattern>
+	</servlet-mapping>
   
 
 
-  <servlet>
-    <servlet-name>LogoutServlet</servlet-name>
-    <servlet-class>com.adarwin.csc435.LogoutServlet</servlet-class>
-  </servlet>
+	<servlet>
+		<servlet-name>LogoutServlet</servlet-name>
+		<servlet-class>com.adarwin.csc435.LogoutServlet</servlet-class>
+	</servlet>
 
-  <servlet-mapping>
-    <servlet-name>LogoutServlet</servlet-name>
-    <url-pattern>/logout</url-pattern>
-  </servlet-mapping>
-
-
-
-  <servlet>
-    <servlet-name>TaskManagementServlet</servlet-name>
-    <servlet-class>com.adarwin.csc435.TaskManagementServlet</servlet-class>
-  </servlet>
-
-  <servlet-mapping>
-    <servlet-name>TaskManagementServlet</servlet-name>
-    <url-pattern>/taskmanagement</url-pattern>
-  </servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>LogoutServlet</servlet-name>
+		<url-pattern>/logout</url-pattern>
+	</servlet-mapping>
 
 
 
-  <filter>
-    <filter-name>PrivateFilter</filter-name>
-    <filter-class>com.adarwin.csc435.PrivateFilter</filter-class>
-  </filter>
+	<servlet>
+		<servlet-name>TaskManagementServlet</servlet-name>
+		<servlet-class>com.adarwin.csc435.TaskManagementServlet</servlet-class>
+	</servlet>
 
-  <filter-mapping>
-    <filter-name>PrivateFilter</filter-name>
-    <url-pattern>/private/*</url-pattern>
-  </filter-mapping>
+	<servlet-mapping>
+		<servlet-name>TaskManagementServlet</servlet-name>
+		<url-pattern>/taskmanagement</url-pattern>
+	</servlet-mapping>
 
 
-  <filter>
-    <filter-name>LoggingFilter</filter-name>
-    <filter-class>com.adarwin.csc435.LoggingFilter</filter-class>
-  </filter>
 
-  <filter-mapping>
-    <filter-name>LoggingFilter</filter-name>
-    <url-pattern>/*</url-pattern>
-  </filter-mapping>
+	<filter>
+		<filter-name>PrivateFilter</filter-name>
+		<filter-class>com.adarwin.csc435.PrivateFilter</filter-class>
+	</filter>
 
+	<filter-mapping>
+		<filter-name>PrivateFilter</filter-name>
+		<url-pattern>/private/*</url-pattern>
+	</filter-mapping>
+
+
+	<!--<filter>
+		<filter-name>LoggingFilter</filter-name>
+		<filter-class>com.adarwin.csc435.LoggingFilter</filter-class>
+	</filter>
+
+	<filter-mapping>
+		<filter-name>LoggingFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>-->
+
+
+
+	<welcome-file-list>
+		<welcome-file>login</welcome-file>
+	</welcome-file-list>
+	
+	
+
+	<error-page>
+		<description>Bad Request</description>
+		<error-code>400</error-code>
+		<location>/error.html</location>
+	</error-page>
+	
+	<error-page>
+		<description>Unauthorized</description>
+		<error-code>401</error-code>
+		<location>/error.html</location>
+	</error-page>
+	
+	<error-page>
+		<description>Forbidden</description>
+		<error-code>403</error-code>
+		<location>/error.html</location>
+	</error-page>
+	
+	<error-page>
+		<description>Not Found</description>
+		<error-code>404</error-code>
+		<location>/error404.html</location>
+	</error-page>
+	
+	<error-page>
+		<description>Internal Server Error</description>
+		<error-code>500</error-code>
+		<location>/error.html</location>
+	</error-page>
+	
+	<error-page>
+		<description>Not Implemented</description>
+		<error-code>501</error-code>
+		<location>/error.html</location>
+	</error-page>
 
 
 </web-app>

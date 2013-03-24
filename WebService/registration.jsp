@@ -9,5 +9,6 @@
 
 <body>
 <h1>Thank you for registering, <%= request.getParameter("username") %></h1>
+<p>If your browser does not automatically redirect you, please head on <a href="/TaskCommander" tabindex="1">home</a>.</p>
 </body>
 </html>

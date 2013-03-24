@@ -74,7 +74,7 @@ public class LoginServlet extends HttpServlet
       //loggedInUsers.add(session.getId());
       Authentication.logUserIn(session, username, password);
       log(Logbook.INFO, "Logged " + username + " in");
-      response.sendRedirect("/TaskCommander/private/home.html");
+      response.sendRedirect("/TaskCommander/private/home.jsp");
       /*
       RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/home.html");
       dispatcher.forward(request, response);
