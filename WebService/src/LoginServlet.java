@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 
-//@WebServlet("/login")
 public class LoginServlet extends HttpServlet
 {
 
@@ -70,15 +69,9 @@ public class LoginServlet extends HttpServlet
     {
       log(Logbook.INFO, "Post request is from valid registered user, '" + username + "'");
       HttpSession session = request.getSession();
-      //updateCookies(request, response);
-      //loggedInUsers.add(session.getId());
       Authentication.logUserIn(session, username, password);
       log(Logbook.INFO, "Logged " + username + " in");
       response.sendRedirect("/TaskCommander/private/home.jsp");
-      /*
-      RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/home.html");
-      dispatcher.forward(request, response);
-      */
     }
     else if (request.getParameter("register") != null)
     {
@@ -116,55 +109,5 @@ public class LoginServlet extends HttpServlet
       out.println(htmlOutput);
     }
     //Check against database and authenticate user
-  }
-
-
-
-
-
-  /*
-  static protected boolean isLoggedInUser(HttpServletRequest request)
-  {
-    HttpSession session = request.getSession();
-    return loggedInUsers.contains(session.getId());
-  }
-  */
-
-
-
-
-
-
-  /*
-  private boolean authenticateUser(HttpServletRequest request)
-  {
-    String username = request.getParameter("username");
-    String password = request.getParameter("password");
-    return (username.equals("darwin") && password.equals("pass")) || isLoggedInUser(request);
-  }
-  */
-
-
-
-
-
-
-
-  private void updateCookies(HttpServletRequest request, HttpServletResponse response)
-  {
-    Cookie[] existingCookies = request.getCookies();
-    for (Cookie cookie : existingCookies)
-    {
-      if (cookie.getName().equals("username"))
-      {
-        cookie.setValue(request.getParameter("username"));
-        response.addCookie(cookie);
-      }
-      else if (cookie.getName().equals("password"))
-      {
-        cookie.setValue(request.getParameter("password"));
-        response.addCookie(cookie);
-      }
-    }
   }
 }
