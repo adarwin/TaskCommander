@@ -13,6 +13,7 @@ public class User
   private final String logHeader = "User";
   private String currentTaskName;
   private String currentTaskDueDate;
+  private boolean loggedIn = false;
 
 
 
@@ -47,6 +48,8 @@ public class User
   public void setCurrentTaskName(String taskName) { currentTaskName = taskName; }
   public String getCurrentTaskDueDate() { return currentTaskDueDate; }
   public void setCurrentTaskDueDate(String dueDate) { currentTaskDueDate = dueDate; }
+  public boolean getLoggedIn() { return loggedIn; }
+  public void setLoggedIn(boolean loggedIn) { this.loggedIn = loggedIn; }
 
   public void addTask(Task task)
   {

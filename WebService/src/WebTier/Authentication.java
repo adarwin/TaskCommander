@@ -74,6 +74,7 @@ class Authentication
   protected static void logUserOut(HttpSession session)
   {
     session.setAttribute(loggedIn, false);
+    //TODO Should probably set user object to null
     log(Logbook.INFO, "User: '" + session.getId() + "' successfully logged out.");
   }
 }

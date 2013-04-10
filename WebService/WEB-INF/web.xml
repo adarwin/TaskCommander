@@ -124,6 +124,13 @@
 		<error-code>501</error-code>
 		<location>/error.html</location>
 	</error-page>
+	
+	
+	
+	<ejb-ref>
+		<ejb-ref-name>ejb/Authentication</ejb-ref-name>
+		<ejb-ref-type>Session</ejb-ref-type>
+	</ejb-ref>
 
 
 </web-app>

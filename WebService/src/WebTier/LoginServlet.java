@@ -1,8 +1,10 @@
 package com.adarwin.csc435;
 
 import com.adarwin.logging.Logbook;
+import com.adarwin.csc435.ejb.AuthenticationBean;
 import java.io.IOException;
 import java.io.PrintWriter;
+import javax.ejb.EJB;
 import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
@@ -17,6 +19,8 @@ public class LoginServlet extends HttpServlet
   private Logbook logbook = new Logbook("../logs/TaskCommander.log");
   private static final long serialVersionUID = 1L;
   private final String logHeader = "LoginServlet";
+  @EJB
+  private AuthenticationBean authenticationBean;
 
 
   private void log(Exception ex)
@@ -38,7 +42,8 @@ public class LoginServlet extends HttpServlet
   {
     log(Logbook.INFO, "Received get request");
     //Check to see if the user is already logged in
-    if (Authentication.isLoggedIn(request.getSession()))
+    User user = (User)(request.getSession().getAttribute("user"));
+    if (authenticationBean.isLoggedIn(user))
     {
       log(Logbook.INFO, "Determined get request was from logged-in user. Forward to home.jsp.");
       RequestDispatcher dispatcher = request.getRequestDispatcher("/private/home.jsp");
@@ -69,7 +74,7 @@ public class LoginServlet extends HttpServlet
     if (!areMaliciousInputs(username, password))
     {
       if (request.getParameter("login") != null
-          && Authentication.isRegisteredUser(getServletContext(), username, password))
+          && authenticationBean.isRegisteredUser(username, password))
       {
         log(Logbook.INFO, "Post request is from valid registered user, '" + username + "'");
         HttpSession session = request.getSession();

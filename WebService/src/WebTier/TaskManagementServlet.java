@@ -1,6 +1,8 @@
 package com.adarwin.csc435;
 
 import com.adarwin.logging.Logbook;
+import com.adarwin.csc435.User;
+import com.adarwin.csc435.Task;
 import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
