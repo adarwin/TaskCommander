@@ -58,6 +58,7 @@ public class TaskManagementServlet extends HttpServlet implements CustomizedLogg
           user.addTask(newTask);
           user.setCurrentTaskName("");
           user.setCurrentTaskDueDate("");
+          System.out.println("Modifying User: " + user);
         }
         else
         {

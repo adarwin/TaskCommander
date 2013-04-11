@@ -98,7 +98,7 @@ public class LoginServlet extends HttpServlet implements CustomizedLogger {
         log(Logbook.INFO, "Post request is from valid registered user, '" + username + "'");
         HttpSession session = request.getSession();
         User user = authenticationBean.logUserIn(username, password);
-        log(Logbook.INFO, "Logged " + username + " in");
+        log(Logbook.INFO, "Logged " + user + " in");
         session.setAttribute("user", user);
         response.sendRedirect("/TaskCommander/private/home.jsp");
       }

@@ -11,9 +11,11 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.Local;
 import javax.ejb.Singleton;
+import javax.ejb.Stateful;
 
 @Singleton
 @Local
+@Stateful
 public class DataBean { //TODO: Figure out why we can't
                         //      implement CustomizedLogger here
 
@@ -35,6 +37,7 @@ public class DataBean { //TODO: Figure out why we can't
     public void init() {
         usersList = new ArrayList<User>();
     }
+
 
 
     public User getUser(String username, String password) {
