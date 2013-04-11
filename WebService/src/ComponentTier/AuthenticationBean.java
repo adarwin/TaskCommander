@@ -6,8 +6,7 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
 @Stateless
-public class AuthenticationBean
-{
+public class AuthenticationBean implements Authentication {
     private static Logbook logbook = new Logbook("../logs/TaskCommander.log");
     private final String logHeader = "AuthenticationBean";
     @EJB
@@ -27,7 +26,7 @@ public class AuthenticationBean
     }
 
 
-    //@Override
+    @Override
     public boolean isLoggedIn(User user) {
         boolean loggedIn = false;
         if (user != null) {

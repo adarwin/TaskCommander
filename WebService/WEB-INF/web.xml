@@ -127,10 +127,10 @@
 	
 	
 	
-	<ejb-ref>
-		<ejb-ref-name>ejb/Authentication</ejb-ref-name>
+	<!--<ejb-ref>
+		<ejb-ref-name>Authentication</ejb-ref-name>
 		<ejb-ref-type>Session</ejb-ref-type>
-	</ejb-ref>
+	</ejb-ref>-->
 
 
 </web-app>
