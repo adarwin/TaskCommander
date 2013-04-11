@@ -21,33 +21,38 @@ public class AuthenticationBean implements Authentication {
     }
 
 
-    public boolean test() {
-        return false;
-    }
-
 
     @Override
     public boolean isLoggedIn(User user) {
+        log(Logbook.INFO, "Checking to see if user is logged in");
         boolean loggedIn = false;
         if (user != null) {
             loggedIn = user.getLoggedIn();
+        }
+        if (loggedIn) {
+            log(Logbook.INFO, "Determined user was logged in");
+        } else {
+            log(Logbook.INFO, "Determined user was not logged in");
         }
         return loggedIn;
     }
 
 
 
+    @Override
     public boolean isRegisteredUser(String username, String password) {
         return dataBean.isRegisteredUser(username, password);
     }
 
 
+    @Override
     public User logUserIn(String username, String password) {
         User user = dataBean.getUser(username, password);
         return user;
     }
 
 
+    @Override
     public User logUserOut(User user) {
         return user;
     }

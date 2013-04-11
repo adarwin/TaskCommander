@@ -2,9 +2,12 @@ package com.adarwin.csc435;
 
 import com.adarwin.logging.Logbook;
 import com.adarwin.csc435.ejb.AuthenticationBean;
+import com.adarwin.csc435.ejb.Authentication;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.ejb.EJB;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
@@ -19,8 +22,9 @@ public class LoginServlet extends HttpServlet
   private Logbook logbook = new Logbook("../logs/TaskCommander.log");
   private static final long serialVersionUID = 1L;
   private final String logHeader = "LoginServlet";
-  @EJB
-  private AuthenticationBean authenticationBean;
+  //@EJB
+  private InitialContext initialContext;
+  private Authentication authenticationBean;
 
 
   private void log(Exception ex)
@@ -34,6 +38,20 @@ public class LoginServlet extends HttpServlet
 
 
 
+  @Override
+  public void init() { // Don't need to call super.init() because this is a
+                       // convenience method designed to prevent having to do
+                       // that.
+      try {
+        initialContext = new InitialContext();
+        authenticationBean = (Authentication)initialContext.lookup("java:app/ejb/AuthenticationBean");
+      } catch (NamingException ex) {
+        log(ex);
+      }
+  }
+
+
+
 
   @Override
   protected void doGet (HttpServletRequest request,
@@ -42,7 +60,9 @@ public class LoginServlet extends HttpServlet
   {
     log(Logbook.INFO, "Received get request");
     //Check to see if the user is already logged in
+    log(Logbook.INFO, "Getting User");
     User user = (User)(request.getSession().getAttribute("user"));
+    log(Logbook.INFO, "Got User");
     if (authenticationBean.isLoggedIn(user))
     {
       log(Logbook.INFO, "Determined get request was from logged-in user. Forward to home.jsp.");
@@ -78,7 +98,7 @@ public class LoginServlet extends HttpServlet
       {
         log(Logbook.INFO, "Post request is from valid registered user, '" + username + "'");
         HttpSession session = request.getSession();
-        Authentication.logUserIn(session, username, password);
+        authenticationBean.logUserIn(username, password);
         log(Logbook.INFO, "Logged " + username + " in");
         response.sendRedirect("/TaskCommander/private/home.jsp");
       }
