@@ -3,7 +3,6 @@ package com.adarwin.csc435;
 import com.adarwin.logging.Logbook;
 import com.adarwin.csc435.ejb.AuthenticationBean;
 import com.adarwin.csc435.ejb.Authentication;
-import com.adarwin.csc435.CustomizedLogger;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.ejb.EJB;
@@ -38,7 +37,7 @@ public class LoginServlet extends HttpServlet implements CustomizedLogger {
 
 
   @Override
-  public void init() { // Don't need to call super.init() because this is a
+  public void init() { // don't need to call super.init() because this is a
                        // convenience method designed to prevent having to do
                        // that.
       try {
@@ -98,23 +97,19 @@ public class LoginServlet extends HttpServlet implements CustomizedLogger {
       {
         log(Logbook.INFO, "Post request is from valid registered user, '" + username + "'");
         HttpSession session = request.getSession();
-        authenticationBean.logUserIn(username, password);
+        User user = authenticationBean.logUserIn(username, password);
         log(Logbook.INFO, "Logged " + username + " in");
+        session.setAttribute("user", user);
         response.sendRedirect("/TaskCommander/private/home.jsp");
       }
       else if (request.getParameter("register") != null)
       {
         log(Logbook.INFO, "Post request is from new user, '" + username + "'");
         HttpSession session = request.getSession();
-        try
-        {
-          DataTier.registerUser(request.getServletContext(), username, password);
+        if (authenticationBean.registerUser(username, password)) {
           RequestDispatcher dispatcher = request.getRequestDispatcher("/registration.jsp");
           dispatcher.forward(request, response);
-        }
-        catch (UserAlreadyExistsException ex)
-        {
-          log(ex);
+        } else {
           String htmlOutput = "<html><head></head><body>";
           htmlOutput += "<h2>Username Already Taken!</h2>";
           htmlOutput += "<form action=\"/TaskCommander\" method=\"get\" name=\"back\">";
@@ -124,7 +119,6 @@ public class LoginServlet extends HttpServlet implements CustomizedLogger {
           PrintWriter out = response.getWriter();
           out.println(htmlOutput);
         }
-        //response.sendRedirect("/TaskCommander/registration.jsp");
       }
       else
       {

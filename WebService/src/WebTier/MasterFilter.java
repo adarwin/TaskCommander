@@ -8,8 +8,7 @@ import javax.servlet.annotation.*;
 import java.util.List;
 import java.util.ArrayList;
 
-public class MasterFilter implements Filter, CustomizedLogger
-{
+public class MasterFilter implements Filter, CustomizedLogger {
 
   private Logbook logbook;
   private FilterConfig filterConfig;

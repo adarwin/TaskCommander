@@ -8,18 +8,18 @@ import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 import java.io.*;
 
-public class TaskManagementServlet extends HttpServlet
-{
+public class TaskManagementServlet extends HttpServlet implements CustomizedLogger {
+
   private Logbook logbook = new Logbook("../logs/TaskCommander.log");
   private static final long serialVersionUID = 1L;
   private final String logHeader = "TaskManagementServlet";
 
 
-  private void log(Exception ex)
+  public void log(Exception ex)
   {
     logbook.log(logHeader, ex);
   }
-  private void log(String level, String message)
+  public void log(String level, String message)
   {
     logbook.log(level, logHeader, message);
   }

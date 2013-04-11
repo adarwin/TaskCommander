@@ -12,4 +12,5 @@ public interface Authentication {
     public boolean isRegisteredUser(String username, String password);
     public User logUserIn(String username, String password);
     public User logUserOut(User user);
+    public boolean registerUser(String username, String password);
 }

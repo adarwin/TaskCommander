@@ -5,8 +5,8 @@ import javax.servlet.jsp.*;
 import javax.servlet.jsp.tagext.*;
 import java.io.*;
 
-public class MakeTaskRowsTag extends SimpleTagSupport
-{
+public class MakeTaskRowsTag extends SimpleTagSupport implements CustomizedLogger {
+
   private Logbook logbook = new Logbook("../logs/MakeTaskRowsTag.log");
   private User user;
   private Task currentTask;
@@ -15,11 +15,11 @@ public class MakeTaskRowsTag extends SimpleTagSupport
   private final String logHeader = "MakeTaskRowsTag";
 
 
-  private void log(Exception ex)
+  public void log(Exception ex)
   {
     logbook.log(logHeader, ex);
   }
-  private void log(String level, String message)
+  public void log(String level, String message)
   {
     logbook.log(level, logHeader, message);
   }
