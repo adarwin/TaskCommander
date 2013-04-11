@@ -3,6 +3,7 @@ package com.adarwin.csc435;
 import com.adarwin.logging.Logbook;
 import com.adarwin.csc435.ejb.AuthenticationBean;
 import com.adarwin.csc435.ejb.Authentication;
+import com.adarwin.csc435.CustomizedLogger;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.ejb.EJB;
@@ -16,22 +17,20 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 
-public class LoginServlet extends HttpServlet
-{
+public class LoginServlet extends HttpServlet implements CustomizedLogger {
 
   private Logbook logbook = new Logbook("../logs/TaskCommander.log");
   private static final long serialVersionUID = 1L;
   private final String logHeader = "LoginServlet";
-  //@EJB
   private InitialContext initialContext;
   private Authentication authenticationBean;
 
 
-  private void log(Exception ex)
+  public void log(Exception ex)
   {
     logbook.log(logHeader, ex);
   }
-  private void log(String level, String message)
+  public void log(String level, String message)
   {
     logbook.log(level, logHeader, message);
   }
@@ -47,6 +46,10 @@ public class LoginServlet extends HttpServlet
         authenticationBean = (Authentication)initialContext.lookup("java:app/ejb/AuthenticationBean");
       } catch (NamingException ex) {
         log(ex);
+        if (authenticationBean == null) {
+            log(Logbook.WARNING, "AuthenticationBean is null and therefore " +
+                                 "can't be used for anything.");
+        }
       }
   }
 
@@ -60,9 +63,7 @@ public class LoginServlet extends HttpServlet
   {
     log(Logbook.INFO, "Received get request");
     //Check to see if the user is already logged in
-    log(Logbook.INFO, "Getting User");
     User user = (User)(request.getSession().getAttribute("user"));
-    log(Logbook.INFO, "Got User");
     if (authenticationBean.isLoggedIn(user))
     {
       log(Logbook.INFO, "Determined get request was from logged-in user. Forward to home.jsp.");
@@ -74,7 +75,6 @@ public class LoginServlet extends HttpServlet
       log(Logbook.INFO, "Determed get request was not from a logged-in user. Redirect to login.jsp");
       RequestDispatcher dispatcher = request.getRequestDispatcher("login.jsp");
       dispatcher.forward(request, response);
-      //response.sendRedirect("/TaskCommander/login.jsp");
     }
   }
 
