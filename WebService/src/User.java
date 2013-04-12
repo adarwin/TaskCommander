@@ -38,6 +38,17 @@ public class User
     this();
     this.username = username;
   }
+
+
+  public void updateFrom(User user) {
+      setUsername(user.getUsername());
+      setPassword(user.getPassword());
+      setTasks(user.getTasks());
+      setCurrentTaskName(user.getCurrentTaskName());
+      setCurrentTaskDueDate(user.getCurrentTaskDueDate());
+      setLoggedIn(user.getLoggedIn());
+  }
+
   public String getUsername() { return username; }
   public void setUsername(String username) { this.username = username; }
   public String getPassword() { return password; }

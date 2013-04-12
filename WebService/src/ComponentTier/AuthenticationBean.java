@@ -25,13 +25,13 @@ public class AuthenticationBean implements Authentication {
 
     @Override
     public boolean isLoggedIn(User user) {
-        log(Logbook.INFO, "Checking to see if " + user + " is logged in");
+        //log(Logbook.INFO, "Checking to see if " + user + " is logged in");
         boolean loggedIn = false;
         if (user != null) {
             loggedIn = user.getLoggedIn();
-            log(Logbook.INFO, user + " is logged in");
+            //log(Logbook.INFO, user + " is logged in");
         } else {
-            log(Logbook.INFO, user + " is not logged in");
+            //log(Logbook.INFO, user + " is not logged in");
         }
         return loggedIn;
     }
@@ -68,10 +68,14 @@ public class AuthenticationBean implements Authentication {
 
     @Override
     public User logUserOut(User user) {
+        // Assume the input user object is a copoy and we should update
+        // the official stored user
         if (user == null) {
             log(Logbook.WARNING, "Can't log out a null user");
         } else {
             user.setLoggedIn(false);
+            User realUser = dataBean.getUser(user.getUsername(), user.getPassword());
+            realUser.updateFrom(user);
             log(Logbook.INFO, "Logged " + user + " out");
         }
         return user;

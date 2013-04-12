@@ -42,7 +42,7 @@ public class TaskManagementServlet extends HttpServlet implements CustomizedLogg
   {
     log(Logbook.INFO, "Received post request");
     User user = (User)(request.getSession().getAttribute("user"));
-    log(Logbook.INFO, "Got user object from session");
+    log(Logbook.INFO, "Got user :" + user + " from session");
     if (user != null)
     {
       log(Logbook.INFO, "The user stored in the session has username: " +
