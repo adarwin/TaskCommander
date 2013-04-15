@@ -1,10 +1,11 @@
 package com.adarwin.csc435;
 
 import com.adarwin.logging.Logbook;
+import java.io.Serializable;
 import java.util.List;
 import java.util.ArrayList;
 
-public class User
+public class User implements Serializable
 {
   private Logbook logbook = new Logbook("../logs/User.log");
   private String username;

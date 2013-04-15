@@ -1,8 +1,9 @@
 package com.adarwin.csc435;
 
 import com.adarwin.logging.Logbook;
+import java.io.Serializable;
 
-public class Task
+public class Task implements Serializable
 {
   private String name;
   private String dueDate;
