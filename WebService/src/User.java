@@ -8,26 +8,43 @@ import javax.persistence.Entity;
 import javax.persistence.ElementCollection;
 import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
-import javax.persistence.OneToMany;
+import javax.persistence.CascadeType;
 import javax.persistence.ElementCollection;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.Column;
 
 @Entity
+@NamedQueries({
+    @NamedQuery(
+        name = "getAllUsers",
+        query = "SELECT u FROM User u"
+    ),
+    @NamedQuery(
+        name = "getUser",
+        query = "SELECT u FROM User u " +
+                "WHERE u.username LIKE :username and u.password LIKE :password"
+    )
+})
 public class User implements Serializable
 {
     private static final long serialVersionUID = 1L;
     private static final String logHeader = "User";
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    @GeneratedValue
+    //@Column(name="USER_ID", nullable=false)
+    private Long id;
     //private Logbook logbook = new Logbook("../logs/User.log");
     @NotNull
     private String username;
     @NotNull
     private String password;
-    @ElementCollection
-    //@OneToMany(cascade=REMOVE, mappedBy="user")
+    @ElementCollection(fetch=FetchType.EAGER)
+    @OneToMany(cascade=CascadeType.ALL, mappedBy="user")
     private List<Task> tasks;
     private String currentTaskName;
     private String currentTaskDueDate;
