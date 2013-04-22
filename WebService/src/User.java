@@ -1,23 +1,41 @@
 package com.adarwin.csc435;
 
-import com.adarwin.logging.Logbook;
+//import com.adarwin.logging.Logbook;
 import java.io.Serializable;
 import java.util.List;
 import java.util.ArrayList;
+import javax.persistence.Entity;
+import javax.persistence.ElementCollection;
+import javax.persistence.Id;
+import javax.validation.constraints.NotNull;
+import javax.persistence.OneToMany;
+import javax.persistence.ElementCollection;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 
+@Entity
 public class User implements Serializable
 {
-  private Logbook logbook = new Logbook("../logs/User.log");
-  private String username;
-  private String password;
-  private List<Task> tasks;
-  private final String logHeader = "User";
-  private String currentTaskName;
-  private String currentTaskDueDate;
-  private boolean loggedIn = false;
+    private static final long serialVersionUID = 1L;
+    private static final String logHeader = "User";
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long id;
+    //private Logbook logbook = new Logbook("../logs/User.log");
+    @NotNull
+    private String username;
+    @NotNull
+    private String password;
+    @ElementCollection
+    //@OneToMany(cascade=REMOVE, mappedBy="user")
+    private List<Task> tasks;
+    private String currentTaskName;
+    private String currentTaskDueDate;
+    private boolean loggedIn = false;
 
 
 
+  /*
   private void log(Exception ex)
   {
     logbook.log(logHeader, ex);
@@ -26,6 +44,7 @@ public class User implements Serializable
   {
     logbook.log(level, logHeader, message);
   }
+  */
 
 
 
@@ -72,11 +91,11 @@ public class User implements Serializable
     if (!tasks.contains(task))
     {
       tasks.add(task);
-      log(Logbook.INFO, "Added task: '" + task.getName() + "'");
+      //log(Logbook.INFO, "Added task: '" + task.getName() + "'");
     }
     else
     {
-      log(Logbook.WARNING, "Task: '" + task.getName() + "' already exists and was therefore not added");
+      //log(Logbook.WARNING, "Task: '" + task.getName() + "' already exists and was therefore not added");
     }
   }
   public void removeTask(String taskName)

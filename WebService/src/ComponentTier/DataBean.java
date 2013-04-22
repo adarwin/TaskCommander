@@ -12,10 +12,15 @@ import javax.ejb.EJB;
 import javax.ejb.Local;
 import javax.ejb.Singleton;
 import javax.ejb.Stateful;
+import javax.ejb.Stateless;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceUnit;
 
-@Singleton
+//@Singleton
 @Local
-@Stateful
+@Stateless
 public class DataBean { //TODO: Figure out why we can't
                         //      implement CustomizedLogger here
 
@@ -23,6 +28,11 @@ public class DataBean { //TODO: Figure out why we can't
     private Logbook logbook = new Logbook("../logs/TaskCommander.log");
     private final String logHeader = "DataBean";
     private List<User> usersList;
+
+    //@PersistenceUnit
+    //private EntityManagerFactory emFactory;
+    @PersistenceContext(unitName = "usersPU")
+    private EntityManager entityManager;
 
     public void log(Exception ex) {
         logbook.log(logHeader, ex);
@@ -36,6 +46,7 @@ public class DataBean { //TODO: Figure out why we can't
     @PostConstruct
     public void init() {
         usersList = new ArrayList<User>();
+        //entityManager = emFactory.createEntityManager();
     }
 
 
@@ -98,6 +109,9 @@ public class DataBean { //TODO: Figure out why we can't
         Task newTask = new Task("New User Orientation");
         newTask.setDueDate("Today");
         user.addTask(newTask);
+        if (entityManager == null) {
+            log(Logbook.WARNING, "entityManager is null");
+        }
         users.add(user);
         return successful;
     }

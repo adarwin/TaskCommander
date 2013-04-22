@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence>
+    <persistence-unit name="usersPU" transaction-type="JTA">
+        <description>This unit manages users and their tasks.</description>
+        <jta-data-source>jdbc/TaskCommanderDB</jta-data-source>
+        <jar-file>persistence.jar</jar-file>
+        <class>com.adarwin.csc435.User</class>
+        <class>com.adarwin.csc435.Task</class>
+		<properties>
+			<property name="eclilpselink.ddl-generation" value="drop-and-create-tables" />
+		</properties>
+    </persistence-unit>
+</persistence>
