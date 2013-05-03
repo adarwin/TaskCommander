@@ -17,6 +17,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.NamedQuery;
 import javax.persistence.NamedQueries;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceUnit;
 import javax.persistence.TypedQuery;
@@ -63,20 +64,24 @@ public class DataBean { //TODO: Figure out why we can't
         query.setMaxResults(10);
         //List<User> queriedUsers = query.getResultList();
         log(Logbook.INFO, "About to query...");
-        User queriedUser = query.getSingleResult();
-        //String usersString = "";
-        //for (User user : queriedUsers) {
-            //usersString += user.getUsername() + ":" + user.getPassword() + ", ";
-        //}
-        //log(Logbook.INFO, "Queried users: " + usersString);
-        /*
-        if (outputUser == null) {
-            log(Logbook.WARNING, "Never found user: " + username);
-        } else {
-            log(Logbook.INFO, "Found user: " + username);
+        User queriedUser = null;
+        try {
+            queriedUser = query.getSingleResult();
+        } catch (NoResultException ex) {
+            //Do something here
+            log(ex);
         }
-        */
         return queriedUser;
+    }
+
+
+    public User logUserOut(User webTierUser) {
+        webTierUser.setLoggedIn(false);
+        User realUser = getUser(webTierUser.getUsername(), webTierUser.getPassword());
+        //entityManager.getTransaction().begin();
+        realUser.updateFrom(webTierUser);
+        //entityManager.getTransaction().commit();
+        return realUser;
     }
 
 
@@ -120,6 +125,7 @@ public class DataBean { //TODO: Figure out why we can't
             User user = new User(username);
             user.setPassword(password);
             Task newTask = new Task("New User Orientation");
+            log(Logbook.INFO, "Created new task");
             newTask.setDueDate("Today");
             user.addTask(newTask);
             if (entityManager == null) {

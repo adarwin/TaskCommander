@@ -64,6 +64,7 @@ public class LogoutServlet extends HttpServlet implements CustomizedLogger {
     User user = (User)(request.getSession().getAttribute("user"));
     log(Logbook.INFO, "Got user: " + user + " from session.");
     authenticationBean.logUserOut(user);
+    user = null;
     session.invalidate();
     response.sendRedirect("/TaskCommander");
   }

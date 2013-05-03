@@ -13,6 +13,7 @@ import javax.persistence.ElementCollection;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
+import javax.persistence.JoinColumn;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -43,8 +44,9 @@ public class User implements Serializable
     private String username;
     @NotNull
     private String password;
-    @ElementCollection(fetch=FetchType.EAGER)
-    @OneToMany(cascade=CascadeType.ALL, mappedBy="user")
+    //@ElementCollection(fetch=FetchType.EAGER)
+    @OneToMany(orphanRemoval=true, cascade=CascadeType.ALL, fetch=FetchType.EAGER)//, mappedBy="user")
+    @JoinColumn(name="USER_ID")
     private List<Task> tasks;
     private String currentTaskName;
     private String currentTaskDueDate;
@@ -78,6 +80,7 @@ public class User implements Serializable
 
 
   public void updateFrom(User user) {
+      setId(user.getId());
       setUsername(user.getUsername());
       setPassword(user.getPassword());
       setTasks(user.getTasks());
@@ -86,12 +89,24 @@ public class User implements Serializable
       setLoggedIn(user.getLoggedIn());
   }
 
+  public Long getId() { return id; }
+  public void setId(Long id) { this.id = id; }
   public String getUsername() { return username; }
   public void setUsername(String username) { this.username = username; }
   public String getPassword() { return password; }
   public void setPassword(String password) { this.password = password; }
   public List<Task> getTasks() { return tasks; }
-  public void setTasks(List<Task> tasks) { this.tasks = tasks; }
+  public void setTasks(List<Task> tasks) {
+      this.tasks.clear();
+      //for (Task task : tasks) {
+          //if (!this.tasks.contains(task)) {
+              Task temp = new Task(task.getName());
+              temp.setDueDate(task.getDueDate());
+              this.tasks.add(temp);
+          //}
+      //}
+      //this.tasks = tasks;
+  }
   public String getCurrentTaskName() { return currentTaskName; }
   public void setCurrentTaskName(String taskName) { currentTaskName = taskName; }
   public String getCurrentTaskDueDate() { return currentTaskDueDate; }

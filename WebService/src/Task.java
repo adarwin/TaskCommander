@@ -21,7 +21,7 @@ public class Task implements Serializable
     private String dueDate;
     //@ManyToOne
     //@JoinColumn(name="USER_ID", nullable=false)
-    private User user;
+    //private User user;
 
     public Task()
     {
@@ -31,18 +31,21 @@ public class Task implements Serializable
 
     public Task(String name)
     {
-        this(null, name);
-    }
-
-    public Task(User user, String name)
-    {
+        //this(null, name);
         this.name = name;
         this.dueDate = "";
-        this.user = user;
     }
 
 
-    public User getUser() { return user; }
+    public boolean equals(Task otherTask) {
+        return otherTask.getId() == getId();
+    }
+
+
+
+
+    //public User getUser() { return user; }
+    public Long getId() { return id; }
     public String getName() { return name; }
     public String getDueDate() { return dueDate; }
     public void setName(String name) { this.name = name; }

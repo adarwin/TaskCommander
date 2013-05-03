@@ -68,14 +68,17 @@ public class AuthenticationBean implements Authentication {
 
     @Override
     public User logUserOut(User user) {
-        // Assume the input user object is a copoy and we should update
+        // Assume the input user object is a copy and we should update
         // the official stored user
         if (user == null) {
             log(Logbook.WARNING, "Can't log out a null user");
         } else {
+            user = dataBean.logUserOut(user);
+            /*
             user.setLoggedIn(false);
             User realUser = dataBean.getUser(user.getUsername(), user.getPassword());
             realUser.updateFrom(user);
+            */
             log(Logbook.INFO, "Logged " + user + " out");
         }
         return user;
