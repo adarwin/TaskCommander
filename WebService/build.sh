@@ -29,7 +29,7 @@ if $success ; then
 fi
 if $success ; then
     echo "| * Compiling Shared Libraries..."
-    javac -cp $CLASSPATH:lib -d lib src/*.java
+    javac -cp $CLASSPATH:lib -d lib src/*.java src/addmilk-read-only/addMilk/src/com/mainchip/Java/addMilk/*.java
     if [ $? -eq 0 ]; then
         echo "|   Success!"
         echo "|"

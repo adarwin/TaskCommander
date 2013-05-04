@@ -1,6 +1,5 @@
 package com.adarwin.csc435.ejb;
 
-import com.adarwin.logging.Logbook;
 import com.adarwin.csc435.User;
 import javax.ejb.EJB;
 import javax.ejb.Remote;
