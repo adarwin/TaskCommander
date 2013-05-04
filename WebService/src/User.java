@@ -98,13 +98,13 @@ public class User implements Serializable
   public List<Task> getTasks() { return tasks; }
   public void setTasks(List<Task> tasks) {
       this.tasks.clear();
-      //for (Task task : tasks) {
+      for (Task task : tasks) {
           //if (!this.tasks.contains(task)) {
               Task temp = new Task(task.getName());
               temp.setDueDate(task.getDueDate());
               this.tasks.add(temp);
           //}
-      //}
+      }
       //this.tasks = tasks;
   }
   public String getCurrentTaskName() { return currentTaskName; }
