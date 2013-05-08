@@ -31,16 +31,22 @@ public class RTMConnectionBean implements RTMConnection {
     private static final String API_KEY = "48f4eca00d151e09f4b8ca74c52cb425";
     private static final String SHARED_SECRET = "1dfa98c49acd35a2";
     private static final String API_KEY_HEADER = "?api_key=";
+    private static final String AUTH_TOKEN = "&auth_token=";
     private static final String FROB_HEADER = "&frob=";
     private static final String METHOD_HEADER = "&method=";
+    private static final String NAME_HEADER = "&name=";
     private static final String PERMS_READ = "&perms=read";
     private static final String PERMS_WRITE = "&perms=write";
     private static final String PERMS_DELETE = "&perms=delete";
+    private static final String TIMELINE_HEADER = "&timeline=";
     private static final String API_SIG_HEADER = "&api_sig=";
     private static final String AUTH_URL = "http://www.rememberthemilk.com/services/auth/";
     private static final String API_URL =  "http://www.rememberthemilk.com/services/rest/";
+    private static final String ADD_TASK = "rtm.tasks.add";
     private static final String GET_FROB = "rtm.auth.getFrob";
     private static final String GET_TOKEN = "rtm.auth.getToken";
+    private static final String CREATE_TIMELINE = "rtm.timelines.create";
+    private static final String API_KEY_COMB = API_KEY_HEADER + API_KEY;
     //private static final String API_SIG = "&api_sig=";
     private static String frob;
     private static String token;
@@ -75,11 +81,14 @@ public class RTMConnectionBean implements RTMConnection {
     @Override
     public String getToken() {
         log(Logbook.INFO, "Attempting to get token");
-        String parameters = API_KEY_HEADER + API_KEY + FROB_HEADER + frob + METHOD_HEADER + GET_TOKEN;
-        Document xmlDocument = callAPI(API_URL, parameters);
+        String parameters = API_KEY_COMB + FROB_HEADER + frob + METHOD_HEADER + GET_TOKEN;
+        Document xmlDocument = callAPI(API_URL, parameters, true);
         NodeList nodes = xmlDocument.getElementsByTagName("token");
-        String output = nodes.item(0).getTextContent();
-        token = output;
+        String output = null;
+        if (nodes != null) {
+            output = nodes.item(0).getTextContent();
+            token = output;
+        }
         log(Logbook.INFO, "Token = " + output);
         return output;
     }
@@ -87,6 +96,24 @@ public class RTMConnectionBean implements RTMConnection {
 
     @Override
     public void addTask(String taskName) {
+        String timeline = createTimeline();
+        String parameters = API_KEY_COMB + AUTH_TOKEN + token + METHOD_HEADER + ADD_TASK + NAME_HEADER + taskName + TIMELINE_HEADER + timeline;
+        Document xmlDocument = callAPI(API_URL, parameters, true);
+        //getDesiredValue(xmlDocument, 
+    }
+
+    private String createTimeline() {
+        Document xmlDocument = callAPI(API_URL, API_KEY_COMB + AUTH_TOKEN + token + METHOD_HEADER + CREATE_TIMELINE, true);
+        return getDesiredValue(xmlDocument, "timeline");
+    }
+    
+    private String getDesiredValue(Document xmlDocument, String valueName) {
+        NodeList nodes = xmlDocument.getElementsByTagName(valueName);
+        String output = null;
+        if (nodes != null) {
+            output = nodes.item(0).getTextContent();
+        }
+        return output;
     }
 
 
@@ -124,13 +151,13 @@ public class RTMConnectionBean implements RTMConnection {
 
 
     public String getFrob() {
-        Document xmlDocument = callAPI(API_URL, API_KEY_HEADER + API_KEY + METHOD_HEADER + GET_FROB);
+        Document xmlDocument = callAPI(API_URL, API_KEY_COMB + METHOD_HEADER + GET_FROB, true);
         NodeList nodes = xmlDocument.getElementsByTagName("frob");
         String output = nodes.item(0).getTextContent();
         return output;
     }
     private String generateAuthURL(String frob) {
-        String parameters = API_KEY_HEADER + API_KEY + FROB_HEADER + frob + PERMS_DELETE;
+        String parameters = API_KEY_COMB + FROB_HEADER + frob + PERMS_DELETE;
         //String parametersB = API_KEY_HEADER + API_KEY + PERMS_DELETE + FROB_HEADER + frob;
         String apiSig = API_SIG_HEADER + md5(SHARED_SECRET + parameters);
         String output = AUTH_URL + parameters + apiSig;
@@ -138,9 +165,13 @@ public class RTMConnectionBean implements RTMConnection {
     }
 
 
-    private Document callAPI(String rootURL, String parameters) {
-        String api_sig = API_SIG_HEADER + md5(SHARED_SECRET + parameters);
-        String urlText = rootURL + parameters + api_sig;
+    private Document callAPI(String rootURL, String parameters, boolean useAPI_SIG) {
+        String urlText = rootURL + parameters;
+        if (useAPI_SIG) {
+            String api_sig = API_SIG_HEADER + md5(SHARED_SECRET + parameters);
+            urlText += api_sig;
+        }
+        log(Logbook.INFO, "callAPI produced urlText: " + urlText);
         Document xmlDocument = null;
         try {
             DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();

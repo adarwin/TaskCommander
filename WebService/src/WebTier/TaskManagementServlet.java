@@ -85,6 +85,7 @@ public class TaskManagementServlet extends HttpServlet implements CustomizedLogg
     if (rtmAuthInProgress) {
         // Finish rtm authorization process
         session.setAttribute("rtmToken", rtmConnectionBean.getToken());
+        session.setAttribute("rtmAuthInProgress", false);
         session.setAttribute("rtmLoggedIn", true);
     }
     boolean rtmLoggedIn = (boolean)(session.getAttribute("rtmLoggedIn"));
@@ -107,6 +108,7 @@ public class TaskManagementServlet extends HttpServlet implements CustomizedLogg
           System.out.println("Modifying User: " + user);
           if (rtmLoggedIn) {
               // Add task to rtm
+              rtmConnectionBean.addTask(newTaskName);
           }
         }
         else
