@@ -56,33 +56,10 @@ public class RTMConnectionBean implements RTMConnection {
 
     @PostConstruct
     public void init() {
-        /*
-        try {
-            log(Logbook.INFO, "Initializing rtm");
-            //rtm = new RTM(API_KEY, SHARED_SECRET);
-            //log(Logbook.INFO, "sig for rtm.test.login = " + rtm.parseSig("rtm.test.echo"));
-            //log(Logbook.INFO, "Generating test auth url");
-            //log(Logbook.INFO, rtm.genAuthURL("", "delete"));
-            log(Logbook.INFO, "Getting frob");
-            //String frob = rtm.getFrob();
-            log(Logbook.INFO, "Getting Token");
-            //token = rtm.getToken(frob);
-        } catch (MilkException ex) {
-            log(ex);
-        }
-        */
     }
 
     @Override
     public void login() {
-        /*
-        try {
-            //User testUser = rtm.testLogin();
-            log(Logbook.INFO, "rtm.testLogin() returned " + testUser);
-        } catch (MilkException ex) {
-            log(ex);
-        }
-        */
     }
 
     @Override
@@ -99,30 +76,10 @@ public class RTMConnectionBean implements RTMConnection {
     public String getToken() {
         log(Logbook.INFO, "Attempting to get token");
         String parameters = API_KEY_HEADER + API_KEY + FROB_HEADER + frob + METHOD_HEADER + GET_TOKEN;
-        //String parametersB = API_KEY_HEADER + API_KEY + PERMS_DELETE + FROB_HEADER + frob;
-        String apiSig = API_SIG_HEADER + md5(SHARED_SECRET + parameters);
-        String urlText = API_URL + parameters + apiSig;
-        log(Logbook.INFO, "urlText = " + urlText);
-        String output = null;
-        try {
-            DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder domParser = domFactory.newDocumentBuilder();
-            URL url = new URL(urlText);
-            URLConnection urlConn = url.openConnection();
-            InputStream inputStream = urlConn.getInputStream();
-            Document xmlDocument = domParser.parse(inputStream);
-            NodeList nodes = xmlDocument.getElementsByTagName("token");
-            output = nodes.item(0).getTextContent();
-            token = output;
-        } catch (ParserConfigurationException ex) {
-            log(ex);
-        } catch (SAXException ex) {
-            log(ex);
-        } catch (MalformedURLException ex) {
-            log(ex);
-        } catch (IOException ex) {
-            log(ex);
-        }
+        Document xmlDocument = callAPI(API_URL, parameters);
+        NodeList nodes = xmlDocument.getElementsByTagName("token");
+        String output = nodes.item(0).getTextContent();
+        token = output;
         log(Logbook.INFO, "Token = " + output);
         return output;
     }
@@ -167,19 +124,33 @@ public class RTMConnectionBean implements RTMConnection {
 
 
     public String getFrob() {
-        String output = null;
-        String md5Input = SHARED_SECRET + "api_key" + API_KEY + "method" + GET_FROB;
-        String api_sig = API_SIG_HEADER + md5(md5Input);
-        String urlText = API_URL + "?api_key=" + API_KEY + "&method=" + GET_FROB + api_sig;
+        Document xmlDocument = callAPI(API_URL, API_KEY_HEADER + API_KEY + METHOD_HEADER + GET_FROB);
+        NodeList nodes = xmlDocument.getElementsByTagName("frob");
+        String output = nodes.item(0).getTextContent();
+        return output;
+    }
+    private String generateAuthURL(String frob) {
+        String parameters = API_KEY_HEADER + API_KEY + FROB_HEADER + frob + PERMS_DELETE;
+        //String parametersB = API_KEY_HEADER + API_KEY + PERMS_DELETE + FROB_HEADER + frob;
+        String apiSig = API_SIG_HEADER + md5(SHARED_SECRET + parameters);
+        String output = AUTH_URL + parameters + apiSig;
+        return output;
+    }
+
+
+    private Document callAPI(String rootURL, String parameters) {
+        String api_sig = API_SIG_HEADER + md5(SHARED_SECRET + parameters);
+        String urlText = rootURL + parameters + api_sig;
+        Document xmlDocument = null;
         try {
             DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder domParser = domFactory.newDocumentBuilder();
             URL url = new URL(urlText);
             URLConnection urlConn = url.openConnection();
             InputStream inputStream = urlConn.getInputStream();
-            Document xmlDocument = domParser.parse(inputStream);
-            NodeList nodes = xmlDocument.getElementsByTagName("frob");
-            output = nodes.item(0).getTextContent();
+            xmlDocument = domParser.parse(inputStream);
+            //NodeList nodes = xmlDocument.getElementsByTagName("frob");
+            //output = nodes.item(0).getTextContent();
         } catch (ParserConfigurationException ex) {
             log(ex);
         } catch (SAXException ex) {
@@ -189,13 +160,6 @@ public class RTMConnectionBean implements RTMConnection {
         } catch (IOException ex) {
             log(ex);
         }
-        return output;
-    }
-    private String generateAuthURL(String frob) {
-        String parameters = API_KEY_HEADER + API_KEY + FROB_HEADER + frob + PERMS_DELETE;
-        //String parametersB = API_KEY_HEADER + API_KEY + PERMS_DELETE + FROB_HEADER + frob;
-        String apiSig = API_SIG_HEADER + md5(SHARED_SECRET + parameters);
-        String output = AUTH_URL + parameters + apiSig;
-        return output;
+        return xmlDocument;
     }
 }
