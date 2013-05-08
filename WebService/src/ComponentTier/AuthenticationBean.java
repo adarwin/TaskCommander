@@ -12,6 +12,8 @@ public class AuthenticationBean implements Authentication {
     private final String logHeader = "AuthenticationBean";
     @EJB
     private DataBean dataBean;
+    @EJB
+    private RTMConnection rtmConnectionBean;
 
 
     public void log(Exception ex) {
@@ -56,6 +58,11 @@ public class AuthenticationBean implements Authentication {
     @Override
     public User logUserIn(String username, String password) {
         log(Logbook.INFO, "Attempting to log " + username + " in");
+        if (rtmConnectionBean != null) {
+            rtmConnectionBean.login();
+        } else {
+            log(Logbook.INFO, "rtmConnectionBean == null");
+        }
         User user = dataBean.getUser(username, password);
         if (user == null) {
             log(Logbook.WARNING, "Failed to log " + username + " in");

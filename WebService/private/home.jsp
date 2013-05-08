@@ -10,9 +10,12 @@
 <body background="/TaskCommander/img/WaterColorPaperBackground.jpg">
 <div id="title" align="center" style="float:center">
 <div id="logout" style="float:right">
+<form action="/TaskCommander/taskmanagement" method="get" name="RTMLogin">
+	<input name="rtmLogin" type="submit" value="RTM Login">
+</form>
 <form action="/TaskCommander/logout" method="post" name="LogoutForm">
         <input name="logout" type="submit" value="Logout">
-    </form>
+</form>
 </div>
 <h1>Welcome home, ${user.username}</h1>
 </div>
