@@ -2,6 +2,22 @@
 <web-app metadata-complete="true">
 
 	<servlet>
+		<servlet-name>jersey</servlet-name>
+		<servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
+		<load-on-startup>1</load-on-startup>
+		<init-param>
+			<param-name>com.sun.jersey.config.property.packages</param-name>
+			<param-value>com.adarwin.csc435</param-value>
+		</init-param>
+	</servlet>
+	
+	<servlet-mapping>
+    	<servlet-name>jersey</servlet-name>
+    	<url-pattern>/rest/*</url-pattern>
+	</servlet-mapping>
+
+
+	<servlet>
 		<servlet-name>Portal</servlet-name>
 		<servlet-class>com.adarwin.csc435.Portal</servlet-class>
 	</servlet>

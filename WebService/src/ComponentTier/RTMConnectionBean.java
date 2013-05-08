@@ -17,12 +17,21 @@ import java.security.NoSuchAlgorithmException;
 import javax.ejb.Singleton;
 import javax.ejb.Stateless;
 import javax.annotation.PostConstruct;
+import javax.jws.WebMethod;
+import javax.jws.WebService;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 @Singleton
 @Stateless
+//@WebService(endpointInterface = "com.adarwin.csc435.ejb.RTMConnection")
 public class RTMConnectionBean implements RTMConnection {
 
     private static Logbook logbook = new Logbook("../logs/TaskCommander.log");
