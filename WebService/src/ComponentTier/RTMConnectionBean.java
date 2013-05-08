@@ -30,11 +30,18 @@ public class RTMConnectionBean implements RTMConnection {
 
     private static final String API_KEY = "48f4eca00d151e09f4b8ca74c52cb425";
     private static final String SHARED_SECRET = "1dfa98c49acd35a2";
+    private static final String API_KEY_HEADER = "?api_key=";
+    private static final String FROB_HEADER = "&frob=";
+    private static final String METHOD_HEADER = "&method=";
+    private static final String PERMS_READ = "&perms=read";
+    private static final String PERMS_WRITE = "&perms=write";
+    private static final String PERMS_DELETE = "&perms=delete";
+    private static final String API_SIG_HEADER = "&api_sig=";
     private static final String AUTH_URL = "http://www.rememberthemilk.com/services/auth/";
     private static final String API_URL =  "http://www.rememberthemilk.com/services/rest/";
     private static final String GET_FROB = "rtm.auth.getFrob";
-    private static final String API_SIG = "&api_sig=";
-    private static String frob;
+    //private static final String API_SIG = "&api_sig=";
+    //private static String frob;
     private static String token;
     private RTM rtm;
     //private Token token;
@@ -48,7 +55,10 @@ public class RTMConnectionBean implements RTMConnection {
 
     @PostConstruct
     public void init() {
-        log(Logbook.INFO, "Frob = " + getFrob());
+        String frob = getFrob();
+        log(Logbook.INFO, "Frob = " + frob);
+        String authURL = generateAuthURL(frob);
+        log(Logbook.INFO, "AuthURL = " + authURL);
         /*
         try {
             log(Logbook.INFO, "Initializing rtm");
@@ -80,6 +90,19 @@ public class RTMConnectionBean implements RTMConnection {
 
 
     public String md5(String message) {
+        String temp = message;
+        if (!message.startsWith(SHARED_SECRET)) {
+            message = SHARED_SECRET + message;
+        }
+        //message = message.replace("[?&=]", "");
+        message = message.replace("?", "");
+        message = message.replace("&", "");
+        message = message.replace("=", "");
+        if (!temp.equals(message)) {
+            log(Logbook.INFO, "md5 conditioned the incoming message from " + temp +
+                              " to " + message);
+        }
+        log(Logbook.INFO, "Beginning md5 hash of " + message);
         String hashedOutput = null;
         try {
             MessageDigest md = MessageDigest.getInstance("MD5");
@@ -102,7 +125,7 @@ public class RTMConnectionBean implements RTMConnection {
     public String getFrob() {
         String output = null;
         String md5Input = SHARED_SECRET + "api_key" + API_KEY + "method" + GET_FROB;
-        String api_sig = API_SIG + md5(md5Input);
+        String api_sig = API_SIG_HEADER + md5(md5Input);
         String urlText = API_URL + "?api_key=" + API_KEY + "&method=" + GET_FROB + api_sig;
         try {
             DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
@@ -124,8 +147,11 @@ public class RTMConnectionBean implements RTMConnection {
         }
         return output;
     }
-    private String generateAuthURL() {
-        String rootURL = "http://www.rememberthemilk.com/services/auth/";
-        return rootURL;
+    private String generateAuthURL(String frob) {
+        String parameters = API_KEY_HEADER + API_KEY + FROB_HEADER + frob + PERMS_DELETE;
+        //String parametersB = API_KEY_HEADER + API_KEY + PERMS_DELETE + FROB_HEADER + frob;
+        String apiSig = API_SIG_HEADER + md5(SHARED_SECRET + parameters);
+        String output = AUTH_URL + parameters + apiSig;
+        return output;
     }
 }
