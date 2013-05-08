@@ -152,8 +152,13 @@ public class RTMConnectionBean implements RTMConnection {
 
     public String getFrob() {
         Document xmlDocument = callAPI(API_URL, API_KEY_COMB + METHOD_HEADER + GET_FROB, true);
-        NodeList nodes = xmlDocument.getElementsByTagName("frob");
-        String output = nodes.item(0).getTextContent();
+        String output = "";
+        if (xmlDocument != null) {
+            NodeList nodes = xmlDocument.getElementsByTagName("frob");
+            if (nodes != null) {
+                output = nodes.item(0).getTextContent();
+            }
+        }
         return output;
     }
     private String generateAuthURL(String frob) {
