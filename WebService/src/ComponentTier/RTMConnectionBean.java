@@ -86,8 +86,11 @@ public class RTMConnectionBean implements RTMConnection {
         NodeList nodes = xmlDocument.getElementsByTagName("token");
         String output = null;
         if (nodes != null) {
-            output = nodes.item(0).getTextContent();
-            token = output;
+            Node node = nodes.item(0);
+            if (node != null) {
+                output = node.getTextContent();
+                token = output;
+            }
         }
         log(Logbook.INFO, "Token = " + output);
         return output;
