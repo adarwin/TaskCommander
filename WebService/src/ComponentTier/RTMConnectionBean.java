@@ -40,8 +40,9 @@ public class RTMConnectionBean implements RTMConnection {
     private static final String AUTH_URL = "http://www.rememberthemilk.com/services/auth/";
     private static final String API_URL =  "http://www.rememberthemilk.com/services/rest/";
     private static final String GET_FROB = "rtm.auth.getFrob";
+    private static final String GET_TOKEN = "rtm.auth.getToken";
     //private static final String API_SIG = "&api_sig=";
-    //private static String frob;
+    private static String frob;
     private static String token;
     private RTM rtm;
     //private Token token;
@@ -55,10 +56,6 @@ public class RTMConnectionBean implements RTMConnection {
 
     @PostConstruct
     public void init() {
-        String frob = getFrob();
-        log(Logbook.INFO, "Frob = " + frob);
-        String authURL = generateAuthURL(frob);
-        log(Logbook.INFO, "AuthURL = " + authURL);
         /*
         try {
             log(Logbook.INFO, "Initializing rtm");
@@ -86,6 +83,53 @@ public class RTMConnectionBean implements RTMConnection {
             log(ex);
         }
         */
+    }
+
+    @Override
+    public String getAuthenticationURL() {
+        frob = getFrob();
+        log(Logbook.INFO, "Frob = " + frob);
+        String authURL = generateAuthURL(frob);
+        log(Logbook.INFO, "AuthURL = " + authURL);
+        return authURL;
+    }
+
+
+    @Override
+    public String getToken() {
+        log(Logbook.INFO, "Attempting to get token");
+        String parameters = API_KEY_HEADER + API_KEY + FROB_HEADER + frob + METHOD_HEADER + GET_TOKEN;
+        //String parametersB = API_KEY_HEADER + API_KEY + PERMS_DELETE + FROB_HEADER + frob;
+        String apiSig = API_SIG_HEADER + md5(SHARED_SECRET + parameters);
+        String urlText = API_URL + parameters + apiSig;
+        log(Logbook.INFO, "urlText = " + urlText);
+        String output = null;
+        try {
+            DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder domParser = domFactory.newDocumentBuilder();
+            URL url = new URL(urlText);
+            URLConnection urlConn = url.openConnection();
+            InputStream inputStream = urlConn.getInputStream();
+            Document xmlDocument = domParser.parse(inputStream);
+            NodeList nodes = xmlDocument.getElementsByTagName("token");
+            output = nodes.item(0).getTextContent();
+            token = output;
+        } catch (ParserConfigurationException ex) {
+            log(ex);
+        } catch (SAXException ex) {
+            log(ex);
+        } catch (MalformedURLException ex) {
+            log(ex);
+        } catch (IOException ex) {
+            log(ex);
+        }
+        log(Logbook.INFO, "Token = " + output);
+        return output;
+    }
+
+
+    @Override
+    public void addTask(String taskName) {
     }
 
 

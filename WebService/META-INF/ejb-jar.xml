@@ -10,6 +10,13 @@
 			<session-type>Stateless</session-type>
 			<transaction-type>Container</transaction-type>
 		</session>
+		<session>
+			<ejb-name>RTMConnection</ejb-name>
+			<remote>com.adarwin.csc435.ejb.RTMConnection</remote>
+			<ejb-class>com.adarwin.csc435.ejb.RTMConnectionBean</ejb-class>
+			<session-type>Stateless</session-type>
+			<transaction-type>Container</transaction-type>
+		</session>
 	</enterprise-beans>
 </ejb-jar>
 

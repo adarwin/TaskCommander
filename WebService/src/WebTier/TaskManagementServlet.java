@@ -3,16 +3,24 @@ package com.adarwin.csc435;
 import com.adarwin.logging.Logbook;
 import com.adarwin.csc435.User;
 import com.adarwin.csc435.Task;
+import com.adarwin.csc435.ejb.RTMConnection;
+import com.adarwin.csc435.ejb.RTMConnectionBean;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 import java.io.*;
+import javax.ejb.EJB;
 
 public class TaskManagementServlet extends HttpServlet implements CustomizedLogger {
 
   private Logbook logbook = new Logbook("../logs/TaskCommander.log");
   private static final long serialVersionUID = 1L;
   private final String logHeader = "TaskManagementServlet";
+
+  private InitialContext initialContext;
+  private RTMConnection rtmConnectionBean;
 
 
   public void log(Exception ex)
@@ -27,12 +35,42 @@ public class TaskManagementServlet extends HttpServlet implements CustomizedLogg
 
 
   @Override
+  public void init() { // don't need to call super.init() because this is a
+                       // convenience method designed to prevent having to do
+                       // that.
+      try {
+        initialContext = new InitialContext();
+        rtmConnectionBean = (RTMConnection)initialContext.lookup("java:app/ejb/RTMConnectionBean");
+      } catch (NamingException ex) {
+        log(ex);
+        if (rtmConnectionBean == null) {
+            log(Logbook.WARNING, "RTMConnectionBean is null and therefore " +
+                                 "can't be used for anything.");
+        }
+      }
+  }
+  @Override
   protected void doGet (HttpServletRequest request,
                         HttpServletResponse response)
                    throws ServletException, IOException
   {
-    log(Logbook.INFO, "Received get request. Call doPost(...)");
-    response.sendRedirect("/TaskCommander");
+    log(Logbook.INFO, "Received get request");
+    HttpSession session = request.getSession();
+    if (request.getParameter("rtmLogin") != null) {
+        String url = rtmConnectionBean.getAuthenticationURL();
+        session.setAttribute("rtmAuthInProgress", true);
+        /*
+        String htmlOutput = "<html><head></head><body onload='newWindow()'>";
+        htmlOutput += "<script><function newWindow()>";
+        htmlOutput += "window.open('" + url + "')";
+        htmlOutput += "</function>";
+        htmlOutput += "</body></html>";
+        PrintWriter out = response.getWriter();
+        out.println(htmlOutput);
+        */
+        response.sendRedirect(url);
+    }
+    //response.sendRedirect("/TaskCommander");
     //doPost(request, response);
   }
   @Override
@@ -41,7 +79,15 @@ public class TaskManagementServlet extends HttpServlet implements CustomizedLogg
                    throws ServletException, IOException
   {
     log(Logbook.INFO, "Received post request");
-    User user = (User)(request.getSession().getAttribute("user"));
+    HttpSession session = request.getSession();
+    User user = (User)(session.getAttribute("user"));
+    boolean rtmAuthInProgress = (boolean)(session.getAttribute("rtmAuthInProgress"));
+    if (rtmAuthInProgress) {
+        // Finish rtm authorization process
+        session.setAttribute("rtmToken", rtmConnectionBean.getToken());
+        session.setAttribute("rtmLoggedIn", true);
+    }
+    boolean rtmLoggedIn = (boolean)(session.getAttribute("rtmLoggedIn"));
     log(Logbook.INFO, "Got user :" + user + " from session");
     if (user != null)
     {
@@ -59,6 +105,9 @@ public class TaskManagementServlet extends HttpServlet implements CustomizedLogg
           user.setCurrentTaskName("");
           user.setCurrentTaskDueDate("");
           System.out.println("Modifying User: " + user);
+          if (rtmLoggedIn) {
+              // Add task to rtm
+          }
         }
         else
         {
